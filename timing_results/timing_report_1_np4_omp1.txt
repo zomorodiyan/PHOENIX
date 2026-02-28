@@ -1,0 +1,50 @@
+============================================
+  AM-CFD Module Timing Report
+  (CPU time accumulated in main loop)
+============================================
+  Total iterations (itertot): 1223
+  Simulation time reached:    5.010001E-04
+  Total CPU time:       69.249 s
+--------------------------------------------
+  Module              |   Time(s)   |   Ratio(%)
+--------------------------------------------
+             mod_solve|      16.828  |   24.30%
+           mod_discret|      14.198  |   20.50%
+              mod_prop|      14.023  |   20.25%
+              mod_sour|      10.937  |   15.79%
+     other (copy/misc)|       3.682  |    5.32%
+             mod_entot|       2.239  |    3.23%
+          mod_converge|       2.126  |    3.07%
+             mod_resid|       1.970  |    2.84%
+             mod_dimen|       1.474  |    2.13%
+              mod_flux|       1.450  |    2.09%
+             mod_bound|       0.259  |    0.37%
+        laser/toolpath|       0.039  |    0.06%
+            mod_revise|       0.022  |    0.03%
+             mod_print|       0.003  |    0.01%
+--------------------------------------------
+  Sum (check):               69.249
+============================================
+
+  Subroutine breakdown (modules with ratio >10%)
+  Time(s) = CPU time; Ratio(%) = within module; Glob%(%) = of total
+--------------------------------------------
+  mod_sour:
+    source_momentum            0.139  |    1.27% mod |  0.20% glob
+    source_pp                  0.014  |    0.13% mod |  0.02% glob
+    source_enthalpy           10.784  |   98.60% mod | 15.57% glob
+    (mod_sour sum)            10.937
+--------------------------------------------
+  mod_discret:
+    discretize_enthalpy       13.503  |   95.11% mod | 19.50% glob
+    discretize_momentum        0.670  |    4.72% mod |  0.97% glob
+    discretize_pp              0.024  |    0.17% mod |  0.04% glob
+    (mod_discret sum)         14.198
+--------------------------------------------
+  mod_solve:
+    solution_enthalpy         16.569  |   98.46% mod | 23.93% glob
+    solution_uvw (4x)          0.239  |    1.42% mod |  0.35% glob
+    cleanuvw                   0.020  |    0.12% mod |  0.03% glob
+    (mod_solve sum)           16.828
+--------------------------------------------
+============================================

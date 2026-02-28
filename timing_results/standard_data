@@ -1,0 +1,230 @@
+ Date: 2026- 2-26  time: 19 :45 :51
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.10E-05   24    0.000        24   9.5E-08   4.9E-04  1.9E-04  2.9E-06  1.8E-04
+  Tmax        umax       vmax         wmax       length       depth     width
+  1803.52   1.48E-02    3.25E-05    7.39E-03    2.28E-05    1.04E-04    3.93E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+    0.0    0.0    0.0    0.0    0.0   -0.0    0.0  -0.0 105.7   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.10E-05  5.246E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.10E-05   50    0.014        74   3.0E-04   1.3E-01  9.7E-02  1.6E-03  2.5E-01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2558.73   8.81E-01    1.20E-02    4.04E-01   -1.74E-05    1.01E-04    5.76E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+    0.0    0.0    0.0    0.0    0.0   -0.0    0.0  -0.0 105.2   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.10E-05  5.492E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 6.10E-05   50    0.008       124   9.6E-05   2.6E-01  9.2E+00  1.2E+01  2.5E+01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2768.70   1.01E+00    9.56E-01    5.96E-01    5.11E-05    1.05E-04    0.00E+00
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+    0.0    0.0    0.0    0.0    0.0   -0.0    0.0  -0.0 106.7   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 6.10E-05  5.738E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 8.10E-05   50    0.006       174   7.4E-05   6.7E-02  1.2E+01  1.5E+01  1.7E+01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2892.96   9.18E-01    1.07E+00    6.37E-01    9.70E-05    1.06E-04    0.00E+00
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+    0.0    0.0    0.0    0.0    0.0   -0.0    0.0  -0.0 106.5   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 8.10E-05  5.984E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 1.01E-04   50    0.004       224   1.5E-04   9.8E-02  3.8E+01  3.3E+01  9.1E+01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2931.24   7.87E-01    1.08E+00    6.37E-01    1.32E-04    1.06E-04    0.00E+00
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+    0.0    0.0    0.0    0.0    0.0   -0.0    0.0  -0.0 105.3   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 1.01E-04  6.230E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 1.21E-04   50    0.015       274   1.1E-05   3.4E-02  1.2E+00  5.2E-01  9.7E-01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2929.70   6.64E-01    1.05E+00    5.65E-01    6.99E-05    1.06E-04    1.18E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 105.7   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 1.21E-04  6.476E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 1.41E-04   50    0.012       324   9.2E-05   4.8E-02  5.8E-02  5.3E-02  1.2E-01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2997.37   1.01E+00    1.07E+00    5.96E-01    1.48E-04    1.07E-04    1.94E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 106.1   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 1.41E-04  6.722E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 1.61E-04   50    0.011       374   6.1E-05   3.4E-02  3.4E-02  3.4E-02  4.9E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2939.97   9.01E-01    1.08E+00    7.39E-01    1.96E-04    1.07E-04    2.91E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 106.8   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 1.61E-04  6.968E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 1.81E-04   50    0.009       424   1.4E-04   5.6E-02  4.5E-02  5.2E-02  9.8E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2955.47   6.29E-01    1.14E+00    6.97E-01    2.33E-04    1.07E-04    3.68E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 106.6   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 1.81E-04  7.214E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.01E-04   50    0.011       474   2.3E-04   2.1E-02  8.2E-02  6.5E-02  9.2E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2932.99   6.18E-01    1.08E+00    5.76E-01    2.61E-04    1.06E-04    4.32E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 107.1   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.01E-04  7.460E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.21E-04   50    0.011       524   8.6E-05   2.6E-02  1.7E-02  1.7E-02  2.1E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2892.32   6.55E-01    1.05E+00    5.48E-01    2.32E-04    1.07E-04    4.86E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0   -0.0  -0.0 105.8   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.21E-04  7.706E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.41E-04   50    0.012       574   3.5E-06   2.5E-02  6.4E-03  6.9E-03  1.2E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2817.49   9.10E-01    1.13E+00    6.15E-01    2.90E-04    1.07E-04    5.29E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 107.5   0.0 105.7   0.98
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.41E-04  7.952E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.61E-04   50    0.011       624   1.1E-04   3.1E-02  1.1E-02  1.2E-02  1.6E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2915.64   7.44E-01    1.11E+00    6.61E-01    3.29E-04    1.07E-04    5.63E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 108.2   0.0 105.7   0.98
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.61E-04  8.198E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 2.81E-04   50    0.012       674   1.2E-04   4.5E-02  3.1E-01  4.4E-02  4.7E-01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2933.76   6.43E-01    1.06E+00    5.88E-01    3.61E-04    1.06E-04    5.90E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 106.0   0.0 105.7   1.00
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 2.81E-04  8.444E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 3.01E-04   50    0.011       724   3.0E-04   4.2E-02  4.3E-02  2.5E-02  4.4E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2931.28   6.15E-01    1.05E+00    5.55E-01    3.14E-04    1.06E-04    6.12E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 106.9   0.0 105.7   0.99
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 3.01E-04  8.690E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 3.21E-04   50    0.012       774   1.1E-04   3.0E-02  8.6E-03  6.3E-03  9.8E-03
+  Tmax        umax       vmax         wmax       length       depth     width
+  2861.41   9.51E-01    1.05E+00    5.69E-01    3.80E-04    1.07E-04    6.32E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 108.4   0.0 105.7   0.97
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 3.21E-04  8.936E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 3.41E-04   50    0.012       824   1.3E-04   2.4E-02  7.0E-03  5.7E-03  8.5E-03
+  Tmax        umax       vmax         wmax       length       depth     width
+  2891.11   8.18E-01    1.14E+00    6.35E-01    4.24E-04    1.07E-04    6.48E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 108.9   0.0 105.7   0.97
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 3.41E-04  9.182E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 3.61E-04   50    0.011       874   8.0E-06   4.7E-02  3.0E-02  2.2E-02  1.1E-01
+  Tmax        umax       vmax         wmax       length       depth     width
+  2938.58   5.06E-01    1.11E+00    6.15E-01    4.58E-04    1.07E-04    6.62E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0    0.0  -0.0 108.2   0.0 105.7   0.98
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 3.61E-04  9.428E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 3.81E-04   50    0.012       924   2.9E-04   1.6E-02  2.3E-02  1.4E-02  3.0E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2932.60   4.99E-01    1.09E+00    5.70E-01    3.89E-04    1.06E-04    6.74E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0    0.0  -0.0 111.3   0.0 105.7   0.95
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 3.81E-04  9.674E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.01E-04   50    0.011       974   1.4E-04   3.7E-02  5.2E-03  4.1E-03  6.4E-03
+  Tmax        umax       vmax         wmax       length       depth     width
+  2907.52   9.80E-01    1.07E+00    5.71E-01    4.69E-04    1.07E-04    6.84E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0    0.0  -0.0 111.2   0.0 105.7   0.95
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.01E-04  9.920E-04  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.21E-04   50    0.013      1024   1.3E-04   2.6E-02  7.7E-03  7.0E-03  4.2E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2924.25   9.06E-01    1.06E+00    6.79E-01    5.18E-04    1.07E-04    6.93E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 110.5   0.0 105.7   0.96
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.21E-04  1.017E-03  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.41E-04   50    0.012      1074   1.6E-04   2.8E-02  2.9E-02  2.0E-02  7.9E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2956.80   6.38E-01    1.14E+00    6.59E-01    5.54E-04    1.07E-04    7.01E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 110.4   0.0 105.7   0.96
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.41E-04  1.041E-03  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.61E-04   50    0.012      1124   2.1E-04   2.3E-02  2.9E-02  1.6E-02  3.4E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2933.74   5.06E-01    1.06E+00    5.78E-01    4.37E-04    1.06E-04    7.07E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0    0.0    0.0  -0.0 110.8   0.0 105.7   0.95
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.61E-04  1.066E-03  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 4.81E-04   50    0.012      1174   7.4E-06   4.2E-02  3.2E-02  8.0E-03  1.1E-02
+  Tmax        umax       vmax         wmax       length       depth     width
+  2907.12   5.24E-01    1.06E+00    5.30E-01    5.51E-04    1.07E-04    7.12E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0    0.0  -0.0 108.8   0.0 105.7   0.97
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 4.81E-04  1.090E-03  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  time  iter  time/iter  tot_iter  res_enth  res_mass     res_u   res_v   res_w
+ 5.01E-04   50    0.011      1224   1.4E-04   2.1E-02  1.3E-02  2.9E-03  5.2E-03
+  Tmax        umax       vmax         wmax       length       depth     width
+  2832.91   9.17E-01    1.13E+00    6.28E-01    6.10E-04    1.07E-04    7.18E-05
+  north  south  top  toploss  bottom  west  east  hout  accu  hin heatvol ratio
+   -0.0   -0.0    0.0    0.0   -0.0   -0.0    0.0  -0.0 115.3   0.0 105.7   0.92
+  time    beam_posx  beam_posy  beam_posz  power  scanspeed   speedx   speedy
+ 5.01E-04  1.115E-03  5.000E-04  7.000E-04  300.0    1.230    1.230    0.000
+
+  Date: 2026- 2-26  time: 19:46: 7
+
+  Total time used:     0  hr     0  m    16  s

@@ -1,0 +1,16 @@
+# Fortran build artifacts
+*.o
+*.mod
+cluster_main
+fort.*
+
+# Simulation outputs
+fortran_new/result/
+fortran_origin/result/
+
+# Junk / temp files
+null
+test_cp
+
+# Tool configs
+.claude/

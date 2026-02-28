@@ -11,7 +11,7 @@ echo "Compiling AM-CFD..."
 
 # Compile all modules and main program
 # Order matters: dependencies must be compiled first
-gfortran -fopenmp -O3 -march=native -c \
+mpifort -fopenmp -O3 -march=native -c \
     mod_precision.f90 \
     mod_const.f90 \
     mod_cfd_utils.f90 \
@@ -39,8 +39,8 @@ gfortran -fopenmp -O3 -march=native -c \
     main.f90
 
 # Link all object files
-gfortran -fopenmp -O3 -march=native *.o -o cluster_main
+mpifort -fopenmp -O3 -march=native *.o -o cluster_main
 
 echo "Build complete: cluster_main"
 echo ""
-echo "To run: export OMP_NUM_THREADS=12 && ./cluster_main"
+echo "To run: mpirun -np 4 ./cluster_main"
