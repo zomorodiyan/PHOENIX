@@ -10,7 +10,8 @@ The module supports multiple defect computation methods, each with its own param
 ## Method 1: `maxtemp_determ` (Deterministic Max-Temperature Method)
 
 ### Parameters (defined at top of `defect.f90`, labeled as `maxtemp_determ` parameters)
-- `k_d` : calibration parameter for keyhole porosity scaling
+- `k_lof` : calibration parameter for lack-of-fusion, default = 1.0, typical range 0–1
+- `k_kep` : calibration parameter for keyhole porosity scaling
 
 ---
 
@@ -23,8 +24,8 @@ The module supports multiple defect computation methods, each with its own param
 ### Task 2 — Compute Defect Array (call after simulation completes)
 - `defect` array is already allocated (see Task 1), initialized to `0`.
 - Apply the following rules cell by cell using `max_temp`:
-  - If `max_temp < T_solid` → `defect = -1` (lack-of-fusion)
-  - If `max_temp > T_boiling` → `defect = k_d * (max_temp - T_boiling) / T_boiling` (keyhole porosity)
+  - If `max_temp < T_solid` → `defect = -k_lof` (lack-of-fusion)
+  - If `max_temp > T_boiling` → `defect = k_kep * (max_temp - T_boiling) / T_boiling` (keyhole porosity)
   - If `T_solid ≤ max_temp ≤ T_boiling` → `defect = 0`
 - **Clean-up step**: Read the toolpath file to determine the maximum laser scanning range in the X-Y plane. Set `defect = 0` for all cells outside this range.
 
@@ -55,7 +56,7 @@ After the defect array is computed:
 | Metric | Definition |
 |--------|-----------|
 | Defect fraction | `Σ |defect(i)| × V_cell(i)` / `V_total` |
-| Lack-of-fusion fraction | `Σ V_cell(i)` where `defect(i) = -1`, divided by `V_total` |
+| Lack-of-fusion fraction | `Σ V_cell(i) × |k_lof|` where `defect(i)` is negative, divided by `V_total` |
 | Keyhole porosity fraction | `Σ defect(i) × V_cell(i)` where `0 < defect(i) ≤ 1`, divided by `V_total` |
 
 > Note: `defect fraction = lack-of-fusion fraction + keyhole porosity fraction`
