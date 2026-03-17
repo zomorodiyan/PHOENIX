@@ -82,6 +82,7 @@ Output: `.crs` file (time, x, y, z, laser on/off) + `.png` visualization.
 - `hlatnt` (latent heat) remains a **scalar** — assume both materials have similar values
 - `dgdt` (dγ/dT, thermal Marangoni coefficient) remains a **scalar** — same assumption
 - `dgdc` (dγ/dC, solutal Marangoni coefficient) is a **scalar constant** defined in `mod_species.f90`
+- `beta` (thermal expansion coefficient) and `emiss` (emissivity) remain **scalars**, using primary material values
 - These simplifications avoid modifying `source_enthalpy` (mod_sour.f90) and keep `bound_uv` changes minimal
 
 ## Code Conventions
