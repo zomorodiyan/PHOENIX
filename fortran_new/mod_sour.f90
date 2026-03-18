@@ -49,8 +49,8 @@ subroutine source_momentum(idir)
 	real(wp), parameter :: perm_const = 1.0e-10_wp, eps_darcy = 1.0e-3_wp
 	real(wp) darcy_c0
 
-	darcy_c0 = 180.0_wp * viscos / perm_const
 !-----Darcy resistance in mushy zone-----
+	darcy_c0 = 180.0_wp * viscos / perm_const
 	do k=kstat,nkm1
 !$OMP PARALLEL PRIVATE(fracl_stag, term, tw)
 !$OMP DO
@@ -71,7 +71,7 @@ subroutine source_momentum(idir)
 				sp(i,j,k)=sp(i,j,k)-term*volume_w(i,j,k)
 !-----buoyancy (w only)----------------
 				tw=temp(i,j,k)*(1.0-fracz(k-1))+temp(i,j,k-1)*fracz(k-1)
-				su(i,j,k) = su(i,j,k)+boufac*volume_w(i,j,k)*(tw-tsolid)
+				su(i,j,k) = su(i,j,k)+dens*g*beta*volume_w(i,j,k)*(tw-tsolid)
 			end select
 		endif
 	enddo

@@ -48,6 +48,51 @@ module timing
 
 	contains
 
+!********************************************************************
+subroutine write_memory_report(file_prefix)
+	character(len=*), intent(in) :: file_prefix
+	integer, parameter :: lun = 87
+	character(len=256) :: line
+	integer :: ios
+	character(len=32) :: key
+	integer(8) :: val_kb
+	integer(8) :: vm_peak, vm_rss, vm_hwm, vm_data
+	logical :: found
+
+	vm_peak = -1; vm_rss = -1; vm_hwm = -1; vm_data = -1
+
+	open(unit=lun, file='/proc/self/status', status='old', action='read', iostat=ios)
+	if (ios /= 0) then
+		! /proc not available — write minimal report
+		open(unit=lun, file=trim(file_prefix)//'memory_report.txt', action='write', status='replace')
+		write(lun,'(a)') '  Memory report: /proc/self/status not available'
+		close(lun)
+		return
+	endif
+
+	do
+		read(lun, '(a)', iostat=ios) line
+		if (ios /= 0) exit
+		if (line(1:7) == 'VmPeak:') read(line(8:), *, iostat=ios) vm_peak
+		if (line(1:6) == 'VmRSS:')  read(line(7:), *, iostat=ios) vm_rss
+		if (line(1:6) == 'VmHWM:')  read(line(7:), *, iostat=ios) vm_hwm
+		if (line(1:7) == 'VmData:') read(line(8:), *, iostat=ios) vm_data
+	enddo
+	close(lun)
+
+	open(unit=lun, file=trim(file_prefix)//'memory_report.txt', action='write', status='replace')
+	write(lun,'(a)') '============================================'
+	write(lun,'(a)') '  AM-CFD Memory Report'
+	write(lun,'(a)') '  (from /proc/self/status at end of run)'
+	write(lun,'(a)') '============================================'
+	if (vm_peak > 0) write(lun,'(a,i0,a,f8.1,a)') '  VmPeak (peak virtual):  ', vm_peak, ' kB  (', vm_peak/1024.0_wp, ' MB)'
+	if (vm_hwm  > 0) write(lun,'(a,i0,a,f8.1,a)') '  VmHWM  (peak RSS):      ', vm_hwm,  ' kB  (', vm_hwm/1024.0_wp,  ' MB)'
+	if (vm_rss  > 0) write(lun,'(a,i0,a,f8.1,a)') '  VmRSS  (current RSS):   ', vm_rss,  ' kB  (', vm_rss/1024.0_wp,  ' MB)'
+	if (vm_data > 0) write(lun,'(a,i0,a,f8.1,a)') '  VmData (heap+stack):    ', vm_data, ' kB  (', vm_data/1024.0_wp, ' MB)'
+	write(lun,'(a)') '============================================'
+	close(lun)
+end subroutine write_memory_report
+
 subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	integer, intent(in) :: itertot
 	real(wp), intent(in) :: timet_end

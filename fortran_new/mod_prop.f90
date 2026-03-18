@@ -7,8 +7,11 @@ module property
 	use parameters
 	use dimensions
 
+	implicit none
+
 	contains
 
+!********************************************************************
 subroutine properties(ilo, ihi, jlo, jhi, klo, khi)
 	implicit none
 	integer, intent(in) :: ilo, ihi, jlo, jhi, klo, khi
@@ -24,17 +27,17 @@ subroutine properties(ilo, ihi, jlo, jhi, klo, khi)
 	do j=jlo,jhi
 	do i=ilo,ihi
 
-	
+
 		visT=0 !dens*dL_mix*0.3*vMag
 		diffT=visT/0.9
 
 		diffs=(thconsa*temp(i,j,k)+thconsb)/(acpa*temp(i,j,k)+acpb)
 		diffl=thconl/acpl
-		vis(i,j,k)=(viscos+visT)                !temperature is larger than liquidus 
+		vis(i,j,k)=(viscos+visT)                !temperature is larger than liquidus
 		diff(i,j,k)=(diffl+diffT)
 		den(i,j,k)=denl
 
-		if(temp(i,j,k).ge.tliquid) cycle          
+		if(temp(i,j,k).ge.tliquid) cycle
 			diff(i,j,k)=diffs          !temperature is less than solidus
 			vis(i,j,k)=vis_solid
 			den(i,j,k)=dens
@@ -45,7 +48,7 @@ subroutine properties(ilo, ihi, jlo, jhi, klo, khi)
 				diff(i,j,k)=(pthcona*temp(i,j,k)+pthconb)/(pcpa*temp(i,j,k)+pcpb)
 			endif
 
-		if(temp(i,j,k).le.tsolid) cycle   !temperature is between liquidus and solidus           
+		if(temp(i,j,k).le.tsolid) cycle   !temperature is between liquidus and solidus
 			diff(i,j,k)=(fracl(i,j,k)*diffl+(1.0-fracl(i,j,k))*diffs)
 			vis(i,j,k)=(viscos+visT)
 			den(i,j,k)=(fracl(i,j,k)*denl+(1.0-fracl(i,j,k))*dens)
@@ -54,6 +57,5 @@ subroutine properties(ilo, ihi, jlo, jhi, klo, khi)
 	enddo
 !$OMP END PARALLEL
 	enddo
-end subroutine properties	
+end subroutine properties
 end module property
-

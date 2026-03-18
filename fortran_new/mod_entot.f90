@@ -25,7 +25,6 @@ subroutine enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
 			temp(i,j,k)=(enthalpy(i,j,k)-hlcal)/acpl+tliquid
 		elseif(enthalpy(i,j,k).le.hsmelt) then
 			fracl(i,j,k)=0.0
-			!temp(i,j,k)=tsolid-(hsmelt-enthalpy(i,j,k))/acp
 			temp(i,j,k)=(sqrt(acpb**2+2*acpa*enthalpy(i,j,k))-acpb)/acpa
 		else
 			fracl(i,j,k)=(enthalpy(i,j,k)-hsmelt)/(hlcal-hsmelt)

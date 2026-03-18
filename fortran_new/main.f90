@@ -403,5 +403,6 @@ program main
 	wall_elapsed = omp_get_wtime() - wall_start
 
 	call write_timing_report(itertot, timet, wall_elapsed, file_prefix)
+	call write_memory_report(file_prefix)
 	stop
 	end

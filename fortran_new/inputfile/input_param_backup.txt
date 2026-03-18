@@ -27,5 +27,5 @@
 
 &local_solver localnum=4, local_half_x=1.0e-3, local_half_y=2.0e-4, local_depth_z=2.0e-4 /
 
-&output_control outputintervel=20, case_name='test', toolpath_file='./ToolFiles/my_toolpath.crs' /
+&output_control outputintervel=20, case_name='hull_v8', toolpath_file='./ToolFiles/my_toolpath.crs' /
 

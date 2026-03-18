@@ -7,13 +7,52 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
 ## Design Principles
 
 - `mod_species.f90` is a standalone module: all secondary material properties, species arrays, solver, BCs, output defined within
-- When `species_flag=0`, existing code behavior is unchanged — all property arrays remain constant or T-dependent as before
-- When `species_flag=1`, `mod_species.f90` provides functions to update property arrays as composition-dependent
-- Species transport active only in melt pool region (same as uvwp): when `T < tsolidmatrix(i,j,k)`, `massdiffusivity` is near-zero
+- When `species_flag=0`, existing code behavior is **completely unchanged** — no extra arrays, no extra computation, no code path differences
+- When `species_flag=1`, each routine that needs composition-dependent properties computes them **inline** using `concentration(i,j,k)`:
+  ```fortran
+  prop_local = prop1 * C + prop2 * (1.0 - C)
+  ```
+- No per-cell property arrays (`dens_arr`, `acpa_arr`, etc.) — all composition mixing is computed on-the-fly from the concentration field + scalar pairs (primary/secondary material constants)
+- Species transport active only in melt pool region (same as uvwp): when `T < tsolid_local`, `massdiffusivity` is near-zero
 - Concentration C: 1 = base material (from `&material_properties`), 0 = secondary material (from `mod_species.f90`)
 - Species solver reuses all shared coefficient arrays (`an, as, ae, aw, at, ab, ap, su, sp, apnot`) — solve after momentum/enthalpy so coefficients are free
 - Species arrays are allocated on the global domain, but discretization/source/solver only loop over the melt pool region using `istat,iend,jstat,jend,kstat` from `mod_dimen.f90` (same as uvw momentum equations)
 - Species is solved once per timestep after `iter_loop` exits (not inside the iteration loop), using `delt` for transient term
+
+## Inline Computation Strategy (replaces Phase 0 array approach)
+
+**Rationale**: The Phase 0 approach (16 per-cell property arrays, ~513 MB overhead, +12% runtime) was implemented and reverted. Instead, all composition-dependent properties are computed inline inside hot loops using local variables:
+
+```fortran
+! Example: in properties() when species_flag=1
+C_local = concentration(i,j,k)
+tsolid_local  = tsolid  * C_local + tsolid2  * (1.0_wp - C_local)
+tliquid_local = tliquid * C_local + tliquid2 * (1.0_wp - C_local)
+dens_local    = dens    * C_local + dens2    * (1.0_wp - C_local)
+! ... etc. for all properties used in this routine
+```
+
+When `species_flag=0`, the original scalar code paths remain untouched — no `if` checks, no concentration lookups, no overhead.
+
+**Benefits over array approach**:
+- Zero memory overhead (no 16 extra 3D arrays)
+- No `allocate_prop_arrays` call needed
+- No compile-order dependency changes
+- Properties stay "live" — always consistent with current concentration (no stale array risk)
+- Code changes confined to the `species_flag=1` branch — existing single-material behavior is untouched
+
+**Implementation pattern for modified routines** (properties, enthalpy_to_temp, source_momentum, source_pp, velocity zeroing):
+```fortran
+if (species_flag == 1) then
+    ! Composition-dependent path: compute local properties from C
+    C_local = concentration(i,j,k)
+    tsolid_local = tsolid * C_local + tsolid2 * (1.0_wp - C_local)
+    ! ... use tsolid_local in branching and computation
+else
+    ! Original scalar path (unchanged)
+    ! ... use tsolid directly
+endif
+```
 
 ## Key Physics Changes from Original (program931)
 
@@ -27,27 +66,14 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
 
 ## Tasks (easy -> hard)
 
-### Phase 0: Refactor scalars to arrays (no physics change)
+### Phase 0: Infrastructure (no physics change)
 
-1. [ ] **Convert key thermal property scalars to per-cell arrays**
-   - Goal: replace scalar properties with arrays in all per-cell computations, initialized to the original scalar values. Results must be bit-identical to the scalar version.
-   - Create arrays in `mod_prop.f90`:
-     - Phase change: `tsolidmatrix(ni,nj,nk)`, `tliquidmatrix(ni,nj,nk)`
-     - Dense solid: `dens_arr(ni,nj,nk)` → `dens`, `acpa_arr`, `acpb_arr`, `thconsa_arr`, `thconsb_arr`
-     - Liquid: `denl_arr(ni,nj,nk)` → `denl`, `acpl_arr`, `thconl_arr`
-     - Viscosity: `viscmatrix(ni,nj,nk)` → `viscos`
-     - Powder: `pden_arr(ni,nj,nk)` → `pden`, `pcpa_arr`, `pcpb_arr`, `pthcona_arr`, `pthconb_arr`
-     - All initialized to primary material scalar values
-   - Replace scalar usage with array lookups in:
-     - `mod_entot.f90` (`enthalpy_to_temp`): compute `hsmelt_local`, `hlcal_local`, `deltemp_local`, `cpavg_local` from arrays as local variables inside the loop. Guard `deltemp_local = max(..., 1.0_wp)`
-     - `mod_prop.f90` (`properties`): all three temperature regimes use arrays:
-       - `T >= tliquidmatrix`: `denl_arr`, `viscmatrix`, `thconl_arr/acpl_arr`
-       - `T <= tsolidmatrix`: `dens_arr`, `acpa_arr/acpb_arr`, `thconsa_arr/thconsb_arr`; powder region uses `pden_arr`, `pcpa_arr/pcpb_arr`, `pthcona_arr/pthconb_arr`
-       - Mushy zone: mix of solid/liquid arrays weighted by `fracl`
-     - `mod_sour.f90` (`source_momentum`, `source_pp`): use `tsolidmatrix(i,j,k)` for Darcy/buoyancy/solid checks; compute `boufac` cell-locally from `dens_arr * g * beta`; use `viscmatrix(i,j,k)` for Darcy coefficient inside the loop
-     - `mod_bound.f90`: no change needed (`dgdt` stays scalar)
-     - `main.f90`: velocity zeroing uses `tsolidmatrix(i,j,k)`; melt pool check `if(tpeak > min(tsolid, tsolid2))` (or just `tsolid` for now since arrays = scalar)
-   - **Verification**: run existing test case, confirm identical results
+1. [x] **Add `write_memory_report` to timing module**
+   - Added `write_memory_report(file_prefix)` subroutine to `mod_timing.f90`
+   - Reads `/proc/self/status` for VmPeak, VmHWM, VmRSS, VmData
+   - Called from `main.f90` after timing report
+   - Modified `compile.sh`: no longer cleans `result/` on recompile (preserves results between runs)
+   - ~~Per-cell property arrays approach was implemented and reverted~~ — replaced by inline computation strategy (see above)
 
 ### Phase 1: Scaffolding
 
@@ -69,29 +95,27 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
      ```
    - Derived quantities computed in `init_species` (not input parameters):
      ```
-     hsmelt2 = acp2*tsolid2**2/2 + acpb2*tsolid2
+     hsmelt2 = acpa2*tsolid2**2/2 + acpb2*tsolid2
      hlcal2  = hsmelt2 + cpavg2*(tliquid2 - tsolid2)
      hlfriz2 = hlcal2 + hlatnt
      ```
    - `D_m = 5.0e-9_wp` (molecular mass diffusivity, m^2/s)
    - `urfspecies = 0.7_wp` (dedicated relaxation factor)
    - `dgdc_const` (dg/dC, surface tension concentration coefficient)
-   - Allocatable arrays: `concentration(:,:,:)`, `conc_old(:,:,:)`, `massdiffusivity(:,:,:)`
-   - Note: `tsolidmatrix`, `tliquidmatrix`, `dens_arr`, `denl_arr`, `viscmatrix`, cp/thcon/powder arrays already created in Task 1
-   - Empty subroutine stubs: `allocate_species`, `init_species`, `solve_species`, `species_bc`, `update_material_properties`, `update_massdiffusivity`, `write_species_vtk`
+   - Allocatable arrays: `concentration(:,:,:)`, `conc_old(:,:,:)`
+   - No `massdiffusivity` array — use `den(i,j,k) * D_m` inline (den already computed in `properties()`, D_m is scalar constant)
+   - Empty subroutine stubs: `allocate_species`, `init_species`, `solve_species`, `species_bc`, `write_species_vtk`
    - Compiles but does nothing yet
 
 ### Phase 2: Solver core
 
 4. [ ] **Implement `allocate_species` and `init_species`**
-   - Allocate species-only arrays: `concentration`, `conc_old`, `massdiffusivity` to (ni, nj, nk)
+   - Allocate species-only arrays: `concentration`, `conc_old` to (ni, nj, nk)
    - Initial conditions for single-track dissimilar test:
      - Substrate (z < powder layer top): C = 1 (base material)
      - Powder layer, y >= y_mid: C = 1 (base material)
      - Powder layer, y < y_mid: C = 0 (secondary material)
      - No smooth distance — sharp interface
-   - Initialize `massdiffusivity`: floor value `1e-30` where `T < tsolid`, else `dens * D_m`
-   - Update property arrays from initial C via `update_material_properties` (Task 8)
    - Initialize `conc_old = concentration`
 
 5. [ ] **Implement zero-flux BCs (`species_bc`)**
@@ -102,8 +126,8 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
    - Port FVM discretization from `program931/species_transport.f90`
    - Loop over melt pool region only: use `istat,iend,jstat,jend,kstat` from `mod_dimen.f90` (same index ranges as uvw)
    - Power Law scheme for convection-diffusion
-   - Implicit Euler transient term: `apnot(i,j,k) = densmatrix(i,j,k) / delt * volume(i,j,k)`
-   - Diffusion coefficient: use `massdiffusivity(i,j,k)` directly (already stores Gamma = rho * D_m)
+   - Implicit Euler transient term: `apnot(i,j,k) = den(i,j,k) / delt * volume(i,j,k)` (use `den` from properties, already composition-weighted when species_flag=1)
+   - Diffusion coefficient: `Gamma = den(i,j,k) * D_m` computed inline (no array needed). In solid cells (`T < tsolid_local`), use floor `1e-30` instead
    - **Fix: remove velocity x2 factor** — use raw velocities directly
    - **Remove: scanning source term** (no moving frame advection)
    - **Remove: solidification segregation** (no kp term)
@@ -116,42 +140,60 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
 7. [ ] **Wire into main loop**
    - In `main.f90`:
      - Startup: call `allocate_species` and `init_species` (when `species_flag=1`)
-     - Once per timestep, after `iter_loop` exits: call `species_bc`, `update_massdiffusivity`, then `solve_species`
+     - Once per timestep, after `iter_loop` exits: call `species_bc`, then `solve_species`
      - End of timestep: update `conc_old = concentration` — must be full-domain, unconditional of `is_local`
    - Add `resorc` to output line
    - Add species solve time to timing report
 
-### Phase 3: Material property coupling
+### Phase 3: Material property coupling (inline approach)
 
-Since Task 1 already converted scalars to arrays and modified `enthalpy_to_temp`, `properties`, `mod_sour.f90`, `main.f90` to use arrays, these tasks only need to make the arrays composition-dependent.
+8. [ ] **Modify `properties()` in `mod_prop.f90` for composition-dependent properties**
+   - When `species_flag=1`, compute all properties inline from `concentration(i,j,k)`:
+     ```fortran
+     use species, only: concentration, species_flag, tsolid2, tliquid2, ...
+     ! Inside loop:
+     if (species_flag == 1) then
+         C_local = concentration(i,j,k)
+         tsolid_local  = tsolid  * C_local + tsolid2  * (1.0_wp - C_local)
+         tliquid_local = tliquid * C_local + tliquid2 * (1.0_wp - C_local)
+         dens_local    = dens    * C_local + dens2    * (1.0_wp - C_local)
+         denl_local    = denl    * C_local + denl2    * (1.0_wp - C_local)
+         viscos_local  = viscos  * C_local + viscos2  * (1.0_wp - C_local)
+         ! ... all cp, thcon, powder properties similarly
+     else
+         tsolid_local = tsolid; tliquid_local = tliquid; ...
+     endif
+     ```
+   - Use local variables for branching (`tsolid_local`, `tliquid_local`) and property computation
+   - Three temperature regimes use locally-mixed properties
+   - `beta`, `emiss`, `hlatnt`, `dgdt` remain scalars
 
-8. [ ] **Implement `update_material_properties` in `mod_species.f90`**
-   - When `species_flag=1`, update all property arrays each timestep based on local C (linear mixing):
-     - Phase change: `tsolidmatrix = tsolid*C + tsolid2*(1-C)`, same for `tliquidmatrix`
-     - Dense solid: `dens_arr = dens*C + dens2*(1-C)`, `acpa_arr`, `acpb_arr`, `thconsa_arr`, `thconsb_arr`
-     - Liquid: `denl_arr = denl*C + denl2*(1-C)`, `acpl_arr`, `thconl_arr`
-     - Viscosity: `viscmatrix = viscos*C + viscos2*(1-C)`
-     - Powder: `pden_arr = pden*C + pden2*(1-C)`, `pcpa_arr`, `pcpb_arr`, `pthcona_arr`, `pthconb_arr`
-     - Note: `beta` remains scalar (similar values for both materials)
-     - Note: `hlatnt` and `dgdt` remain scalars (assume similar values for both materials)
-   - When `species_flag=0`, arrays stay at scalar initial values (set in Task 1) — no call needed
-   - **Call once per timestep, before `iter_loop`** (concentration does not change during iterations)
-   - No changes to `properties`, `enthalpy_to_temp`, `mod_sour.f90` needed — they already read from arrays (Task 1)
+9. [ ] **Modify `enthalpy_to_temp()` in `mod_entot.f90` for composition-dependent H-T curve**
+   - When `species_flag=1`, compute `hsmelt_local`, `hlcal_local`, `deltemp_local` from mixed `acpa`, `acpb`, `tsolid`, `tliquid`, `acpl`
+   - When `species_flag=0`, use original scalars `hsmelt`, `hlcal`, `deltemp`, `acpl`, `tsolid`, `tliquid` (unchanged)
 
-9. [ ] **Implement `update_massdiffusivity`**
-   - `massdiffusivity(i,j,k) = densmatrix(i,j,k) * D_m` when `temp(i,j,k) >= tsolidmatrix(i,j,k)`, else `1e-30` (floor, not zero)
-   - Called each timestep before species solve, after `enthalpy_to_temp` updates temperature
+10. [ ] **Modify `source_momentum`/`source_pp` in `mod_sour.f90` for composition-dependent branching**
+    - When `species_flag=1`:
+      - Darcy: `darcy_c0` computed cell-locally using mixed viscosity
+      - Buoyancy: uses mixed `dens_local * g * beta * (tw - tsolid_local)`
+      - Solid check: uses mixed `tsolid_local`
+    - When `species_flag=0`: original scalar code (unchanged)
+
+11. [ ] **Modify velocity zeroing in `main.f90`**
+    - When `species_flag=1`: compute `tsolid_local` from `concentration(i,j,k)` for the `temp <= tsolid` check
+    - When `species_flag=0`: use scalar `tsolid` (unchanged, current code)
+    - Also: `if(tpeak > min(tsolid, tsolid2))` for momentum activation check
 
 ### Phase 4: Output and Marangoni
 
-10. [ ] **Implement `write_species_vtk`**
+12. [ ] **Implement `write_species_vtk`**
     - Write concentration field as standalone VTK file (same format as defect VTK)
     - ASCII header + binary data, structured grid
     - Called at same frequency as `Cust_Out` (every `outputintervel` steps)
     - Filename: `{case_name}_species{N}.vtk`
     - Also add concentration as a scalar in main VTK output (`Cust_Out`)
 
-11. [ ] **Solutal Marangoni effect (dgdc)**
+13. [ ] **Solutal Marangoni effect (dgdc)**
     - Define `dgdc` as a scalar constant in `mod_species.f90` (dg/dC, surface tension concentration coefficient)
     - Analogous to thermal Marangoni (`dgdt * dT/dx`), solutal Marangoni is `dgdc * dC/dx`
     - Total surface tension force: `tau = dgdt * grad(T) + dgdc * grad(C)`
@@ -168,19 +210,19 @@ Since Task 1 already converted scalars to arrays and modified `enthalpy_to_temp`
 
 ### Phase 5: Testing
 
-12. [ ] **Create single-track test toolpath**
+14. [ ] **Create single-track test toolpath**
     - Generate a simple single-track toolpath scanning along x-direction at y = half of domain
     - Use `toolpath_generator_rectangle.py` with 1 track (or write manually)
     - Purpose: test species transport with laser scanning across the material interface
 
-13. [ ] **Validation run**
+15. [ ] **Validation run**
     - Run single-track test with `species_flag=1`
     - Verify: concentration stays in [0,1], mixing occurs only in melt pool, material properties update correctly, VTK output readable in ParaView
     - Compare melt pool shape with `species_flag=0` to verify minimal impact when C=1 everywhere
 
 ### Optional / Future
 
-14. [ ] **`enhance_species_speed` block correction**
+16. [ ] **`enhance_species_speed` block correction**
     - Port 1D block-correction from program931 for faster convergence
     - Not required for correctness, but improves convergence speed
 
@@ -193,22 +235,24 @@ Species solver reuses all shared coefficient arrays (`an, as, ae, aw, at, ab, ap
 Species is always solved globally (full domain), not restricted to local solver region. Uses `delt` (not `delt_eff`) for the transient term. `conc_old = concentration` update must be full-domain at end of each timestep, unconditional of `is_local`.
 
 ### Diffusivity convention
-`massdiffusivity(i,j,k)` stores Gamma = rho * D_m (units: kg/(m*s)). This is the FVM diffusion coefficient used directly in face conductance: `D_face = Gamma * A / dx`. In solid cells, use a floor value of `1e-30` (not zero) to avoid division-by-zero in the Power Law scheme.
+Species diffusion coefficient Gamma = rho * D_m = `den(i,j,k) * D_m` (units: kg/(m*s)), computed inline in the species solver. No separate `massdiffusivity` array needed — `den(i,j,k)` is already available from `properties()` and `D_m` is a scalar constant. In solid cells (`T < tsolid_local`), use a floor value of `1e-30` (not zero) to avoid division-by-zero in the Power Law scheme.
 
-### Scalar-to-array strategy (Task 1)
-Task 1 converts all key thermal property scalars to per-cell arrays, initialized to the original scalar values. All per-cell computations (`enthalpy_to_temp`, `properties`, `source_momentum`, `source_pp`, velocity zeroing) are modified to read from arrays instead of scalars. With `species_flag=0`, arrays stay at scalar initial values — results are bit-identical to the original code. With `species_flag=1`, `update_material_properties` fills arrays with composition-weighted values — no further code changes needed.
-
-Derived constants (`hsmelt`, `hlcal`, `deltemp`, `cpavg`) are computed as local variables inside the `enthalpy_to_temp` loop from the per-cell arrays. Guard `deltemp_local = max(deltemp_local, 1.0_wp)` as a safety measure.
+### Inline vs array trade-off
+The inline approach adds a few extra multiplications per cell per property access (~20 FLOPs per cell in `properties()`, ~10 in `enthalpy_to_temp()`). This is negligible compared to the solver cost. The array approach saved these FLOPs but at the cost of 16 extra 3D arrays (~513 MB for 200x200x67 grid) and +12% total runtime from cache pressure. The inline approach is strictly better for this problem size.
 
 ## Known Pitfalls
 
 1. **H-T curve consistency**: Linear mixing of `acpa`, `acpb`, `tsolid` produces `hsmelt_local` that is NOT the same as `hsmelt*C + hsmelt2*(1-C)`. This means small discontinuities in the enthalpy-temperature relationship at composition boundaries. Acceptable for similar materials but may cause slow convergence at sharp interfaces.
 
-2. **~~Narrow mushy zone~~** (resolved): Secondary material now has `deltemp2 = tliquid2 - tsolid2 = 72K`, no longer a concern. The `max(deltemp_local, 1.0_wp)` guard remains as a safety measure.
+2. **~~Narrow mushy zone~~** (resolved): Secondary material now has `deltemp2 = tliquid2 - tsolid2 = 75K`, no longer a concern. Guard `deltemp_local = max(deltemp_local, 1.0_wp)` remains as safety.
 
-3. **`tsolid` scalar remains in `main.f90` line 148**: `if(tpeak.gt.tsolid)` controls whether momentum is solved. When `species_flag=1`, use `min(tsolid, tsolid2)` so that momentum activates whenever ANY material is molten.
+3. **`tsolid` scalar in `main.f90` line 149**: `if(tpeak.gt.tsolid)` controls whether momentum is solved. When `species_flag=1`, use `min(tsolid, tsolid2)` so that momentum activates whenever ANY material is molten.
 
-4. **Darcy source viscosity**: `mod_sour.f90` line 52 computes `darcy_c0 = 180*viscos/perm_const` using scalar viscosity before the loop. When `species_flag=1`, this should be computed cell-locally inside the loop using composition-weighted viscosity.
+4. **Darcy source viscosity**: When `species_flag=1`, `darcy_c0` must be computed cell-locally inside the loop using composition-weighted viscosity (inline from `concentration(i,j,k)`).
+
+## Revert Log
+
+- **2026-03-18**: Reverted Phase 0 per-cell property arrays (`tsolidmatrix`, `tliquidmatrix`, `dens_arr`, etc.) from `mod_prop.f90`, `mod_entot.f90`, `mod_sour.f90`, `main.f90`. All files restored to pre-Phase 0 scalar versions. Kept `write_memory_report` in `mod_timing.f90` and `main.f90`. Kept `compile.sh` change (no longer cleans `result/`). Replaced array approach with inline computation strategy.
 
 ## Reference
 

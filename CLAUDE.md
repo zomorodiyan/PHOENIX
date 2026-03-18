@@ -92,3 +92,4 @@ Output: `.crs` file (time, x, y, z, laser on/off) + `.png` visualization.
 - Do not modify Fortran source code unless the task explicitly requires it
 - When adding features, minimize impact on existing modules
 - Prefer editing existing files over creating new ones
+- **All codebase modifications must be fully documented in the corresponding `task.md`**. Users must be able to track the complete modification progress by reading `task.md` alone. New changes must be written to `task.md` before or alongside code changes.
