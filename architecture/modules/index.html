@@ -1432,6 +1432,39 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allocate_defectnni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_defect(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#update_max_temp" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1454,10 +1487,54 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#compute_scan_range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_scan_range()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#point_in_scan_regionpx-py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        point_in_scan_region(px, py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#write_defect_report" class="md-nav__link">
     <span class="md-ellipsis">
       
         write_defect_report()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_defect_vtkfieldname-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_defect_vtk(fieldname, field)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxtemp_stochas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        maxtemp_stochas()
       
     </span>
   </a>
@@ -2632,6 +2709,39 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrays" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Arrays
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#allocate_defectnni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_defect(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#update_max_temp" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2654,10 +2764,54 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#compute_scan_range" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_scan_range()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#point_in_scan_regionpx-py" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        point_in_scan_region(px, py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#write_defect_report" class="md-nav__link">
     <span class="md-ellipsis">
       
         write_defect_report()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_defect_vtkfieldname-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_defect_vtk(fieldname, field)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maxtemp_stochas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        maxtemp_stochas()
       
     </span>
   </a>
@@ -3301,17 +3455,126 @@
 <p>Computes energy balance: boundary conduction losses on all 6 faces, heat accumulation (enthalpy change + latent heat), and energy ratio <span class="arithmatex">\(R = Q_{in} / Q_{out}\)</span>. Used for convergence checking (<span class="arithmatex">\(R \approx 1.0\)</span>).</p>
 <hr />
 <h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code><a class="headerlink" href="#mod_defectf90-defect_field" title="Permanent link">&para;</a></h2>
+<p>Post-simulation defect detection based on maximum temperature history. Identifies lack-of-fusion (incomplete melting) and keyhole porosity (excessive vaporization) within the powder layer.</p>
+<h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>k_lof</code></td>
+<td>0.9</td>
+<td>Lack-of-fusion calibration factor (0–1)</td>
+</tr>
+<tr>
+<td><code>k_kep</code></td>
+<td>1.0</td>
+<td>Keyhole porosity scaling factor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arrays">Arrays<a class="headerlink" href="#arrays" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Array</th>
+<th>Shape</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>max_temp(ni,nj,nk)</code></td>
+<td>Full domain</td>
+<td>Peak temperature reached during simulation (only <code>k_def_lo:k_def_hi</code> active)</td>
+</tr>
+<tr>
+<td><code>defect_arr(ni,nj,nk)</code></td>
+<td>Full domain</td>
+<td>Defect classification field</td>
+</tr>
+</tbody>
+</table>
+<h3 id="allocate_defectnni-nnj-nnk"><code>allocate_defect(nni, nnj, nnk)</code><a class="headerlink" href="#allocate_defectnni-nnj-nnk" title="Permanent link">&para;</a></h3>
+<p>Allocates arrays and determines the Z-range for defect analysis. The active range is from the top of the domain (<code>nkm1</code>) down to <code>z(nk) - layerheight</code>, covering only the powder/build layer.</p>
 <h3 id="update_max_temp"><code>update_max_temp()</code><a class="headerlink" href="#update_max_temp" title="Permanent link">&para;</a></h3>
-<p>Called every step: tracks peak temperature in each cell within the build layer.</p>
+<p>Called every time step. For each cell in the build layer (<code>k_def_lo:k_def_hi</code>), updates <code>max_temp(i,j,k)</code> if the current temperature exceeds the stored maximum. OpenMP parallelized.</p>
 <h3 id="compute_defect_determ"><code>compute_defect_determ()</code><a class="headerlink" href="#compute_defect_determ" title="Permanent link">&para;</a></h3>
-<p>Post-simulation classification:</p>
+<p>Called once after the simulation ends. Three-step process:</p>
+<ol>
+<li>
+<p><strong>Classify each cell</strong> based on peak temperature:</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Classification</th>
+<th><code>defect_arr</code> value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="arithmatex">\(T_{max} &lt; T_s\)</span></td>
+<td>Lack of fusion</td>
+<td><span class="arithmatex">\(-k_{lof}\)</span> (negative)</td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(T_s \leq T_{max} \leq T_b\)</span></td>
+<td>Sound (defect-free)</td>
+<td><span class="arithmatex">\(0\)</span></td>
+</tr>
+<tr>
+<td><span class="arithmatex">\(T_{max} &gt; T_b\)</span></td>
+<td>Keyhole porosity</td>
+<td><span class="arithmatex">\(\min\left(k_{kep} \frac{T_{max} - T_b}{T_b},\ 0.99\right)\)</span></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>Build scan region polygon</strong> from toolpath via <code>compute_scan_range()</code></p>
+</li>
+<li><strong>Zero defects outside scanned region</strong> — cells that were never under the laser path are not defects</li>
+</ol>
+<h3 id="compute_scan_range"><code>compute_scan_range()</code><a class="headerlink" href="#compute_scan_range" title="Permanent link">&para;</a></h3>
+<p>Builds a convex polygon (counter-clockwise) representing the laser-scanned region from the toolpath data:</p>
 <ul>
-<li><strong>Lack of fusion</strong>: <span class="arithmatex">\(T_{max} &lt; T_s\)</span> (never fully melted)</li>
-<li><strong>Keyhole porosity</strong>: <span class="arithmatex">\(T_{max} &gt; T_b\)</span> (vaporization occurred)</li>
-<li><strong>Sound</strong>: <span class="arithmatex">\(T_s \leq T_{max} \leq T_b\)</span></li>
+<li>Extracts left and right endpoints of each laser-on track</li>
+<li>Constructs polygon: right boundary (bottom→top) + left boundary (top→bottom)</li>
+<li>Also computes axis-aligned bounding box (<code>x_scan_min/max</code>, <code>y_scan_min/max</code>)</li>
 </ul>
+<h3 id="point_in_scan_regionpx-py"><code>point_in_scan_region(px, py)</code><a class="headerlink" href="#point_in_scan_regionpx-py" title="Permanent link">&para;</a></h3>
+<p>Tests if point <code>(px, py)</code> is inside the convex hull polygon using the cross-product winding method. Returns <code>.true.</code> if the point is inside (all cross products ≥ 0 for CCW polygon). Used to exclude cells outside the scanned area from defect statistics.</p>
 <h3 id="write_defect_report"><code>write_defect_report()</code><a class="headerlink" href="#write_defect_report" title="Permanent link">&para;</a></h3>
-<p>Outputs defect fraction, VTK files for max_temp and defect classification.</p>
+<p>Computes volumetric defect fractions and generates output:</p>
+<ol>
+<li>
+<p><strong>Metrics</strong> (over scanned region only):</p>
+<ul>
+<li>Total reference volume <span class="arithmatex">\(V_{total}\)</span></li>
+<li>Lack-of-fusion volume: <span class="arithmatex">\(V_{lof} = \sum |d_i| \cdot V_i\)</span> where <span class="arithmatex">\(d_i &lt; 0\)</span></li>
+<li>Keyhole porosity volume: <span class="arithmatex">\(V_{kep} = \sum d_i \cdot V_i\)</span> where <span class="arithmatex">\(0 &lt; d_i \leq 1\)</span></li>
+<li>Defect fraction: <span class="arithmatex">\((V_{lof} + V_{kep}) / V_{total} \times 100\%\)</span></li>
+</ul>
+</li>
+<li>
+<p><strong>Output files</strong>:</p>
+<ul>
+<li><code>&lt;case&gt;_defect_report.txt</code> — text summary with fractions, volumes, scan region, parameters</li>
+<li>Summary printed to <code>output.txt</code></li>
+<li>Calls <code>write_defect_vtk</code> for VTK output</li>
+</ul>
+</li>
+</ol>
+<h3 id="write_defect_vtkfieldname-field"><code>write_defect_vtk(fieldname, field)</code><a class="headerlink" href="#write_defect_vtkfieldname-field" title="Permanent link">&para;</a></h3>
+<p>Writes a binary VTK structured-grid file for the build layer Z-range only (<code>k_def_lo:k_def_hi</code>). Used to output both <code>maxtemp.vtk</code> and <code>defect.vtk</code>. Same format as <code>Cust_Out</code> VTK files (ASCII header + big-endian float32 binary data).</p>
+<h3 id="maxtemp_stochas"><code>maxtemp_stochas()</code><a class="headerlink" href="#maxtemp_stochas" title="Permanent link">&para;</a></h3>
+<p>Placeholder for future stochastic defect prediction method. Currently a no-op.</p>
 <hr />
 <h2 id="mod_timingf90-timing">mod_timing.f90 — <code>timing</code><a class="headerlink" href="#mod_timingf90-timing" title="Permanent link">&para;</a></h2>
 <h3 id="write_timing_reportitertot-timet_end-wall_elapsed-file_prefix"><code>write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)</code><a class="headerlink" href="#write_timing_reportitertot-timet_end-wall_elapsed-file_prefix" title="Permanent link">&para;</a></h3>
