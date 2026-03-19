@@ -1,20 +1,25 @@
-site_name: AM-CFD Documentation
+site_name: AM-CFD
 site_description: Additive Manufacturing CFD Solver — Fortran + OpenMP
 repo_url: https://github.com/DrZGan/AMCFD
 repo_name: DrZGan/AMCFD
 
 theme:
   name: material
+  logo: img/logo.png
+  favicon: img/logo.png
+  font:
+    text: Source Sans Pro
+    code: Source Code Pro
   palette:
     - scheme: default
-      primary: blue grey
-      accent: orange
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
     - scheme: slate
-      primary: blue grey
-      accent: orange
+      primary: custom
+      accent: custom
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
@@ -22,8 +27,13 @@ theme:
     - navigation.sections
     - navigation.expand
     - navigation.top
+    - navigation.indexes
     - content.code.copy
     - search.highlight
+    - toc.follow
+
+extra_css:
+  - stylesheets/custom.css
 
 markdown_extensions:
   - admonition
@@ -34,6 +44,8 @@ markdown_extensions:
   - tables
   - attr_list
   - md_in_html
+  - toc:
+      permalink: true
   - pymdownx.arithmatex:
       generic: true
 
