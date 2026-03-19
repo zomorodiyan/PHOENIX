@@ -114,7 +114,3 @@
   border-top: 2px solid var(--nature-border);
 }
 
-/* Logo sizing */
-.md-header__button.md-logo img {
-  height: 1.8rem;
-}
