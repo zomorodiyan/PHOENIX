@@ -1,0 +1,1641 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Additive Manufacturing CFD Solver — Fortran + OpenMP">
+      
+      
+      
+      
+        <link rel="prev" href="../getting-started/">
+      
+      
+        <link rel="next" href="../toolpath/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Input File Reference - AM-CFD Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#input-file-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AM-CFD Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Input File Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/DrZGan/AMCFD" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DrZGan/AMCFD
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AM-CFD Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/DrZGan/AMCFD" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DrZGan/AMCFD
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build & Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input File Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input File Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geometry-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometry Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#namelist-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namelist Blocks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Namelist Blocks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#process_parameters-surface-laser-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;process_parameters — Surface Laser Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumetric_parameters-volumetric-heat-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;volumetric_parameters — Volumetric Heat Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#material_properties-primary-material-c1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;material_properties — Primary Material (C=1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powder_properties-powder-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;powder_properties — Powder Layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numerical_relax-solver-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;numerical_relax — Solver Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boundary_conditions-thermal-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;boundary_conditions — Thermal Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local_solver-adaptive-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;local_solver — Adaptive Solver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output_control-output-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;output_control — Output Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../toolpath/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Toolpath
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/modules/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../architecture/solver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solver Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Species Transport
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Species Transport
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../species/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../species/tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Output & Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#file-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        File Structure
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#geometry-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometry Parameters
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#namelist-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Namelist Blocks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Namelist Blocks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#process_parameters-surface-laser-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;process_parameters — Surface Laser Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#volumetric_parameters-volumetric-heat-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;volumetric_parameters — Volumetric Heat Source
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#material_properties-primary-material-c1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;material_properties — Primary Material (C=1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#powder_properties-powder-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;powder_properties — Powder Layer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#numerical_relax-solver-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;numerical_relax — Solver Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#boundary_conditions-thermal-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;boundary_conditions — Thermal Boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local_solver-adaptive-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;local_solver — Adaptive Solver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#output_control-output-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;output_control — Output Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="input-file-reference">Input File Reference</h1>
+<p>All simulation parameters are defined in <code>fortran_new/inputfile/input_param.txt</code>. The file uses Fortran namelist format.</p>
+<h2 id="file-structure">File Structure</h2>
+<p>The input file has two sections:</p>
+<ol>
+<li><strong>Geometry block</strong> (free-format, line-by-line)</li>
+<li><strong>Namelist blocks</strong> (<code>&amp;name ... /</code> format)</li>
+</ol>
+<h2 id="geometry-parameters">Geometry Parameters</h2>
+<p>The geometry is defined by zones in each direction. Each zone has a length, number of control volumes, and power-law exponent for grid stretching.</p>
+<div class="highlight"><pre><span></span><code>nzx                          ! number of x-zones (max 7)
+xzone(1), xzone(2), ...     ! length of each zone (m)
+ncvx(1), ncvx(2), ...       ! number of CVs in each zone
+powrx(1), powrx(2), ...     ! power-law exponents (1=uniform, &gt;1=cluster at end, &lt;0=cluster at start)
+</code></pre></div>
+<p>Same pattern repeated for y (<code>nzy</code>) and z (<code>nzz</code>).</p>
+<p><strong>Example</strong> (current setup):</p>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Zones</th>
+<th>Lengths</th>
+<th>CVs</th>
+<th>Exponents</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>x</td>
+<td>1</td>
+<td>4.0 mm</td>
+<td>400</td>
+<td>1 (uniform)</td>
+<td>400 cells</td>
+</tr>
+<tr>
+<td>y</td>
+<td>1</td>
+<td>4.0 mm</td>
+<td>400</td>
+<td>1 (uniform)</td>
+<td>400 cells</td>
+</tr>
+<tr>
+<td>z</td>
+<td>2</td>
+<td>0.5 mm + 0.2 mm</td>
+<td>10 + 40</td>
+<td>-1.5, 1</td>
+<td>50 cells</td>
+</tr>
+</tbody>
+</table>
+<p>The z-direction uses two zones: a substrate zone (0.5 mm, coarse, clustered toward top) and a powder/build zone (0.2 mm, fine, uniform). Total domain: 4 mm x 4 mm x 0.7 mm.</p>
+<div class="admonition tip">
+<p class="admonition-title">Grid Stretching</p>
+<p>Power-law exponent controls cell clustering:</p>
+<ul>
+<li><code>powr = 1</code>: uniform spacing</li>
+<li><code>powr &gt; 1</code>: cells cluster toward the end of the zone</li>
+<li><code>powr &lt; 0</code>: cells cluster toward the start of the zone (e.g., -1.5 clusters z-cells toward the substrate-powder interface)</li>
+</ul>
+</div>
+<h2 id="namelist-blocks">Namelist Blocks</h2>
+<h3 id="process_parameters-surface-laser-source"><code>&amp;process_parameters</code> — Surface Laser Source</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alaspow</code></td>
+<td>W</td>
+<td>Surface laser power (set to 0 when using volumetric source)</td>
+</tr>
+<tr>
+<td><code>alaseta</code></td>
+<td>-</td>
+<td>Surface laser absorption efficiency</td>
+</tr>
+<tr>
+<td><code>alasrb</code></td>
+<td>m</td>
+<td>Laser beam radius (1/e^2)</td>
+</tr>
+<tr>
+<td><code>alasfact</code></td>
+<td>-</td>
+<td>Gaussian factor (typically 2 for 1/e^2 definition)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="volumetric_parameters-volumetric-heat-source"><code>&amp;volumetric_parameters</code> — Volumetric Heat Source</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>alaspowvol</code></td>
+<td>W</td>
+<td>Volumetric laser power</td>
+</tr>
+<tr>
+<td><code>alasetavol</code></td>
+<td>-</td>
+<td>Volumetric absorption efficiency</td>
+</tr>
+<tr>
+<td><code>sourcerad</code></td>
+<td>m</td>
+<td>Source radius (Gaussian 1/e^2)</td>
+</tr>
+<tr>
+<td><code>sourcedepth</code></td>
+<td>m</td>
+<td>Source penetration depth</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Either surface (<code>alaspow</code>) or volumetric (<code>alaspowvol</code>) source is used. Set the unused one to 0. The volumetric source distributes heat as:</p>
+<div class="arithmatex">\[q(x,y,z) = \frac{P \cdot \eta \cdot f}{\pi r_s^2 \cdot d_s} \exp\left(-\frac{f}{r_s^2}\left[(x-x_b)^2 + (y-y_b)^2\right]\right)\]</div>
+</div>
+<h3 id="material_properties-primary-material-c1"><code>&amp;material_properties</code> — Primary Material (C=1)</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dens</code></td>
+<td>kg/m^3</td>
+<td>Solid density</td>
+<td>8440</td>
+</tr>
+<tr>
+<td><code>denl</code></td>
+<td>kg/m^3</td>
+<td>Liquid density</td>
+<td>7640</td>
+</tr>
+<tr>
+<td><code>viscos</code></td>
+<td>Pa*s</td>
+<td>Dynamic viscosity (liquid)</td>
+<td>0.007</td>
+</tr>
+<tr>
+<td><code>tsolid</code></td>
+<td>K</td>
+<td>Solidus temperature</td>
+<td>1563</td>
+</tr>
+<tr>
+<td><code>tliquid</code></td>
+<td>K</td>
+<td>Liquidus temperature</td>
+<td>1623</td>
+</tr>
+<tr>
+<td><code>tboiling</code></td>
+<td>K</td>
+<td>Boiling/vaporization temperature</td>
+<td>2650</td>
+</tr>
+<tr>
+<td><code>hlatnt</code></td>
+<td>J/kg</td>
+<td>Latent heat of fusion</td>
+<td>290000</td>
+</tr>
+<tr>
+<td><code>acpa</code></td>
+<td>J/(kg*K^2)</td>
+<td>Solid specific heat coefficient (quadratic term)</td>
+<td>0.2441</td>
+</tr>
+<tr>
+<td><code>acpb</code></td>
+<td>J/(kg*K)</td>
+<td>Solid specific heat coefficient (linear term)</td>
+<td>338.59</td>
+</tr>
+<tr>
+<td><code>acpl</code></td>
+<td>J/(kg*K)</td>
+<td>Liquid specific heat (constant)</td>
+<td>709.25</td>
+</tr>
+<tr>
+<td><code>thconsa</code></td>
+<td>W/(m*K^2)</td>
+<td>Solid thermal conductivity coefficient (linear term)</td>
+<td>0.0155</td>
+</tr>
+<tr>
+<td><code>thconsb</code></td>
+<td>W/(m*K)</td>
+<td>Solid thermal conductivity coefficient (constant term)</td>
+<td>5.0435</td>
+</tr>
+<tr>
+<td><code>thconl</code></td>
+<td>W/(m*K)</td>
+<td>Liquid thermal conductivity (constant)</td>
+<td>30.078</td>
+</tr>
+<tr>
+<td><code>beta</code></td>
+<td>1/K</td>
+<td>Thermal expansion coefficient (for buoyancy)</td>
+<td>5e-5</td>
+</tr>
+<tr>
+<td><code>emiss</code></td>
+<td>-</td>
+<td>Surface emissivity (for radiative loss)</td>
+<td>0.3</td>
+</tr>
+<tr>
+<td><code>dgdtp</code></td>
+<td>N/(m*K)</td>
+<td>dg/dT — thermal Marangoni coefficient</td>
+<td>-3.8e-4</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Specific Heat Model</p>
+<p>Solid specific heat is temperature-dependent: <span class="arithmatex">\(c_p(T) = a \cdot T + b\)</span> where <code>acpa</code> = <span class="arithmatex">\(a\)</span>, <code>acpb</code> = <span class="arithmatex">\(b\)</span>.
+The enthalpy-temperature curve is:</p>
+<ul>
+<li><strong>Solid</strong> (<span class="arithmatex">\(T \leq T_s\)</span>): <span class="arithmatex">\(H = \frac{a}{2}T^2 + bT\)</span></li>
+<li><strong>Mushy</strong> (<span class="arithmatex">\(T_s &lt; T &lt; T_l\)</span>): linear interpolation between <span class="arithmatex">\(H_s\)</span> and <span class="arithmatex">\(H_l\)</span></li>
+<li><strong>Liquid</strong> (<span class="arithmatex">\(T \geq T_l\)</span>): <span class="arithmatex">\(H = H_l + c_{p,l}(T - T_l)\)</span></li>
+</ul>
+</div>
+<h3 id="powder_properties-powder-layer"><code>&amp;powder_properties</code> — Powder Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>layerheight</code></td>
+<td>m</td>
+<td>Powder layer thickness</td>
+<td>0.04e-3</td>
+</tr>
+<tr>
+<td><code>pden</code></td>
+<td>kg/m^3</td>
+<td>Powder density (accounts for porosity)</td>
+<td>4330</td>
+</tr>
+<tr>
+<td><code>pcpa</code></td>
+<td>J/(kg*K^2)</td>
+<td>Powder specific heat (quadratic)</td>
+<td>0.2508</td>
+</tr>
+<tr>
+<td><code>pcpb</code></td>
+<td>J/(kg*K)</td>
+<td>Powder specific heat (linear)</td>
+<td>357.7</td>
+</tr>
+<tr>
+<td><code>pthcona</code></td>
+<td>W/(m*K^2)</td>
+<td>Powder conductivity (linear)</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>pthconb</code></td>
+<td>W/(m*K)</td>
+<td>Powder conductivity (constant)</td>
+<td>0.995</td>
+</tr>
+</tbody>
+</table>
+<p>Powder properties apply to cells in the top <code>layerheight</code> of the domain that have not yet been melted (<code>solidfield &lt;= 0.5</code>).</p>
+<h3 id="numerical_relax-solver-parameters"><code>&amp;numerical_relax</code> — Solver Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>maxit</code></td>
+<td>-</td>
+<td>Max iterations per time step</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>delt</code></td>
+<td>s</td>
+<td>Time step size</td>
+<td>2e-5</td>
+</tr>
+<tr>
+<td><code>timax</code></td>
+<td>s</td>
+<td>Total simulation time</td>
+<td>0.09</td>
+</tr>
+<tr>
+<td><code>urfu</code></td>
+<td>-</td>
+<td>Under-relaxation factor for u-velocity</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>urfv</code></td>
+<td>-</td>
+<td>Under-relaxation factor for v-velocity</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>urfw</code></td>
+<td>-</td>
+<td>Under-relaxation factor for w-velocity</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>urfp</code></td>
+<td>-</td>
+<td>Under-relaxation factor for pressure</td>
+<td>0.7</td>
+</tr>
+<tr>
+<td><code>urfh</code></td>
+<td>-</td>
+<td>Under-relaxation factor for enthalpy</td>
+<td>0.7</td>
+</tr>
+</tbody>
+</table>
+<h3 id="boundary_conditions-thermal-boundaries"><code>&amp;boundary_conditions</code> — Thermal Boundaries</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>htci</code></td>
+<td>W/(m^2*K)</td>
+<td>Convection coefficient on x-faces (west/east)</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>htcj</code></td>
+<td>W/(m^2*K)</td>
+<td>Convection coefficient on y-faces (north/south)</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>htck1</code></td>
+<td>W/(m^2*K)</td>
+<td>Convection coefficient on bottom face</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>htckn</code></td>
+<td>W/(m^2*K)</td>
+<td>Convection coefficient on top face</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>tempWest</code></td>
+<td>K</td>
+<td>Far-field temperature at west boundary</td>
+<td>293</td>
+</tr>
+<tr>
+<td><code>tempEast</code></td>
+<td>K</td>
+<td>Far-field temperature at east boundary</td>
+<td>293</td>
+</tr>
+<tr>
+<td><code>tempNorth</code></td>
+<td>K</td>
+<td>Far-field temperature at north boundary</td>
+<td>293</td>
+</tr>
+<tr>
+<td><code>tempBottom</code></td>
+<td>K</td>
+<td>Far-field temperature at bottom boundary</td>
+<td>293</td>
+</tr>
+<tr>
+<td><code>tempPreheat</code></td>
+<td>K</td>
+<td>Initial/preheat temperature</td>
+<td>293</td>
+</tr>
+<tr>
+<td><code>tempAmb</code></td>
+<td>K</td>
+<td>Ambient temperature (for radiation)</td>
+<td>293</td>
+</tr>
+</tbody>
+</table>
+<p>The top surface uses combined convection + radiation:
+$<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)\)</span>$</p>
+<h3 id="local_solver-adaptive-solver"><code>&amp;local_solver</code> — Adaptive Solver</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localnum</code></td>
+<td>-</td>
+<td>Number of local steps between global steps</td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>local_half_x</code></td>
+<td>m</td>
+<td>Half-width of local region in x</td>
+<td>1.0e-3</td>
+</tr>
+<tr>
+<td><code>local_half_y</code></td>
+<td>m</td>
+<td>Half-width of local region in y</td>
+<td>2.0e-4</td>
+</tr>
+<tr>
+<td><code>local_depth_z</code></td>
+<td>m</td>
+<td>Depth of local region in z</td>
+<td>2.0e-4</td>
+</tr>
+</tbody>
+</table>
+<p>The local solver only updates enthalpy in a small region around the melt pool for <code>localnum</code> consecutive steps, then solves the full domain. This provides significant speedup (typically 3-5x) with minimal accuracy loss.</p>
+<h3 id="output_control-output-settings"><code>&amp;output_control</code> — Output Settings</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>outputintervel</code></td>
+<td>steps</td>
+<td>VTK output frequency (every N time steps)</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>case_name</code></td>
+<td>-</td>
+<td>Case identifier (sets output directory name)</td>
+<td>'testcase'</td>
+</tr>
+<tr>
+<td><code>toolpath_file</code></td>
+<td>-</td>
+<td>Path to toolpath file (.crs)</td>
+<td>'./ToolFiles/B26.crs'</td>
+</tr>
+<tr>
+<td><code>species_flag</code></td>
+<td>-</td>
+<td>Enable species transport (0=off, 1=on)</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

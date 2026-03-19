@@ -1,0 +1,3371 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Additive Manufacturing CFD Solver — Fortran + OpenMP">
+      
+      
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../solver/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>Module Reference - AM-CFD Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#module-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AM-CFD Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Module Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/DrZGan/AMCFD" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DrZGan/AMCFD
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AM-CFD Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/DrZGan/AMCFD" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    DrZGan/AMCFD
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Getting Started
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Build & Run
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../input-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Input File Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../toolpath/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Toolpath
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Architecture
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mod_precisionf90-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_precision.f90 — precision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_constf90-constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_const.f90 — constant
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_cfd_utilsf90-cfd_utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_cfd_utils.f90 — cfd_utils
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_cfd_utils.f90 — cfd_utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#harmonic_meanval1-val2-frac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        harmonic_mean(val1, val2, frac)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power_law_coeffdiff-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        power_law_coeff(diff, flux)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#darcy_resistanceviscos-fracl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        darcy_resistance(viscos, fracl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_paramf90-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_param.f90 — parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_param.f90 — parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_data()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_geomf90-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_geom.f90 — geometry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_geom.f90 — geometry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate_grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_grid()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-quantities-computed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometric quantities computed:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_field_dataf90-field_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_field_data.f90 — field_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_field_data.f90 — field_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allocate_field_datanni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_field_data(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_coeff_dataf90-coeff_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_coeff_data.f90 — coeff_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_coeff_data.f90 — coeff_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allocate_coeff_datanni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_coeff_data(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_sim_statef90-sim_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_sim_state.f90 — sim_state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_initf90-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_init.f90 — initialization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_init.f90 — initialization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        initialize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_laserf90-laserinput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_laser.f90 — laserinput
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_laser.f90 — laserinput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#laser_beam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        laser_beam()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_toolpathf90-toolpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_toolpath.f90 — toolpath
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_toolpath.f90 — toolpath">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read_toolpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_toolpath()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read_coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_coordinates()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_dimenf90-dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_dimen.f90 — dimensions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_dimen.f90 — dimensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pool_sizeilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pool_size(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_local_enthalpy.f90 — local_enthalpy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_local_enthalpy.f90 — local_enthalpy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute_delt_eff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_delt_eff()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_skipped-is_local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_skipped(..., is_local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_propf90-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_prop.f90 — property
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_prop.f90 — property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#propertiesilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        properties(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_speciesf90-species" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_species.f90 — species
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_species.f90 — species">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key functions:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_boundf90-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_bound.f90 — boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_bound.f90 — boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bound_uvidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_uv(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_w" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_w()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_discretf90-discretization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_discret.f90 — discretization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_discret.f90 — discretization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#discretize_momentumidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_momentum(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discretize_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discretize_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_entotf90-entotemp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_entot.f90 — entotemp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_entot.f90 — entotemp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_sourf90-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_sour.f90 — source
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_sour.f90 — source">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source_momentumidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_momentum(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_residf90-residue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_resid.f90 — residue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_resid.f90 — residue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calc_momentum_residualvel-resor_out-calc_refmom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_momentum_residual(vel, resor_out, calc_refmom)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calc_pressure_residual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_pressure_residual()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_solvef90-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_solve.f90 — solver
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_solve.f90 — solver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_uvwfield-solution_enthalpyilo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        solution_uvw(field) / solution_enthalpy(ilo,...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanuvw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cleanuvw()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_convergef90-convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_converge.f90 — convergence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_converge.f90 — convergence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enhance_converge_speedilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_revisef90-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_revise.f90 — revision
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_revise.f90 — revision">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#revision_p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        revision_p()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_fluxf90-fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_flux.f90 — fluxes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_flux.f90 — fluxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#heat_fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_fluxes()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_defectf90-defect_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_defect.f90 — defect_field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_defect.f90 — defect_field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#update_max_temp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_max_temp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute_defect_determ" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_defect_determ()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_defect_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_defect_report()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_timingf90-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_timing.f90 — timing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_timing.f90 — timing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write_timing_reportitertot-timet_end-wall_elapsed-file_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_memory_reportfile_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_memory_report(file_prefix)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_printf90-printing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_print.f90 — printing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_print.f90 — printing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outputres" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outputres()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cust_out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cust_Out()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#init_thermal_history-write_thermal_historytimet-finalize_thermal_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        init_thermal_history() / write_thermal_history(timet) / finalize_thermal_history()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_vtk_scalarunit-filename-name-field-write_vtk_vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_vtk_scalar(unit, filename, name, field) / write_vtk_vector(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../solver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solver Algorithm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Species Transport
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Species Transport
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../species/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../species/tasks/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Task Tracking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../output/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Output & Visualization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mod_precisionf90-precision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_precision.f90 — precision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_constf90-constant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_const.f90 — constant
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_cfd_utilsf90-cfd_utils" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_cfd_utils.f90 — cfd_utils
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_cfd_utils.f90 — cfd_utils">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#harmonic_meanval1-val2-frac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        harmonic_mean(val1, val2, frac)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power_law_coeffdiff-flux" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        power_law_coeff(diff, flux)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#darcy_resistanceviscos-fracl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        darcy_resistance(viscos, fracl)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_paramf90-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_param.f90 — parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_param.f90 — parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_data()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_geomf90-geometry" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_geom.f90 — geometry
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_geom.f90 — geometry">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#generate_grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_grid()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#geometric-quantities-computed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Geometric quantities computed:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_field_dataf90-field_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_field_data.f90 — field_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_field_data.f90 — field_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allocate_field_datanni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_field_data(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_coeff_dataf90-coeff_data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_coeff_data.f90 — coeff_data
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_coeff_data.f90 — coeff_data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#allocate_coeff_datanni-nnj-nnk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        allocate_coeff_data(nni, nnj, nnk)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_sim_statef90-sim_state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_sim_state.f90 — sim_state
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_initf90-initialization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_init.f90 — initialization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_init.f90 — initialization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initialize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        initialize()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_laserf90-laserinput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_laser.f90 — laserinput
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_laser.f90 — laserinput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#laser_beam" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        laser_beam()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_toolpathf90-toolpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_toolpath.f90 — toolpath
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_toolpath.f90 — toolpath">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#read_toolpath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_toolpath()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#read_coordinates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        read_coordinates()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_dimenf90-dimensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_dimen.f90 — dimensions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_dimen.f90 — dimensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pool_sizeilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        pool_size(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_local_enthalpy.f90 — local_enthalpy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_local_enthalpy.f90 — local_enthalpy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute_delt_eff" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_delt_eff()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_skipped-is_local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_skipped(..., is_local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_propf90-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_prop.f90 — property
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_prop.f90 — property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#propertiesilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        properties(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_speciesf90-species" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_species.f90 — species
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_species.f90 — species">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key functions:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_boundf90-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_bound.f90 — boundary
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_bound.f90 — boundary">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bound_uvidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_uv(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_w" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_w()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_discretf90-discretization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_discret.f90 — discretization
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_discret.f90 — discretization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#discretize_momentumidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_momentum(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discretize_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discretize_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        discretize_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_entotf90-entotemp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_entot.f90 — entotemp
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_entot.f90 — entotemp">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_sourf90-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_sour.f90 — source
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_sour.f90 — source">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#source_momentumidir" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_momentum(idir)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source_pp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_pp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_residf90-residue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_resid.f90 — residue
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_resid.f90 — residue">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#calc_momentum_residualvel-resor_out-calc_refmom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_momentum_residual(vel, resor_out, calc_refmom)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#calc_pressure_residual" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        calc_pressure_residual()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_solvef90-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_solve.f90 — solver
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_solve.f90 — solver">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#solution_uvwfield-solution_enthalpyilo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        solution_uvw(field) / solution_enthalpy(ilo,...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleanuvw" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cleanuvw()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_convergef90-convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_converge.f90 — convergence
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_converge.f90 — convergence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enhance_converge_speedilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_revisef90-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_revise.f90 — revision
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_revise.f90 — revision">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#revision_p" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        revision_p()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_fluxf90-fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_flux.f90 — fluxes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_flux.f90 — fluxes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#heat_fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        heat_fluxes()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_defectf90-defect_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_defect.f90 — defect_field
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_defect.f90 — defect_field">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#update_max_temp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_max_temp()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compute_defect_determ" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute_defect_determ()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_defect_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_defect_report()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_timingf90-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_timing.f90 — timing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_timing.f90 — timing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write_timing_reportitertot-timet_end-wall_elapsed-file_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_memory_reportfile_prefix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_memory_report(file_prefix)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_printf90-printing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_print.f90 — printing
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_print.f90 — printing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#outputres" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        outputres()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cust_out" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cust_Out()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#init_thermal_history-write_thermal_historytimet-finalize_thermal_history" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        init_thermal_history() / write_thermal_history(timet) / finalize_thermal_history()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_vtk_scalarunit-filename-name-field-write_vtk_vector" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        write_vtk_scalar(unit, filename, name, field) / write_vtk_vector(...)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="module-reference">Module Reference</h1>
+<p>Detailed documentation for every module in <code>fortran_new/</code>.</p>
+<hr />
+<h2 id="mod_precisionf90-precision">mod_precision.f90 — <code>precision</code></h2>
+<p>Defines working precision for the entire codebase.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">37</span><span class="p">)</span><span class="w">  </span><span class="c">! single precision</span>
+</code></pre></div>
+<p>All floating-point variables use <code>real(wp)</code>. Change to <code>selected_real_kind(15, 307)</code> for double precision.</p>
+<hr />
+<h2 id="mod_constf90-constant">mod_const.f90 — <code>constant</code></h2>
+<p>Physical constants and simulation control parameters.</p>
+<table>
+<thead>
+<tr>
+<th>Constant</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>9.8</td>
+<td>Gravitational acceleration (m/s^2)</td>
+</tr>
+<tr>
+<td><code>pi</code></td>
+<td>3.14159...</td>
+<td>Pi</td>
+</tr>
+<tr>
+<td><code>sigm</code></td>
+<td>5.67e-8</td>
+<td>Stefan-Boltzmann constant (W/m^2/K^4)</td>
+</tr>
+<tr>
+<td><code>great</code></td>
+<td>1e20</td>
+<td>Large number (for zeroing solid velocity)</td>
+</tr>
+<tr>
+<td><code>small</code></td>
+<td>1e-6</td>
+<td>Small number (avoid division by zero)</td>
+</tr>
+<tr>
+<td><code>conv_res_heat</code></td>
+<td>1e-5</td>
+<td>Enthalpy convergence threshold (heating)</td>
+</tr>
+<tr>
+<td><code>conv_res_cool</code></td>
+<td>1e-6</td>
+<td>Enthalpy convergence threshold (cooling)</td>
+</tr>
+<tr>
+<td><code>vis_solid</code></td>
+<td>1e10</td>
+<td>Effective viscosity in solid (Pa*s)</td>
+</tr>
+<tr>
+<td><code>powder_threshold</code></td>
+<td>0.5</td>
+<td>solidfield threshold for powder detection</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mod_cfd_utilsf90-cfd_utils">mod_cfd_utils.f90 — <code>cfd_utils</code></h2>
+<p>Pure utility functions for CFD calculations.</p>
+<h3 id="temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp"><code>temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)</code></h3>
+<p>Converts temperature to enthalpy using piecewise model:</p>
+<ul>
+<li>Solid (<span class="arithmatex">\(T \leq T_s\)</span>): <span class="arithmatex">\(H = \frac{a}{2}T^2 + bT\)</span></li>
+<li>Mushy (<span class="arithmatex">\(T_s &lt; T &lt; T_l\)</span>): linear interpolation</li>
+<li>Liquid (<span class="arithmatex">\(T \geq T_l\)</span>): <span class="arithmatex">\(H = H_l + c_{p,l}(T - T_l)\)</span></li>
+</ul>
+<h3 id="harmonic_meanval1-val2-frac"><code>harmonic_mean(val1, val2, frac)</code></h3>
+<p>Harmonic-mean interpolation for face properties: <span class="arithmatex">\(\bar{k} = \frac{1}{f/k_1 + (1-f)/k_2}\)</span>. Used for viscosity and diffusivity at cell faces.</p>
+<h3 id="power_law_coeffdiff-flux"><code>power_law_coeff(diff, flux)</code></h3>
+<p>Power-law discretization scheme: returns <span class="arithmatex">\(D \cdot \max(0, (1 - 0.1|F/D|)^5) + \max(0, -F)\)</span>. Blends central differencing (low Peclet) and upwind (high Peclet).</p>
+<h3 id="darcy_resistanceviscos-fracl"><code>darcy_resistance(viscos, fracl)</code></h3>
+<p>Carman-Kozeny model for mushy zone: <span class="arithmatex">\(S = \frac{180 \mu}{K_0} \frac{(1-f_l)^2}{f_l + \epsilon}\)</span></p>
+<hr />
+<h2 id="mod_paramf90-parameters">mod_param.f90 — <code>parameters</code></h2>
+<p>Reads all simulation parameters from <code>input_param.txt</code>.</p>
+<h3 id="read_data"><code>read_data()</code></h3>
+<p>Parses geometry (zones, CVs, exponents) and 7 namelist groups. Creates result directory <code>result/&lt;case_name&gt;/</code> automatically.</p>
+<p>See <a href="../../input-reference/">Input File Reference</a> for parameter details.</p>
+<hr />
+<h2 id="mod_geomf90-geometry">mod_geom.f90 — <code>geometry</code></h2>
+<p>Generates the 3D structured grid.</p>
+<h3 id="generate_grid"><code>generate_grid()</code></h3>
+<p>Entry point: calls <code>generate_1d_grid</code> for x, y, z directions, then computes all geometric quantities.</p>
+<h3 id="generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1"><code>generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)</code></h3>
+<p>Generates 1D non-uniform grid for one coordinate direction using power-law spacing within each zone. Outputs:</p>
+<ul>
+<li><code>scalar_grid</code>: cell-center positions (x, y, z)</li>
+<li><code>vel_grid</code>: face positions (xu, yv, zw)</li>
+<li><code>n</code>, <code>nm1</code>: total cells, total cells minus 1</li>
+</ul>
+<h3 id="geometric-quantities-computed">Geometric quantities computed:</h3>
+<ul>
+<li><code>volume(i,j,k)</code>: scalar CV volume</li>
+<li><code>volume_u/v/w</code>: staggered CV volumes</li>
+<li><code>areaij/jk/ik</code>: scalar face areas</li>
+<li><code>areauij/uik</code>, <code>areavjk/vij</code>, <code>areawik/wjk</code>: staggered face areas</li>
+<li><code>dxpwinv/dypsinv/dzpbinv</code>: inverse distances between scalar nodes (for gradient computation)</li>
+<li><code>fracx/fracy/fracz</code>: interpolation fractions</li>
+</ul>
+<hr />
+<h2 id="mod_field_dataf90-field_data">mod_field_data.f90 — <code>field_data</code></h2>
+<p>Allocates primary flow field arrays.</p>
+<h3 id="allocate_field_datanni-nnj-nnk"><code>allocate_field_data(nni, nnj, nnk)</code></h3>
+<p>Allocates all arrays to <code>(nni, nnj, nnk)</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Array</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>uVel, vVel, wVel</code></td>
+<td>Current velocity components</td>
+</tr>
+<tr>
+<td><code>unot, vnot, wnot</code></td>
+<td>Previous time step velocity</td>
+</tr>
+<tr>
+<td><code>pressure, pp</code></td>
+<td>Pressure and pressure correction</td>
+</tr>
+<tr>
+<td><code>enthalpy, hnot</code></td>
+<td>Current and previous enthalpy</td>
+</tr>
+<tr>
+<td><code>temp, tnot</code></td>
+<td>Current and previous temperature</td>
+</tr>
+<tr>
+<td><code>fracl, fraclnot</code></td>
+<td>Current and previous liquid fraction</td>
+</tr>
+<tr>
+<td><code>solidfield</code></td>
+<td>Track ID that solidified each cell</td>
+</tr>
+<tr>
+<td><code>localfield</code></td>
+<td>Local solver region visualization</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mod_coeff_dataf90-coeff_data">mod_coeff_data.f90 — <code>coeff_data</code></h2>
+<p>Allocates FVM discretization coefficient arrays.</p>
+<h3 id="allocate_coeff_datanni-nnj-nnk"><code>allocate_coeff_data(nni, nnj, nnk)</code></h3>
+<table>
+<thead>
+<tr>
+<th>Array</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vis, diff, den</code></td>
+<td>Material properties (viscosity, diffusivity, density)</td>
+</tr>
+<tr>
+<td><code>an, as, ae, aw, at, ab</code></td>
+<td>Neighbor coefficients (north, south, east, west, top, bottom)</td>
+</tr>
+<tr>
+<td><code>ap</code></td>
+<td>Central coefficient</td>
+</tr>
+<tr>
+<td><code>apnot</code></td>
+<td>Transient term coefficient</td>
+</tr>
+<tr>
+<td><code>su, sp</code></td>
+<td>Explicit and implicit source terms</td>
+</tr>
+<tr>
+<td><code>dux, dvy, dwz</code></td>
+<td>Velocity correction coefficients (for SIMPLE)</td>
+</tr>
+</tbody>
+</table>
+<p>All arrays are <strong>shared</strong> between equations — enthalpy, u, v, w, pp, and species all reuse them sequentially.</p>
+<hr />
+<h2 id="mod_sim_statef90-sim_state">mod_sim_state.f90 — <code>sim_state</code></h2>
+<p>Global simulation state variables.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dgdt</code></td>
+<td>Thermal Marangoni coefficient (= <code>dgdtp</code> from input)</td>
+</tr>
+<tr>
+<td><code>deltemp</code></td>
+<td>Liquidus - solidus temperature difference</td>
+</tr>
+<tr>
+<td><code>cpavg</code></td>
+<td>Average specific heat in mushy zone</td>
+</tr>
+<tr>
+<td><code>hlcal</code></td>
+<td>Enthalpy at liquidus temperature</td>
+</tr>
+<tr>
+<td><code>boufac</code></td>
+<td>Buoyancy factor: <code>denl * g * beta</code></td>
+</tr>
+<tr>
+<td><code>resorm</code></td>
+<td>Mass conservation residual</td>
+</tr>
+<tr>
+<td><code>refmom</code></td>
+<td>Reference momentum for residual normalization</td>
+</tr>
+<tr>
+<td><code>beam_pos, beam_posy</code></td>
+<td>Current laser position</td>
+</tr>
+<tr>
+<td><code>toolmatrix(1000,5)</code></td>
+<td>Toolpath waypoints</td>
+</tr>
+<tr>
+<td><code>coordhistory(5000,8)</code></td>
+<td>Beam state history</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mod_initf90-initialization">mod_init.f90 — <code>initialization</code></h2>
+<p>Startup initialization wrapper.</p>
+<h3 id="initialize"><code>initialize()</code></h3>
+<ol>
+<li>Computes derived constants: <code>hsmelt</code>, <code>hlcal</code>, <code>boufac</code>, <code>dgdt</code>, <code>deltemp</code></li>
+<li>Initializes all fields to preheat conditions (velocity=0, T=tempPreheat)</li>
+<li>Sets enthalpy boundary values from temperature BCs</li>
+<li>Initializes <code>solidfield = 0</code> (no solidification yet)</li>
+</ol>
+<hr />
+<h2 id="mod_laserf90-laserinput">mod_laser.f90 — <code>laserinput</code></h2>
+<p>Laser beam management.</p>
+<h3 id="laser_beam"><code>laser_beam()</code></h3>
+<p>Called every time step:</p>
+<ol>
+<li>Interpolates <code>toolmatrix</code> to find beam position at current <code>timet</code></li>
+<li>Advances <code>PathNum</code> when passing waypoints</li>
+<li>Computes scan velocity from position differences</li>
+<li>Distributes laser power as 2D Gaussian on top surface</li>
+<li>Identifies initial melt pool search region (imin, imax, jmin, jmax)</li>
+</ol>
+<hr />
+<h2 id="mod_toolpathf90-toolpath">mod_toolpath.f90 — <code>toolpath</code></h2>
+<h3 id="read_toolpath"><code>read_toolpath()</code></h3>
+<p>Reads <code>.crs</code> file into <code>toolmatrix(1000, 5)</code>. Format: time, x, y, z, laser_flag.</p>
+<h3 id="read_coordinates"><code>read_coordinates()</code></h3>
+<p>Records current beam state (position, power, velocity) to <code>coordhistory</code> rolling buffer each time step.</p>
+<hr />
+<h2 id="mod_dimenf90-dimensions">mod_dimen.f90 — <code>dimensions</code></h2>
+<h3 id="pool_sizeilo-ihi-jlo-jhi-klo-khi"><code>pool_size(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Detects melt pool extent from temperature field:</p>
+<ol>
+<li>Scans domain for cells above <code>tsolid</code></li>
+<li>Computes pool dimensions: <code>alen</code> (x-length), <code>depth</code> (z), <code>width</code> (y)</li>
+<li>Sets solver bounds with 2-3 cell padding: <code>istat</code>, <code>iend</code>, <code>jstat</code>, <code>jend</code>, <code>kstat</code></li>
+<li>Pre-computes <code>istatp1 = istat+1</code>, <code>iendm1 = iend-1</code></li>
+</ol>
+<p>These indices are used by momentum solver, species solver, and velocity cleanup.</p>
+<hr />
+<h2 id="mod_local_enthalpyf90-local_enthalpy">mod_local_enthalpy.f90 — <code>local_enthalpy</code></h2>
+<h3 id="get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi"><code>get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Determines if current step is local or global:</p>
+<ul>
+<li>Global: every <code>localnum+1</code> steps, or first step</li>
+<li>Local: otherwise, returns small region around melt pool</li>
+</ul>
+<h3 id="compute_delt_eff"><code>compute_delt_eff()</code></h3>
+<p>Updates effective time step for all cells: <code>delt_eff(i,j,k) = delt * (n_skipped(i,j,k) + 1)</code>.</p>
+<h3 id="update_skipped-is_local"><code>update_skipped(..., is_local)</code></h3>
+<p>Increments skip counter for cells outside current solve region; resets to 0 for solved cells.</p>
+<hr />
+<h2 id="mod_propf90-property">mod_prop.f90 — <code>property</code></h2>
+<h3 id="propertiesilo-ihi-jlo-jhi-klo-khi"><code>properties(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Updates material property arrays based on temperature (and concentration when <code>species_flag=1</code>):</p>
+<p><strong>Three regimes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Regime</th>
+<th>Condition</th>
+<th>Viscosity</th>
+<th>Diffusivity</th>
+<th>Density</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liquid</td>
+<td><span class="arithmatex">\(T \geq T_l\)</span></td>
+<td><code>viscos</code></td>
+<td><code>thconl/acpl</code></td>
+<td><code>denl</code></td>
+</tr>
+<tr>
+<td>Solid</td>
+<td><span class="arithmatex">\(T \leq T_s\)</span></td>
+<td><code>vis_solid</code> (1e10)</td>
+<td><code>(thconsa*T+thconsb)/(acpa*T+acpb)</code></td>
+<td><code>dens</code></td>
+</tr>
+<tr>
+<td>Mushy</td>
+<td><span class="arithmatex">\(T_s &lt; T &lt; T_l\)</span></td>
+<td><code>viscos</code></td>
+<td><code>fracl*diffl + (1-fracl)*diffs</code></td>
+<td><code>fracl*denl + (1-fracl)*dens</code></td>
+</tr>
+</tbody>
+</table>
+<p>Powder cells (top layer, not yet melted) use reduced density and conductivity.</p>
+<p>When <code>species_flag=1</code>: all properties are computed from <code>mix(prop_primary, prop_secondary, C)</code> before applying the three-regime logic.</p>
+<hr />
+<h2 id="mod_speciesf90-species">mod_species.f90 — <code>species</code></h2>
+<p>Species transport for dissimilar metal mixing. See <a href="../../species/overview/">Species Transport</a> for details.</p>
+<h3 id="key-functions">Key functions:</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mix(prop1, prop2, C)</code></td>
+<td>Pure function: <code>prop1*C + prop2*(1-C)</code></td>
+</tr>
+<tr>
+<td><code>allocate_species()</code></td>
+<td>Allocates concentration arrays</td>
+</tr>
+<tr>
+<td><code>init_species()</code></td>
+<td>Sets IC: substrate=1, powder half=0</td>
+</tr>
+<tr>
+<td><code>species_bc()</code></td>
+<td>Zero-flux Neumann on all faces</td>
+</tr>
+<tr>
+<td><code>solve_species()</code></td>
+<td>Full solve: discretize + source + TDMA + block correction + clip + residual</td>
+</tr>
+<tr>
+<td><code>solution_species_tdma()</code></td>
+<td>OpenMP TDMA with per-thread buffers</td>
+</tr>
+<tr>
+<td><code>enhance_species_speed()</code></td>
+<td>Block correction in x-direction</td>
+</tr>
+<tr>
+<td><code>calc_species_residual()</code></td>
+<td>Weighted residual for convergence monitoring</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mod_boundf90-boundary">mod_bound.f90 — <code>boundary</code></h2>
+<h3 id="bound_uvidir"><code>bound_uv(idir)</code></h3>
+<p>Top surface Marangoni boundary condition (k=nk):</p>
+<div class="arithmatex">\[u_{surface} = u_{below} + \frac{f_l}{vis} \left(\frac{d\gamma}{dT}\frac{\partial T}{\partial x} + \frac{d\gamma}{dC}\frac{\partial C}{\partial x}\right) \frac{1}{\Delta z^{-1}}\]</div>
+<p>The solutal Marangoni term (<code>dgdc * dC/dx</code>) is only active when <code>species_flag=1</code>.</p>
+<h3 id="bound_w"><code>bound_w()</code></h3>
+<p>No-slip condition at melt pool boundaries for w-velocity.</p>
+<h3 id="bound_pp"><code>bound_pp()</code></h3>
+<p>Zero pressure correction in solid region.</p>
+<h3 id="bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local"><code>bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)</code></h3>
+<ul>
+<li><strong>Top surface</strong>: radiation + convection loss</li>
+<li><strong>Other faces</strong>: convection to ambient</li>
+<li><strong>Local mode</strong>: Dirichlet (frozen values) outside local region</li>
+</ul>
+<hr />
+<h2 id="mod_discretf90-discretization">mod_discret.f90 — <code>discretization</code></h2>
+<h3 id="discretize_momentumidir"><code>discretize_momentum(idir)</code></h3>
+<p>FVM discretization for u (idir=1), v (idir=2), w (idir=3):</p>
+<ol>
+<li>Interpolates face velocities from staggered grid</li>
+<li>Computes convection coefficients: <span class="arithmatex">\(F = \rho u A\)</span></li>
+<li>Computes face viscosity via harmonic mean</li>
+<li>Computes diffusion coefficients: <span class="arithmatex">\(D = \mu A / \Delta x\)</span></li>
+<li>Applies power-law scheme for neighbor coefficients</li>
+<li>Adds transient term: <span class="arithmatex">\(a_{P}^0 = \rho V / \Delta t\)</span></li>
+<li>Adds pressure gradient and cross-derivative source terms</li>
+</ol>
+<h3 id="discretize_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses <code>delt_eff</code> for transient term (local solver compensation).</p>
+<h3 id="discretize_pp"><code>discretize_pp()</code></h3>
+<p>Pressure-correction equation using velocity correction coefficients from momentum solve.</p>
+<hr />
+<h2 id="mod_entotf90-entotemp">mod_entot.f90 — <code>entotemp</code></h2>
+<h3 id="enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi"><code>enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Inverts enthalpy-temperature relationship:</p>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Condition</th>
+<th>Temperature</th>
+<th>Liquid Fraction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Liquid</td>
+<td><span class="arithmatex">\(H \geq H_l\)</span></td>
+<td><span class="arithmatex">\(T = (H - H_l)/c_{p,l} + T_l\)</span></td>
+<td><span class="arithmatex">\(f_l = 1\)</span></td>
+</tr>
+<tr>
+<td>Solid</td>
+<td><span class="arithmatex">\(H \leq H_s\)</span></td>
+<td><span class="arithmatex">\(T = (-b + \sqrt{b^2 + 2aH})/a\)</span></td>
+<td><span class="arithmatex">\(f_l = 0\)</span></td>
+</tr>
+<tr>
+<td>Mushy</td>
+<td><span class="arithmatex">\(H_s &lt; H &lt; H_l\)</span></td>
+<td><span class="arithmatex">\(T = \Delta T \cdot f_l + T_s\)</span></td>
+<td><span class="arithmatex">\(f_l = (H - H_s)/(H_l - H_s)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>When <code>species_flag=1</code>: <span class="arithmatex">\(H_s\)</span>, <span class="arithmatex">\(H_l\)</span>, <span class="arithmatex">\(\Delta T\)</span>, <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(b\)</span>, <span class="arithmatex">\(c_{p,l}\)</span> are all computed inline from <code>mix()</code> using local concentration.</p>
+<hr />
+<h2 id="mod_sourf90-source">mod_sour.f90 — <code>source</code></h2>
+<h3 id="source_momentumidir"><code>source_momentum(idir)</code></h3>
+<ol>
+<li><strong>Darcy resistance</strong> in mushy zone: <span class="arithmatex">\(S_p = -\frac{180\mu}{K_0} \frac{(1-f_l)^2}{f_l + \epsilon} V\)</span></li>
+<li><strong>Buoyancy</strong> (w-momentum only): <span class="arithmatex">\(S_u = \rho g \beta (T - T_s) V\)</span></li>
+<li><strong>Assembly</strong>: <span class="arithmatex">\(a_P = \sum a_{nb} + a_P^0 - S_P\)</span></li>
+<li><strong>Under-relaxation</strong>: <span class="arithmatex">\(a_P = a_P / \alpha\)</span>, <span class="arithmatex">\(S_U += (1-\alpha) a_P \phi\)</span></li>
+<li><strong>Solid zeroing</strong>: If <span class="arithmatex">\(T \leq T_s\)</span>, zero all coefficients, set <span class="arithmatex">\(a_P = 10^{20}\)</span></li>
+</ol>
+<p>When <code>species_flag=1</code>: Darcy uses composition-weighted viscosity, buoyancy uses composition-weighted density and tsolid.</p>
+<h3 id="source_pp"><code>source_pp()</code></h3>
+<p>Assembly of pressure-correction coefficients. Zeros solid cells.</p>
+<h3 id="source_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<ol>
+<li><strong>Laser volumetric source</strong>: Gaussian distribution in x-y, uniform in z within penetration depth</li>
+<li><strong>Latent heat</strong>: <span class="arithmatex">\(S = -\rho h_{lat} (f_l - f_l^{old}) V / \Delta t\)</span></li>
+<li><strong>Latent heat advection</strong>: Upwind flux of liquid fraction through cell faces</li>
+<li><strong>Boundary transfers</strong>: Converts boundary conditions to source/sink terms</li>
+<li><strong>Assembly and under-relaxation</strong></li>
+</ol>
+<hr />
+<h2 id="mod_residf90-residue">mod_resid.f90 — <code>residue</code></h2>
+<h3 id="calc_momentum_residualvel-resor_out-calc_refmom"><code>calc_momentum_residual(vel, resor_out, calc_refmom)</code></h3>
+<p>Weighted residual: <span class="arithmatex">\(r = \sum |a_{nb}\phi_{nb} + S_U - a_P\phi_P| / \text{refmom}\)</span></p>
+<p>Reference momentum: <span class="arithmatex">\(\text{refmom} = 0.25\pi (\min(L,D,W))^2 \rho u_{max}^2\)</span></p>
+<h3 id="calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi"><code>calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p><span class="arithmatex">\(r_h = \sum|residual| / \sum|H|\)</span></p>
+<h3 id="calc_pressure_residual"><code>calc_pressure_residual()</code></h3>
+<p><span class="arithmatex">\(r_m = \sum|\nabla \cdot \vec{u}| / (\rho \sum|\vec{u}| A)\)</span></p>
+<hr />
+<h2 id="mod_solvef90-solver">mod_solve.f90 — <code>solver</code></h2>
+<h3 id="tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi"><code>tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)</code></h3>
+<p>OpenMP-parallelized line-by-line TDMA:</p>
+<ul>
+<li>Double k-sweep (backward then forward) for convergence</li>
+<li>Per-thread pr/qr buffers to avoid data races</li>
+<li>Forward elimination in i-direction, back substitution</li>
+</ul>
+<h3 id="solution_uvwfield-solution_enthalpyilo"><code>solution_uvw(field)</code> / <code>solution_enthalpy(ilo,...)</code></h3>
+<p>Convenience wrappers that call TDMA with appropriate bounds.</p>
+<h3 id="cleanuvw"><code>cleanuvw()</code></h3>
+<p>Zeroes velocity at staggered nodes where both adjacent cells are solid (<span class="arithmatex">\(T \leq T_s\)</span>). Also zeroes velocity above boiling point (free surface approximation).</p>
+<hr />
+<h2 id="mod_convergef90-convergence">mod_converge.f90 — <code>convergence</code></h2>
+<h3 id="enhance_converge_speedilo-ihi-jlo-jhi-klo-khi"><code>enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<p>Block correction: accumulates j-k plane coefficients into a 1D system along x, solves with TDMA, broadcasts correction. Reduces low-frequency errors that the line-by-line TDMA handles slowly.</p>
+<hr />
+<h2 id="mod_revisef90-revision">mod_revise.f90 — <code>revision</code></h2>
+<h3 id="revision_p"><code>revision_p()</code></h3>
+<p>SIMPLE pressure-velocity correction: <span class="arithmatex">\(u' = u + d_u(p'_W - p'_P)\)</span> where <span class="arithmatex">\(d_u = A_{face} / a_P\)</span>.</p>
+<hr />
+<h2 id="mod_fluxf90-fluxes">mod_flux.f90 — <code>fluxes</code></h2>
+<h3 id="heat_fluxes"><code>heat_fluxes()</code></h3>
+<p>Computes energy balance: boundary conduction losses on all 6 faces, heat accumulation (enthalpy change + latent heat), and energy ratio <span class="arithmatex">\(R = Q_{in} / Q_{out}\)</span>. Used for convergence checking (<span class="arithmatex">\(R \approx 1.0\)</span>).</p>
+<hr />
+<h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code></h2>
+<h3 id="update_max_temp"><code>update_max_temp()</code></h3>
+<p>Called every step: tracks peak temperature in each cell within the build layer.</p>
+<h3 id="compute_defect_determ"><code>compute_defect_determ()</code></h3>
+<p>Post-simulation classification:</p>
+<ul>
+<li><strong>Lack of fusion</strong>: <span class="arithmatex">\(T_{max} &lt; T_s\)</span> (never fully melted)</li>
+<li><strong>Keyhole porosity</strong>: <span class="arithmatex">\(T_{max} &gt; T_b\)</span> (vaporization occurred)</li>
+<li><strong>Sound</strong>: <span class="arithmatex">\(T_s \leq T_{max} \leq T_b\)</span></li>
+</ul>
+<h3 id="write_defect_report"><code>write_defect_report()</code></h3>
+<p>Outputs defect fraction, VTK files for max_temp and defect classification.</p>
+<hr />
+<h2 id="mod_timingf90-timing">mod_timing.f90 — <code>timing</code></h2>
+<h3 id="write_timing_reportitertot-timet_end-wall_elapsed-file_prefix"><code>write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)</code></h3>
+<p>Writes detailed breakdown of CPU time by module (17 categories), sorted by percentage. Includes subroutine-level breakdown for modules &gt;10%.</p>
+<h3 id="write_memory_reportfile_prefix"><code>write_memory_report(file_prefix)</code></h3>
+<p>Reads <code>/proc/self/status</code> for VmPeak, VmHWM (peak physical RAM), VmRSS, VmData.</p>
+<hr />
+<h2 id="mod_printf90-printing">mod_print.f90 — <code>printing</code></h2>
+<h3 id="outputres"><code>outputres()</code></h3>
+<p>Writes one block per time step to <code>output.txt</code>: residuals, velocities, pool dimensions, energy balance, progress.</p>
+<h3 id="cust_out"><code>Cust_Out()</code></h3>
+<p>Writes binary VTK file every <code>outputintervel</code> steps. Fields: Velocity (vector), T, vis, diff, den, solidID, localfield. When <code>species_flag=1</code>: adds concentration and tsolid_field.</p>
+<h3 id="init_thermal_history-write_thermal_historytimet-finalize_thermal_history"><code>init_thermal_history()</code> / <code>write_thermal_history(timet)</code> / <code>finalize_thermal_history()</code></h3>
+<p>Tracks temperature at 10 monitoring points throughout simulation. Generates Python plotting script and PNG at end.</p>
+<h3 id="write_vtk_scalarunit-filename-name-field-write_vtk_vector"><code>write_vtk_scalar(unit, filename, name, field)</code> / <code>write_vtk_vector(...)</code></h3>
+<p>Binary VTK writers: ASCII header (SCALARS/VECTORS + LOOKUP_TABLE) followed by big-endian float32 data.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
