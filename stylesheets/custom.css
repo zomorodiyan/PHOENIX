@@ -1,0 +1,120 @@
+/* Nature Journal inspired styling */
+
+:root {
+  /* Nature color palette */
+  --nature-navy: #1a2332;
+  --nature-dark: #2c3e50;
+  --nature-red: #c12e0c;
+  --nature-red-dark: #a02509;
+  --nature-text: #333333;
+  --nature-gray: #6c757d;
+  --nature-light: #f8f9fa;
+  --nature-border: #dee2e6;
+}
+
+/* Light mode overrides */
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: var(--nature-navy);
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: var(--nature-red);
+  --md-default-fg-color: var(--nature-text);
+  --md-typeset-a-color: var(--nature-red);
+}
+
+/* Dark mode overrides */
+[data-md-color-scheme="slate"] {
+  --md-accent-fg-color: #e8533c;
+}
+
+/* Header bar */
+.md-header {
+  background-color: var(--nature-navy) !important;
+}
+
+/* Clean typography - Nature uses serif for headings */
+.md-typeset h1 {
+  font-weight: 700;
+  color: var(--nature-navy);
+  border-bottom: 3px solid var(--nature-red);
+  padding-bottom: 0.3em;
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  color: var(--nature-dark);
+  border-bottom: 1px solid var(--nature-border);
+  padding-bottom: 0.2em;
+}
+
+.md-typeset h3 {
+  font-weight: 600;
+  color: var(--nature-dark);
+}
+
+/* Tables - clean Nature style */
+.md-typeset table:not([class]) {
+  border-collapse: collapse;
+  font-size: 0.85em;
+}
+
+.md-typeset table:not([class]) th {
+  background-color: var(--nature-navy) !important;
+  color: white !important;
+  font-weight: 600;
+  padding: 8px 12px;
+  border: none;
+}
+
+.md-typeset table:not([class]) td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--nature-border);
+}
+
+.md-typeset table:not([class]) tr:nth-child(even) td {
+  background-color: var(--nature-light);
+}
+
+/* Code blocks */
+.md-typeset code {
+  color: var(--nature-red-dark);
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  padding: 0.1em 0.3em;
+}
+
+.md-typeset pre > code {
+  color: inherit;
+}
+
+/* Admonitions */
+.md-typeset .admonition,
+.md-typeset details {
+  border-left: 4px solid var(--nature-red);
+  border-radius: 0;
+}
+
+/* Navigation sidebar */
+.md-nav__link--active {
+  color: var(--nature-red) !important;
+  font-weight: 600;
+}
+
+/* Footer */
+.md-footer {
+  background-color: var(--nature-navy);
+}
+
+/* Content max-width for readability */
+.md-content {
+  max-width: 960px;
+}
+
+/* Horizontal rules */
+.md-typeset hr {
+  border-top: 2px solid var(--nature-border);
+}
+
+/* Logo sizing */
+.md-header__button.md-logo img {
+  height: 1.8rem;
+}

@@ -20,12 +20,12 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
-        <title>Module Reference - AM-CFD Documentation</title>
+        <title>Module Reference - AM-CFD</title>
       
     
     
@@ -46,10 +46,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../stylesheets/custom.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -67,7 +69,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -92,10 +94,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="../.." title="AM-CFD" class="md-header__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../../img/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +107,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AM-CFD Documentation
+            AM-CFD
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -125,7 +126,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -135,7 +136,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -228,13 +229,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="../.." title="AM-CFD" class="md-nav__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../../img/logo.png" alt="logo">
 
     </a>
-    AM-CFD Documentation
+    AM-CFD
   </label>
   
     <div class="md-nav__source">
@@ -285,6 +285,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -432,6 +440,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1603,6 +1619,12 @@
   
     
     
+      
+        
+      
+        
+      
+    
     
     
       
@@ -2765,16 +2787,16 @@
   
 
 
-<h1 id="module-reference">Module Reference</h1>
+<h1 id="module-reference">Module Reference<a class="headerlink" href="#module-reference" title="Permanent link">&para;</a></h1>
 <p>Detailed documentation for every module in <code>fortran_new/</code>.</p>
 <hr />
-<h2 id="mod_precisionf90-precision">mod_precision.f90 — <code>precision</code></h2>
+<h2 id="mod_precisionf90-precision">mod_precision.f90 — <code>precision</code><a class="headerlink" href="#mod_precisionf90-precision" title="Permanent link">&para;</a></h2>
 <p>Defines working precision for the entire codebase.</p>
 <div class="highlight"><pre><span></span><code><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">wp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">selected_real_kind</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">37</span><span class="p">)</span><span class="w">  </span><span class="c">! single precision</span>
 </code></pre></div>
 <p>All floating-point variables use <code>real(wp)</code>. Change to <code>selected_real_kind(15, 307)</code> for double precision.</p>
 <hr />
-<h2 id="mod_constf90-constant">mod_const.f90 — <code>constant</code></h2>
+<h2 id="mod_constf90-constant">mod_const.f90 — <code>constant</code><a class="headerlink" href="#mod_constf90-constant" title="Permanent link">&para;</a></h2>
 <p>Physical constants and simulation control parameters.</p>
 <table>
 <thead>
@@ -2833,40 +2855,40 @@
 </tbody>
 </table>
 <hr />
-<h2 id="mod_cfd_utilsf90-cfd_utils">mod_cfd_utils.f90 — <code>cfd_utils</code></h2>
+<h2 id="mod_cfd_utilsf90-cfd_utils">mod_cfd_utils.f90 — <code>cfd_utils</code><a class="headerlink" href="#mod_cfd_utilsf90-cfd_utils" title="Permanent link">&para;</a></h2>
 <p>Pure utility functions for CFD calculations.</p>
-<h3 id="temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp"><code>temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)</code></h3>
+<h3 id="temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp"><code>temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)</code><a class="headerlink" href="#temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp" title="Permanent link">&para;</a></h3>
 <p>Converts temperature to enthalpy using piecewise model:</p>
 <ul>
 <li>Solid (<span class="arithmatex">\(T \leq T_s\)</span>): <span class="arithmatex">\(H = \frac{a}{2}T^2 + bT\)</span></li>
 <li>Mushy (<span class="arithmatex">\(T_s &lt; T &lt; T_l\)</span>): linear interpolation</li>
 <li>Liquid (<span class="arithmatex">\(T \geq T_l\)</span>): <span class="arithmatex">\(H = H_l + c_{p,l}(T - T_l)\)</span></li>
 </ul>
-<h3 id="harmonic_meanval1-val2-frac"><code>harmonic_mean(val1, val2, frac)</code></h3>
+<h3 id="harmonic_meanval1-val2-frac"><code>harmonic_mean(val1, val2, frac)</code><a class="headerlink" href="#harmonic_meanval1-val2-frac" title="Permanent link">&para;</a></h3>
 <p>Harmonic-mean interpolation for face properties: <span class="arithmatex">\(\bar{k} = \frac{1}{f/k_1 + (1-f)/k_2}\)</span>. Used for viscosity and diffusivity at cell faces.</p>
-<h3 id="power_law_coeffdiff-flux"><code>power_law_coeff(diff, flux)</code></h3>
+<h3 id="power_law_coeffdiff-flux"><code>power_law_coeff(diff, flux)</code><a class="headerlink" href="#power_law_coeffdiff-flux" title="Permanent link">&para;</a></h3>
 <p>Power-law discretization scheme: returns <span class="arithmatex">\(D \cdot \max(0, (1 - 0.1|F/D|)^5) + \max(0, -F)\)</span>. Blends central differencing (low Peclet) and upwind (high Peclet).</p>
-<h3 id="darcy_resistanceviscos-fracl"><code>darcy_resistance(viscos, fracl)</code></h3>
+<h3 id="darcy_resistanceviscos-fracl"><code>darcy_resistance(viscos, fracl)</code><a class="headerlink" href="#darcy_resistanceviscos-fracl" title="Permanent link">&para;</a></h3>
 <p>Carman-Kozeny model for mushy zone: <span class="arithmatex">\(S = \frac{180 \mu}{K_0} \frac{(1-f_l)^2}{f_l + \epsilon}\)</span></p>
 <hr />
-<h2 id="mod_paramf90-parameters">mod_param.f90 — <code>parameters</code></h2>
+<h2 id="mod_paramf90-parameters">mod_param.f90 — <code>parameters</code><a class="headerlink" href="#mod_paramf90-parameters" title="Permanent link">&para;</a></h2>
 <p>Reads all simulation parameters from <code>input_param.txt</code>.</p>
-<h3 id="read_data"><code>read_data()</code></h3>
+<h3 id="read_data"><code>read_data()</code><a class="headerlink" href="#read_data" title="Permanent link">&para;</a></h3>
 <p>Parses geometry (zones, CVs, exponents) and 7 namelist groups. Creates result directory <code>result/&lt;case_name&gt;/</code> automatically.</p>
 <p>See <a href="../../input-reference/">Input File Reference</a> for parameter details.</p>
 <hr />
-<h2 id="mod_geomf90-geometry">mod_geom.f90 — <code>geometry</code></h2>
+<h2 id="mod_geomf90-geometry">mod_geom.f90 — <code>geometry</code><a class="headerlink" href="#mod_geomf90-geometry" title="Permanent link">&para;</a></h2>
 <p>Generates the 3D structured grid.</p>
-<h3 id="generate_grid"><code>generate_grid()</code></h3>
+<h3 id="generate_grid"><code>generate_grid()</code><a class="headerlink" href="#generate_grid" title="Permanent link">&para;</a></h3>
 <p>Entry point: calls <code>generate_1d_grid</code> for x, y, z directions, then computes all geometric quantities.</p>
-<h3 id="generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1"><code>generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)</code></h3>
+<h3 id="generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1"><code>generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)</code><a class="headerlink" href="#generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1" title="Permanent link">&para;</a></h3>
 <p>Generates 1D non-uniform grid for one coordinate direction using power-law spacing within each zone. Outputs:</p>
 <ul>
 <li><code>scalar_grid</code>: cell-center positions (x, y, z)</li>
 <li><code>vel_grid</code>: face positions (xu, yv, zw)</li>
 <li><code>n</code>, <code>nm1</code>: total cells, total cells minus 1</li>
 </ul>
-<h3 id="geometric-quantities-computed">Geometric quantities computed:</h3>
+<h3 id="geometric-quantities-computed">Geometric quantities computed:<a class="headerlink" href="#geometric-quantities-computed" title="Permanent link">&para;</a></h3>
 <ul>
 <li><code>volume(i,j,k)</code>: scalar CV volume</li>
 <li><code>volume_u/v/w</code>: staggered CV volumes</li>
@@ -2876,9 +2898,9 @@
 <li><code>fracx/fracy/fracz</code>: interpolation fractions</li>
 </ul>
 <hr />
-<h2 id="mod_field_dataf90-field_data">mod_field_data.f90 — <code>field_data</code></h2>
+<h2 id="mod_field_dataf90-field_data">mod_field_data.f90 — <code>field_data</code><a class="headerlink" href="#mod_field_dataf90-field_data" title="Permanent link">&para;</a></h2>
 <p>Allocates primary flow field arrays.</p>
-<h3 id="allocate_field_datanni-nnj-nnk"><code>allocate_field_data(nni, nnj, nnk)</code></h3>
+<h3 id="allocate_field_datanni-nnj-nnk"><code>allocate_field_data(nni, nnj, nnk)</code><a class="headerlink" href="#allocate_field_datanni-nnj-nnk" title="Permanent link">&para;</a></h3>
 <p>Allocates all arrays to <code>(nni, nnj, nnk)</code>:</p>
 <table>
 <thead>
@@ -2923,9 +2945,9 @@
 </tbody>
 </table>
 <hr />
-<h2 id="mod_coeff_dataf90-coeff_data">mod_coeff_data.f90 — <code>coeff_data</code></h2>
+<h2 id="mod_coeff_dataf90-coeff_data">mod_coeff_data.f90 — <code>coeff_data</code><a class="headerlink" href="#mod_coeff_dataf90-coeff_data" title="Permanent link">&para;</a></h2>
 <p>Allocates FVM discretization coefficient arrays.</p>
-<h3 id="allocate_coeff_datanni-nnj-nnk"><code>allocate_coeff_data(nni, nnj, nnk)</code></h3>
+<h3 id="allocate_coeff_datanni-nnj-nnk"><code>allocate_coeff_data(nni, nnj, nnk)</code><a class="headerlink" href="#allocate_coeff_datanni-nnj-nnk" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -2962,7 +2984,7 @@
 </table>
 <p>All arrays are <strong>shared</strong> between equations — enthalpy, u, v, w, pp, and species all reuse them sequentially.</p>
 <hr />
-<h2 id="mod_sim_statef90-sim_state">mod_sim_state.f90 — <code>sim_state</code></h2>
+<h2 id="mod_sim_statef90-sim_state">mod_sim_state.f90 — <code>sim_state</code><a class="headerlink" href="#mod_sim_statef90-sim_state" title="Permanent link">&para;</a></h2>
 <p>Global simulation state variables.</p>
 <table>
 <thead>
@@ -3015,9 +3037,9 @@
 </tbody>
 </table>
 <hr />
-<h2 id="mod_initf90-initialization">mod_init.f90 — <code>initialization</code></h2>
+<h2 id="mod_initf90-initialization">mod_init.f90 — <code>initialization</code><a class="headerlink" href="#mod_initf90-initialization" title="Permanent link">&para;</a></h2>
 <p>Startup initialization wrapper.</p>
-<h3 id="initialize"><code>initialize()</code></h3>
+<h3 id="initialize"><code>initialize()</code><a class="headerlink" href="#initialize" title="Permanent link">&para;</a></h3>
 <ol>
 <li>Computes derived constants: <code>hsmelt</code>, <code>hlcal</code>, <code>boufac</code>, <code>dgdt</code>, <code>deltemp</code></li>
 <li>Initializes all fields to preheat conditions (velocity=0, T=tempPreheat)</li>
@@ -3025,9 +3047,9 @@
 <li>Initializes <code>solidfield = 0</code> (no solidification yet)</li>
 </ol>
 <hr />
-<h2 id="mod_laserf90-laserinput">mod_laser.f90 — <code>laserinput</code></h2>
+<h2 id="mod_laserf90-laserinput">mod_laser.f90 — <code>laserinput</code><a class="headerlink" href="#mod_laserf90-laserinput" title="Permanent link">&para;</a></h2>
 <p>Laser beam management.</p>
-<h3 id="laser_beam"><code>laser_beam()</code></h3>
+<h3 id="laser_beam"><code>laser_beam()</code><a class="headerlink" href="#laser_beam" title="Permanent link">&para;</a></h3>
 <p>Called every time step:</p>
 <ol>
 <li>Interpolates <code>toolmatrix</code> to find beam position at current <code>timet</code></li>
@@ -3037,14 +3059,14 @@
 <li>Identifies initial melt pool search region (imin, imax, jmin, jmax)</li>
 </ol>
 <hr />
-<h2 id="mod_toolpathf90-toolpath">mod_toolpath.f90 — <code>toolpath</code></h2>
-<h3 id="read_toolpath"><code>read_toolpath()</code></h3>
+<h2 id="mod_toolpathf90-toolpath">mod_toolpath.f90 — <code>toolpath</code><a class="headerlink" href="#mod_toolpathf90-toolpath" title="Permanent link">&para;</a></h2>
+<h3 id="read_toolpath"><code>read_toolpath()</code><a class="headerlink" href="#read_toolpath" title="Permanent link">&para;</a></h3>
 <p>Reads <code>.crs</code> file into <code>toolmatrix(1000, 5)</code>. Format: time, x, y, z, laser_flag.</p>
-<h3 id="read_coordinates"><code>read_coordinates()</code></h3>
+<h3 id="read_coordinates"><code>read_coordinates()</code><a class="headerlink" href="#read_coordinates" title="Permanent link">&para;</a></h3>
 <p>Records current beam state (position, power, velocity) to <code>coordhistory</code> rolling buffer each time step.</p>
 <hr />
-<h2 id="mod_dimenf90-dimensions">mod_dimen.f90 — <code>dimensions</code></h2>
-<h3 id="pool_sizeilo-ihi-jlo-jhi-klo-khi"><code>pool_size(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h2 id="mod_dimenf90-dimensions">mod_dimen.f90 — <code>dimensions</code><a class="headerlink" href="#mod_dimenf90-dimensions" title="Permanent link">&para;</a></h2>
+<h3 id="pool_sizeilo-ihi-jlo-jhi-klo-khi"><code>pool_size(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#pool_sizeilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Detects melt pool extent from temperature field:</p>
 <ol>
 <li>Scans domain for cells above <code>tsolid</code></li>
@@ -3054,20 +3076,20 @@
 </ol>
 <p>These indices are used by momentum solver, species solver, and velocity cleanup.</p>
 <hr />
-<h2 id="mod_local_enthalpyf90-local_enthalpy">mod_local_enthalpy.f90 — <code>local_enthalpy</code></h2>
-<h3 id="get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi"><code>get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h2 id="mod_local_enthalpyf90-local_enthalpy">mod_local_enthalpy.f90 — <code>local_enthalpy</code><a class="headerlink" href="#mod_local_enthalpyf90-local_enthalpy" title="Permanent link">&para;</a></h2>
+<h3 id="get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi"><code>get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Determines if current step is local or global:</p>
 <ul>
 <li>Global: every <code>localnum+1</code> steps, or first step</li>
 <li>Local: otherwise, returns small region around melt pool</li>
 </ul>
-<h3 id="compute_delt_eff"><code>compute_delt_eff()</code></h3>
+<h3 id="compute_delt_eff"><code>compute_delt_eff()</code><a class="headerlink" href="#compute_delt_eff" title="Permanent link">&para;</a></h3>
 <p>Updates effective time step for all cells: <code>delt_eff(i,j,k) = delt * (n_skipped(i,j,k) + 1)</code>.</p>
-<h3 id="update_skipped-is_local"><code>update_skipped(..., is_local)</code></h3>
+<h3 id="update_skipped-is_local"><code>update_skipped(..., is_local)</code><a class="headerlink" href="#update_skipped-is_local" title="Permanent link">&para;</a></h3>
 <p>Increments skip counter for cells outside current solve region; resets to 0 for solved cells.</p>
 <hr />
-<h2 id="mod_propf90-property">mod_prop.f90 — <code>property</code></h2>
-<h3 id="propertiesilo-ihi-jlo-jhi-klo-khi"><code>properties(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h2 id="mod_propf90-property">mod_prop.f90 — <code>property</code><a class="headerlink" href="#mod_propf90-property" title="Permanent link">&para;</a></h2>
+<h3 id="propertiesilo-ihi-jlo-jhi-klo-khi"><code>properties(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#propertiesilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Updates material property arrays based on temperature (and concentration when <code>species_flag=1</code>):</p>
 <p><strong>Three regimes:</strong></p>
 <table>
@@ -3107,9 +3129,9 @@
 <p>Powder cells (top layer, not yet melted) use reduced density and conductivity.</p>
 <p>When <code>species_flag=1</code>: all properties are computed from <code>mix(prop_primary, prop_secondary, C)</code> before applying the three-regime logic.</p>
 <hr />
-<h2 id="mod_speciesf90-species">mod_species.f90 — <code>species</code></h2>
+<h2 id="mod_speciesf90-species">mod_species.f90 — <code>species</code><a class="headerlink" href="#mod_speciesf90-species" title="Permanent link">&para;</a></h2>
 <p>Species transport for dissimilar metal mixing. See <a href="../../species/overview/">Species Transport</a> for details.</p>
-<h3 id="key-functions">Key functions:</h3>
+<h3 id="key-functions">Key functions:<a class="headerlink" href="#key-functions" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -3153,24 +3175,24 @@
 </tbody>
 </table>
 <hr />
-<h2 id="mod_boundf90-boundary">mod_bound.f90 — <code>boundary</code></h2>
-<h3 id="bound_uvidir"><code>bound_uv(idir)</code></h3>
+<h2 id="mod_boundf90-boundary">mod_bound.f90 — <code>boundary</code><a class="headerlink" href="#mod_boundf90-boundary" title="Permanent link">&para;</a></h2>
+<h3 id="bound_uvidir"><code>bound_uv(idir)</code><a class="headerlink" href="#bound_uvidir" title="Permanent link">&para;</a></h3>
 <p>Top surface Marangoni boundary condition (k=nk):</p>
 <div class="arithmatex">\[u_{surface} = u_{below} + \frac{f_l}{vis} \left(\frac{d\gamma}{dT}\frac{\partial T}{\partial x} + \frac{d\gamma}{dC}\frac{\partial C}{\partial x}\right) \frac{1}{\Delta z^{-1}}\]</div>
 <p>The solutal Marangoni term (<code>dgdc * dC/dx</code>) is only active when <code>species_flag=1</code>.</p>
-<h3 id="bound_w"><code>bound_w()</code></h3>
+<h3 id="bound_w"><code>bound_w()</code><a class="headerlink" href="#bound_w" title="Permanent link">&para;</a></h3>
 <p>No-slip condition at melt pool boundaries for w-velocity.</p>
-<h3 id="bound_pp"><code>bound_pp()</code></h3>
+<h3 id="bound_pp"><code>bound_pp()</code><a class="headerlink" href="#bound_pp" title="Permanent link">&para;</a></h3>
 <p>Zero pressure correction in solid region.</p>
-<h3 id="bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local"><code>bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)</code></h3>
+<h3 id="bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local"><code>bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)</code><a class="headerlink" href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Top surface</strong>: radiation + convection loss</li>
 <li><strong>Other faces</strong>: convection to ambient</li>
 <li><strong>Local mode</strong>: Dirichlet (frozen values) outside local region</li>
 </ul>
 <hr />
-<h2 id="mod_discretf90-discretization">mod_discret.f90 — <code>discretization</code></h2>
-<h3 id="discretize_momentumidir"><code>discretize_momentum(idir)</code></h3>
+<h2 id="mod_discretf90-discretization">mod_discret.f90 — <code>discretization</code><a class="headerlink" href="#mod_discretf90-discretization" title="Permanent link">&para;</a></h2>
+<h3 id="discretize_momentumidir"><code>discretize_momentum(idir)</code><a class="headerlink" href="#discretize_momentumidir" title="Permanent link">&para;</a></h3>
 <p>FVM discretization for u (idir=1), v (idir=2), w (idir=3):</p>
 <ol>
 <li>Interpolates face velocities from staggered grid</li>
@@ -3181,13 +3203,13 @@
 <li>Adds transient term: <span class="arithmatex">\(a_{P}^0 = \rho V / \Delta t\)</span></li>
 <li>Adds pressure gradient and cross-derivative source terms</li>
 </ol>
-<h3 id="discretize_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h3 id="discretize_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#discretize_enthalpyilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses <code>delt_eff</code> for transient term (local solver compensation).</p>
-<h3 id="discretize_pp"><code>discretize_pp()</code></h3>
+<h3 id="discretize_pp"><code>discretize_pp()</code><a class="headerlink" href="#discretize_pp" title="Permanent link">&para;</a></h3>
 <p>Pressure-correction equation using velocity correction coefficients from momentum solve.</p>
 <hr />
-<h2 id="mod_entotf90-entotemp">mod_entot.f90 — <code>entotemp</code></h2>
-<h3 id="enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi"><code>enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h2 id="mod_entotf90-entotemp">mod_entot.f90 — <code>entotemp</code><a class="headerlink" href="#mod_entotf90-entotemp" title="Permanent link">&para;</a></h2>
+<h3 id="enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi"><code>enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Inverts enthalpy-temperature relationship:</p>
 <table>
 <thead>
@@ -3221,8 +3243,8 @@
 </table>
 <p>When <code>species_flag=1</code>: <span class="arithmatex">\(H_s\)</span>, <span class="arithmatex">\(H_l\)</span>, <span class="arithmatex">\(\Delta T\)</span>, <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(b\)</span>, <span class="arithmatex">\(c_{p,l}\)</span> are all computed inline from <code>mix()</code> using local concentration.</p>
 <hr />
-<h2 id="mod_sourf90-source">mod_sour.f90 — <code>source</code></h2>
-<h3 id="source_momentumidir"><code>source_momentum(idir)</code></h3>
+<h2 id="mod_sourf90-source">mod_sour.f90 — <code>source</code><a class="headerlink" href="#mod_sourf90-source" title="Permanent link">&para;</a></h2>
+<h3 id="source_momentumidir"><code>source_momentum(idir)</code><a class="headerlink" href="#source_momentumidir" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Darcy resistance</strong> in mushy zone: <span class="arithmatex">\(S_p = -\frac{180\mu}{K_0} \frac{(1-f_l)^2}{f_l + \epsilon} V\)</span></li>
 <li><strong>Buoyancy</strong> (w-momentum only): <span class="arithmatex">\(S_u = \rho g \beta (T - T_s) V\)</span></li>
@@ -3231,9 +3253,9 @@
 <li><strong>Solid zeroing</strong>: If <span class="arithmatex">\(T \leq T_s\)</span>, zero all coefficients, set <span class="arithmatex">\(a_P = 10^{20}\)</span></li>
 </ol>
 <p>When <code>species_flag=1</code>: Darcy uses composition-weighted viscosity, buoyancy uses composition-weighted density and tsolid.</p>
-<h3 id="source_pp"><code>source_pp()</code></h3>
+<h3 id="source_pp"><code>source_pp()</code><a class="headerlink" href="#source_pp" title="Permanent link">&para;</a></h3>
 <p>Assembly of pressure-correction coefficients. Zeros solid cells.</p>
-<h3 id="source_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h3 id="source_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#source_enthalpyilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <ol>
 <li><strong>Laser volumetric source</strong>: Gaussian distribution in x-y, uniform in z within penetration depth</li>
 <li><strong>Latent heat</strong>: <span class="arithmatex">\(S = -\rho h_{lat} (f_l - f_l^{old}) V / \Delta t\)</span></li>
@@ -3242,67 +3264,67 @@
 <li><strong>Assembly and under-relaxation</strong></li>
 </ol>
 <hr />
-<h2 id="mod_residf90-residue">mod_resid.f90 — <code>residue</code></h2>
-<h3 id="calc_momentum_residualvel-resor_out-calc_refmom"><code>calc_momentum_residual(vel, resor_out, calc_refmom)</code></h3>
+<h2 id="mod_residf90-residue">mod_resid.f90 — <code>residue</code><a class="headerlink" href="#mod_residf90-residue" title="Permanent link">&para;</a></h2>
+<h3 id="calc_momentum_residualvel-resor_out-calc_refmom"><code>calc_momentum_residual(vel, resor_out, calc_refmom)</code><a class="headerlink" href="#calc_momentum_residualvel-resor_out-calc_refmom" title="Permanent link">&para;</a></h3>
 <p>Weighted residual: <span class="arithmatex">\(r = \sum |a_{nb}\phi_{nb} + S_U - a_P\phi_P| / \text{refmom}\)</span></p>
 <p>Reference momentum: <span class="arithmatex">\(\text{refmom} = 0.25\pi (\min(L,D,W))^2 \rho u_{max}^2\)</span></p>
-<h3 id="calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi"><code>calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h3 id="calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi"><code>calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p><span class="arithmatex">\(r_h = \sum|residual| / \sum|H|\)</span></p>
-<h3 id="calc_pressure_residual"><code>calc_pressure_residual()</code></h3>
+<h3 id="calc_pressure_residual"><code>calc_pressure_residual()</code><a class="headerlink" href="#calc_pressure_residual" title="Permanent link">&para;</a></h3>
 <p><span class="arithmatex">\(r_m = \sum|\nabla \cdot \vec{u}| / (\rho \sum|\vec{u}| A)\)</span></p>
 <hr />
-<h2 id="mod_solvef90-solver">mod_solve.f90 — <code>solver</code></h2>
-<h3 id="tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi"><code>tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)</code></h3>
+<h2 id="mod_solvef90-solver">mod_solve.f90 — <code>solver</code><a class="headerlink" href="#mod_solvef90-solver" title="Permanent link">&para;</a></h2>
+<h3 id="tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi"><code>tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)</code><a class="headerlink" href="#tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi" title="Permanent link">&para;</a></h3>
 <p>OpenMP-parallelized line-by-line TDMA:</p>
 <ul>
 <li>Double k-sweep (backward then forward) for convergence</li>
 <li>Per-thread pr/qr buffers to avoid data races</li>
 <li>Forward elimination in i-direction, back substitution</li>
 </ul>
-<h3 id="solution_uvwfield-solution_enthalpyilo"><code>solution_uvw(field)</code> / <code>solution_enthalpy(ilo,...)</code></h3>
+<h3 id="solution_uvwfield-solution_enthalpyilo"><code>solution_uvw(field)</code> / <code>solution_enthalpy(ilo,...)</code><a class="headerlink" href="#solution_uvwfield-solution_enthalpyilo" title="Permanent link">&para;</a></h3>
 <p>Convenience wrappers that call TDMA with appropriate bounds.</p>
-<h3 id="cleanuvw"><code>cleanuvw()</code></h3>
+<h3 id="cleanuvw"><code>cleanuvw()</code><a class="headerlink" href="#cleanuvw" title="Permanent link">&para;</a></h3>
 <p>Zeroes velocity at staggered nodes where both adjacent cells are solid (<span class="arithmatex">\(T \leq T_s\)</span>). Also zeroes velocity above boiling point (free surface approximation).</p>
 <hr />
-<h2 id="mod_convergef90-convergence">mod_converge.f90 — <code>convergence</code></h2>
-<h3 id="enhance_converge_speedilo-ihi-jlo-jhi-klo-khi"><code>enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)</code></h3>
+<h2 id="mod_convergef90-convergence">mod_converge.f90 — <code>convergence</code><a class="headerlink" href="#mod_convergef90-convergence" title="Permanent link">&para;</a></h2>
+<h3 id="enhance_converge_speedilo-ihi-jlo-jhi-klo-khi"><code>enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#enhance_converge_speedilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <p>Block correction: accumulates j-k plane coefficients into a 1D system along x, solves with TDMA, broadcasts correction. Reduces low-frequency errors that the line-by-line TDMA handles slowly.</p>
 <hr />
-<h2 id="mod_revisef90-revision">mod_revise.f90 — <code>revision</code></h2>
-<h3 id="revision_p"><code>revision_p()</code></h3>
+<h2 id="mod_revisef90-revision">mod_revise.f90 — <code>revision</code><a class="headerlink" href="#mod_revisef90-revision" title="Permanent link">&para;</a></h2>
+<h3 id="revision_p"><code>revision_p()</code><a class="headerlink" href="#revision_p" title="Permanent link">&para;</a></h3>
 <p>SIMPLE pressure-velocity correction: <span class="arithmatex">\(u' = u + d_u(p'_W - p'_P)\)</span> where <span class="arithmatex">\(d_u = A_{face} / a_P\)</span>.</p>
 <hr />
-<h2 id="mod_fluxf90-fluxes">mod_flux.f90 — <code>fluxes</code></h2>
-<h3 id="heat_fluxes"><code>heat_fluxes()</code></h3>
+<h2 id="mod_fluxf90-fluxes">mod_flux.f90 — <code>fluxes</code><a class="headerlink" href="#mod_fluxf90-fluxes" title="Permanent link">&para;</a></h2>
+<h3 id="heat_fluxes"><code>heat_fluxes()</code><a class="headerlink" href="#heat_fluxes" title="Permanent link">&para;</a></h3>
 <p>Computes energy balance: boundary conduction losses on all 6 faces, heat accumulation (enthalpy change + latent heat), and energy ratio <span class="arithmatex">\(R = Q_{in} / Q_{out}\)</span>. Used for convergence checking (<span class="arithmatex">\(R \approx 1.0\)</span>).</p>
 <hr />
-<h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code></h2>
-<h3 id="update_max_temp"><code>update_max_temp()</code></h3>
+<h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code><a class="headerlink" href="#mod_defectf90-defect_field" title="Permanent link">&para;</a></h2>
+<h3 id="update_max_temp"><code>update_max_temp()</code><a class="headerlink" href="#update_max_temp" title="Permanent link">&para;</a></h3>
 <p>Called every step: tracks peak temperature in each cell within the build layer.</p>
-<h3 id="compute_defect_determ"><code>compute_defect_determ()</code></h3>
+<h3 id="compute_defect_determ"><code>compute_defect_determ()</code><a class="headerlink" href="#compute_defect_determ" title="Permanent link">&para;</a></h3>
 <p>Post-simulation classification:</p>
 <ul>
 <li><strong>Lack of fusion</strong>: <span class="arithmatex">\(T_{max} &lt; T_s\)</span> (never fully melted)</li>
 <li><strong>Keyhole porosity</strong>: <span class="arithmatex">\(T_{max} &gt; T_b\)</span> (vaporization occurred)</li>
 <li><strong>Sound</strong>: <span class="arithmatex">\(T_s \leq T_{max} \leq T_b\)</span></li>
 </ul>
-<h3 id="write_defect_report"><code>write_defect_report()</code></h3>
+<h3 id="write_defect_report"><code>write_defect_report()</code><a class="headerlink" href="#write_defect_report" title="Permanent link">&para;</a></h3>
 <p>Outputs defect fraction, VTK files for max_temp and defect classification.</p>
 <hr />
-<h2 id="mod_timingf90-timing">mod_timing.f90 — <code>timing</code></h2>
-<h3 id="write_timing_reportitertot-timet_end-wall_elapsed-file_prefix"><code>write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)</code></h3>
+<h2 id="mod_timingf90-timing">mod_timing.f90 — <code>timing</code><a class="headerlink" href="#mod_timingf90-timing" title="Permanent link">&para;</a></h2>
+<h3 id="write_timing_reportitertot-timet_end-wall_elapsed-file_prefix"><code>write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)</code><a class="headerlink" href="#write_timing_reportitertot-timet_end-wall_elapsed-file_prefix" title="Permanent link">&para;</a></h3>
 <p>Writes detailed breakdown of CPU time by module (17 categories), sorted by percentage. Includes subroutine-level breakdown for modules &gt;10%.</p>
-<h3 id="write_memory_reportfile_prefix"><code>write_memory_report(file_prefix)</code></h3>
+<h3 id="write_memory_reportfile_prefix"><code>write_memory_report(file_prefix)</code><a class="headerlink" href="#write_memory_reportfile_prefix" title="Permanent link">&para;</a></h3>
 <p>Reads <code>/proc/self/status</code> for VmPeak, VmHWM (peak physical RAM), VmRSS, VmData.</p>
 <hr />
-<h2 id="mod_printf90-printing">mod_print.f90 — <code>printing</code></h2>
-<h3 id="outputres"><code>outputres()</code></h3>
+<h2 id="mod_printf90-printing">mod_print.f90 — <code>printing</code><a class="headerlink" href="#mod_printf90-printing" title="Permanent link">&para;</a></h2>
+<h3 id="outputres"><code>outputres()</code><a class="headerlink" href="#outputres" title="Permanent link">&para;</a></h3>
 <p>Writes one block per time step to <code>output.txt</code>: residuals, velocities, pool dimensions, energy balance, progress.</p>
-<h3 id="cust_out"><code>Cust_Out()</code></h3>
+<h3 id="cust_out"><code>Cust_Out()</code><a class="headerlink" href="#cust_out" title="Permanent link">&para;</a></h3>
 <p>Writes binary VTK file every <code>outputintervel</code> steps. Fields: Velocity (vector), T, vis, diff, den, solidID, localfield. When <code>species_flag=1</code>: adds concentration and tsolid_field.</p>
-<h3 id="init_thermal_history-write_thermal_historytimet-finalize_thermal_history"><code>init_thermal_history()</code> / <code>write_thermal_history(timet)</code> / <code>finalize_thermal_history()</code></h3>
+<h3 id="init_thermal_history-write_thermal_historytimet-finalize_thermal_history"><code>init_thermal_history()</code> / <code>write_thermal_history(timet)</code> / <code>finalize_thermal_history()</code><a class="headerlink" href="#init_thermal_history-write_thermal_historytimet-finalize_thermal_history" title="Permanent link">&para;</a></h3>
 <p>Tracks temperature at 10 monitoring points throughout simulation. Generates Python plotting script and PNG at end.</p>
-<h3 id="write_vtk_scalarunit-filename-name-field-write_vtk_vector"><code>write_vtk_scalar(unit, filename, name, field)</code> / <code>write_vtk_vector(...)</code></h3>
+<h3 id="write_vtk_scalarunit-filename-name-field-write_vtk_vector"><code>write_vtk_scalar(unit, filename, name, field)</code> / <code>write_vtk_vector(...)</code><a class="headerlink" href="#write_vtk_scalarunit-filename-name-field-write_vtk_vector" title="Permanent link">&para;</a></h3>
 <p>Binary VTK writers: ASCII header (SCALARS/VECTORS + LOOKUP_TABLE) followed by big-endian float32 data.</p>
 
 
@@ -3359,7 +3381,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>

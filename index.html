@@ -18,12 +18,12 @@
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="img/logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
-        <title>AM-CFD Documentation</title>
+        <title>AM-CFD</title>
       
     
     
@@ -44,10 +44,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
+    
+      <link rel="stylesheet" href="stylesheets/custom.css">
     
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -65,7 +67,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -90,10 +92,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="." title="AM-CFD" class="md-header__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="img/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -104,7 +105,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AM-CFD Documentation
+            AM-CFD
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -123,7 +124,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -133,7 +134,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -226,13 +227,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="." title="AM-CFD" class="md-nav__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="img/logo.png" alt="logo">
 
     </a>
-    AM-CFD Documentation
+    AM-CFD
   </label>
   
     <div class="md-nav__source">
@@ -374,6 +374,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -520,6 +528,14 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+    
     
     
       
@@ -664,6 +680,12 @@
   
   
     
+    
+      
+        
+      
+        
+      
     
     
     
@@ -891,10 +913,10 @@
   
 
 
-<h1 id="am-cfd">AM-CFD</h1>
+<h1 id="am-cfd">AM-CFD<a class="headerlink" href="#am-cfd" title="Permanent link">&para;</a></h1>
 <p><strong>Additive Manufacturing Computational Fluid Dynamics Solver</strong></p>
 <p>AM-CFD is a Fortran + OpenMP solver for simulating thermo-fluid dynamics in laser-based additive manufacturing (AM) processes such as Laser Powder Bed Fusion (LPBF) and Directed Energy Deposition (DED).</p>
-<h2 id="key-features">Key Features</h2>
+<h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Multi-physics</strong>: Coupled heat transfer, fluid flow (Navier-Stokes), phase change (melting/solidification), and species transport</li>
 <li><strong>Marangoni convection</strong>: Surface-tension-driven flow from thermal and solutal gradients</li>
@@ -904,7 +926,7 @@
 <li><strong>OpenMP parallelization</strong>: Shared-memory parallelism for all hot loops (TDMA, discretization, source terms)</li>
 <li><strong>VTK output</strong>: Binary structured-grid VTK files for ParaView visualization</li>
 </ul>
-<h2 id="physics">Physics</h2>
+<h2 id="physics">Physics<a class="headerlink" href="#physics" title="Permanent link">&para;</a></h2>
 <p>The solver models:</p>
 <ul>
 <li><strong>Heat transfer</strong>: Conduction with temperature-dependent properties, volumetric laser heat source (Gaussian distribution)</li>
@@ -915,13 +937,13 @@
 <li><strong>Species transport</strong>: Convection-diffusion of concentration field with molecular diffusivity</li>
 <li><strong>Powder layer</strong>: Distinct thermal properties for unconsolidated powder</li>
 </ul>
-<h2 id="quick-start">Quick Start</h2>
+<h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>fortran_new
 bash<span class="w"> </span>compile.sh<span class="w">              </span><span class="c1"># Build</span>
 bash<span class="w"> </span>run.sh<span class="w"> </span>mycase<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="p">&amp;</span><span class="w">       </span><span class="c1"># Run with 4 OpenMP threads</span>
 </code></pre></div>
 <p>Results are written to <code>fortran_new/result/mycase/</code>.</p>
-<h2 id="project-structure">Project Structure</h2>
+<h2 id="project-structure">Project Structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>AMCFD/
 ├── fortran_new/          # Active simulation code
 │   ├── main.f90          # Entry point
@@ -990,7 +1012,7 @@ bash<span class="w"> </span>run.sh<span class="w"> </span>mycase<span class="w">
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.79ae519e.min.js"></script>

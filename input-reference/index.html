@@ -20,12 +20,12 @@
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../img/logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
-        <title>Input File Reference - AM-CFD Documentation</title>
+        <title>Input File Reference - AM-CFD</title>
       
     
     
@@ -46,10 +46,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
+    
+      <link rel="stylesheet" href="../stylesheets/custom.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -67,7 +69,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -92,10 +94,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href=".." title="AM-CFD" class="md-header__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../img/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +107,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AM-CFD Documentation
+            AM-CFD
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -125,7 +126,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -135,7 +136,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -228,13 +229,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href=".." title="AM-CFD" class="md-nav__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../img/logo.png" alt="logo">
 
     </a>
-    AM-CFD Documentation
+    AM-CFD
   </label>
   
     <div class="md-nav__source">
@@ -287,6 +287,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -605,6 +613,14 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+    
     
     
       
@@ -749,6 +765,12 @@
   
   
     
+    
+      
+        
+      
+        
+      
     
     
     
@@ -1059,15 +1081,15 @@
   
 
 
-<h1 id="input-file-reference">Input File Reference</h1>
+<h1 id="input-file-reference">Input File Reference<a class="headerlink" href="#input-file-reference" title="Permanent link">&para;</a></h1>
 <p>All simulation parameters are defined in <code>fortran_new/inputfile/input_param.txt</code>. The file uses Fortran namelist format.</p>
-<h2 id="file-structure">File Structure</h2>
+<h2 id="file-structure">File Structure<a class="headerlink" href="#file-structure" title="Permanent link">&para;</a></h2>
 <p>The input file has two sections:</p>
 <ol>
 <li><strong>Geometry block</strong> (free-format, line-by-line)</li>
 <li><strong>Namelist blocks</strong> (<code>&amp;name ... /</code> format)</li>
 </ol>
-<h2 id="geometry-parameters">Geometry Parameters</h2>
+<h2 id="geometry-parameters">Geometry Parameters<a class="headerlink" href="#geometry-parameters" title="Permanent link">&para;</a></h2>
 <p>The geometry is defined by zones in each direction. Each zone has a length, number of control volumes, and power-law exponent for grid stretching.</p>
 <div class="highlight"><pre><span></span><code>nzx                          ! number of x-zones (max 7)
 xzone(1), xzone(2), ...     ! length of each zone (m)
@@ -1124,8 +1146,8 @@ powrx(1), powrx(2), ...     ! power-law exponents (1=uniform, &gt;1=cluster at e
 <li><code>powr &lt; 0</code>: cells cluster toward the start of the zone (e.g., -1.5 clusters z-cells toward the substrate-powder interface)</li>
 </ul>
 </div>
-<h2 id="namelist-blocks">Namelist Blocks</h2>
-<h3 id="process_parameters-surface-laser-source"><code>&amp;process_parameters</code> — Surface Laser Source</h3>
+<h2 id="namelist-blocks">Namelist Blocks<a class="headerlink" href="#namelist-blocks" title="Permanent link">&para;</a></h2>
+<h3 id="process_parameters-surface-laser-source"><code>&amp;process_parameters</code> — Surface Laser Source<a class="headerlink" href="#process_parameters-surface-laser-source" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1157,7 +1179,7 @@ powrx(1), powrx(2), ...     ! power-law exponents (1=uniform, &gt;1=cluster at e
 </tr>
 </tbody>
 </table>
-<h3 id="volumetric_parameters-volumetric-heat-source"><code>&amp;volumetric_parameters</code> — Volumetric Heat Source</h3>
+<h3 id="volumetric_parameters-volumetric-heat-source"><code>&amp;volumetric_parameters</code> — Volumetric Heat Source<a class="headerlink" href="#volumetric_parameters-volumetric-heat-source" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1194,7 +1216,7 @@ powrx(1), powrx(2), ...     ! power-law exponents (1=uniform, &gt;1=cluster at e
 <p>Either surface (<code>alaspow</code>) or volumetric (<code>alaspowvol</code>) source is used. Set the unused one to 0. The volumetric source distributes heat as:</p>
 <div class="arithmatex">\[q(x,y,z) = \frac{P \cdot \eta \cdot f}{\pi r_s^2 \cdot d_s} \exp\left(-\frac{f}{r_s^2}\left[(x-x_b)^2 + (y-y_b)^2\right]\right)\]</div>
 </div>
-<h3 id="material_properties-primary-material-c1"><code>&amp;material_properties</code> — Primary Material (C=1)</h3>
+<h3 id="material_properties-primary-material-c1"><code>&amp;material_properties</code> — Primary Material (C=1)<a class="headerlink" href="#material_properties-primary-material-c1" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1313,7 +1335,7 @@ The enthalpy-temperature curve is:</p>
 <li><strong>Liquid</strong> (<span class="arithmatex">\(T \geq T_l\)</span>): <span class="arithmatex">\(H = H_l + c_{p,l}(T - T_l)\)</span></li>
 </ul>
 </div>
-<h3 id="powder_properties-powder-layer"><code>&amp;powder_properties</code> — Powder Layer</h3>
+<h3 id="powder_properties-powder-layer"><code>&amp;powder_properties</code> — Powder Layer<a class="headerlink" href="#powder_properties-powder-layer" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1363,7 +1385,7 @@ The enthalpy-temperature curve is:</p>
 </tbody>
 </table>
 <p>Powder properties apply to cells in the top <code>layerheight</code> of the domain that have not yet been melted (<code>solidfield &lt;= 0.5</code>).</p>
-<h3 id="numerical_relax-solver-parameters"><code>&amp;numerical_relax</code> — Solver Parameters</h3>
+<h3 id="numerical_relax-solver-parameters"><code>&amp;numerical_relax</code> — Solver Parameters<a class="headerlink" href="#numerical_relax-solver-parameters" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1424,7 +1446,7 @@ The enthalpy-temperature curve is:</p>
 </tr>
 </tbody>
 </table>
-<h3 id="boundary_conditions-thermal-boundaries"><code>&amp;boundary_conditions</code> — Thermal Boundaries</h3>
+<h3 id="boundary_conditions-thermal-boundaries"><code>&amp;boundary_conditions</code> — Thermal Boundaries<a class="headerlink" href="#boundary_conditions-thermal-boundaries" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1499,7 +1521,7 @@ The enthalpy-temperature curve is:</p>
 </table>
 <p>The top surface uses combined convection + radiation:
 $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)\)</span>$</p>
-<h3 id="local_solver-adaptive-solver"><code>&amp;local_solver</code> — Adaptive Solver</h3>
+<h3 id="local_solver-adaptive-solver"><code>&amp;local_solver</code> — Adaptive Solver<a class="headerlink" href="#local_solver-adaptive-solver" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1537,7 +1559,7 @@ $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T
 </tbody>
 </table>
 <p>The local solver only updates enthalpy in a small region around the melt pool for <code>localnum</code> consecutive steps, then solves the full domain. This provides significant speedup (typically 3-5x) with minimal accuracy loss.</p>
-<h3 id="output_control-output-settings"><code>&amp;output_control</code> — Output Settings</h3>
+<h3 id="output_control-output-settings"><code>&amp;output_control</code> — Output Settings<a class="headerlink" href="#output_control-output-settings" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
@@ -1629,7 +1651,7 @@ $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>

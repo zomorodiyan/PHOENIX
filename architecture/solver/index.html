@@ -20,12 +20,12 @@
         
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/logo.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
-        <title>Solver Algorithm - AM-CFD Documentation</title>
+        <title>Solver Algorithm - AM-CFD</title>
       
     
     
@@ -46,10 +46,12 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,700,700i%7CSource+Code+Pro:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Source Sans Pro";--md-code-font:"Source Code Pro"}</style>
       
     
+    
+      <link rel="stylesheet" href="../../stylesheets/custom.css">
     
     <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
@@ -67,7 +69,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -92,10 +94,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="AM-CFD Documentation" class="md-header__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="../.." title="AM-CFD" class="md-header__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../../img/logo.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -106,7 +107,7 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic">
           <span class="md-ellipsis">
-            AM-CFD Documentation
+            AM-CFD
           </span>
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
@@ -125,7 +126,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -135,7 +136,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue-grey" data-md-color-accent="orange"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
       <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
@@ -228,13 +229,12 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="AM-CFD Documentation" class="md-nav__button md-logo" aria-label="AM-CFD Documentation" data-md-component="logo">
+    <a href="../.." title="AM-CFD" class="md-nav__button md-logo" aria-label="AM-CFD" data-md-component="logo">
       
-  
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+  <img src="../../img/logo.png" alt="logo">
 
     </a>
-    AM-CFD Documentation
+    AM-CFD
   </label>
   
     <div class="md-nav__source">
@@ -285,6 +285,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -432,6 +440,14 @@
   
   
     
+    
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -667,6 +683,12 @@
   
     
     
+      
+        
+      
+        
+      
+    
     
     
       
@@ -893,8 +915,8 @@
   
 
 
-<h1 id="solver-algorithm">Solver Algorithm</h1>
-<h2 id="main-program-call-flow">Main Program Call Flow</h2>
+<h1 id="solver-algorithm">Solver Algorithm<a class="headerlink" href="#solver-algorithm" title="Permanent link">&para;</a></h1>
+<h2 id="main-program-call-flow">Main Program Call Flow<a class="headerlink" href="#main-program-call-flow" title="Permanent link">&para;</a></h2>
 <p>Detailed call graph showing which function belongs to which module (<code>.f90</code> file).</p>
 <div class="highlight"><pre><span></span><code>main.f90
 │
@@ -1024,7 +1046,7 @@
 ├── write_timing_report()                [mod_timing.f90]
 └── write_memory_report()                [mod_timing.f90]
 </code></pre></div>
-<h2 id="simple-algorithm">SIMPLE Algorithm</h2>
+<h2 id="simple-algorithm">SIMPLE Algorithm<a class="headerlink" href="#simple-algorithm" title="Permanent link">&para;</a></h2>
 <p>Within each iteration, the solver uses the SIMPLE (Semi-Implicit Method for Pressure-Linked Equations) algorithm:</p>
 <ol>
 <li><strong>Guess</strong> pressure field <span class="arithmatex">\(p^*\)</span></li>
@@ -1035,7 +1057,7 @@
 <li><strong>Repeat</strong> until convergence</li>
 </ol>
 <p>The enthalpy equation is solved first (before momentum) because material properties depend on temperature.</p>
-<h2 id="convergence-criteria">Convergence Criteria</h2>
+<h2 id="convergence-criteria">Convergence Criteria<a class="headerlink" href="#convergence-criteria" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -1063,7 +1085,7 @@
 </tbody>
 </table>
 <p>Where <code>ratio</code> is the energy balance ratio from <code>heat_fluxes()</code>.</p>
-<h2 id="staggered-grid">Staggered Grid</h2>
+<h2 id="staggered-grid">Staggered Grid<a class="headerlink" href="#staggered-grid" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>        j+1  ───────────────────
              |                 |
              |    vVel(i,j+1)  |
@@ -1138,7 +1160,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "content.code.copy", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
