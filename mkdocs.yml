@@ -5,8 +5,6 @@ repo_name: DrZGan/AMCFD
 
 theme:
   name: material
-  logo: img/logo.png
-  favicon: img/logo.png
   font:
     text: Source Sans Pro
     code: Source Code Pro
