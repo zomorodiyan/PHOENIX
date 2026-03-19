@@ -25,6 +25,7 @@ The solver models:
 - **Buoyancy**: Boussinesq approximation for natural convection
 - **Species transport**: Convection-diffusion of concentration field with molecular diffusivity
 - **Powder layer**: Distinct thermal properties for unconsolidated powder
+- **Defect prediction**: Post-simulation detection of lack-of-fusion ($T_{max} < T_s$, incomplete melting) and keyhole porosity ($T_{max} > T_b$, excessive vaporization) from peak temperature history within the build layer
 
 ## Quick Start
 
