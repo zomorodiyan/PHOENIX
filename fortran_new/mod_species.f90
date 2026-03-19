@@ -43,7 +43,7 @@ module species
 	! Species transport parameters
 	real(wp), parameter :: D_m = 5.0e-9_wp         ! molecular mass diffusivity (m^2/s)
 	real(wp), parameter :: urfspecies = 0.7_wp      ! under-relaxation factor
-	real(wp), parameter :: dgdc_const = 0.0_wp      ! dg/dC (solutal Marangoni, future use)
+	real(wp), parameter :: dgdc_const = -0.3_wp      ! dg/dC (solutal Marangoni coefficient, N/m)
 	real(wp), parameter :: diff_floor = 1.0e-30_wp  ! diffusivity floor in solid
 
 	! Derived constants for secondary material (set in init_species)

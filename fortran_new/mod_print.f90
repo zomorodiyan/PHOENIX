@@ -12,7 +12,7 @@ module printing
 	use laserinput
 	use boundary
 	use field_data
-	use species, only: concentration
+	use species, only: concentration, mix, tsolid2
 
 	implicit none
 	integer itertot,niter  !main   
@@ -246,6 +246,16 @@ subroutine Cust_Out
 	if (species_flag == 1) then
 		call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 		                      'concentration', concentration)
+		! Compute tsolid_field using auvl as scratch (already written to VTK above)
+		do k=1,nk
+		do j=1,nj
+		do i=1,ni
+			auvl(i,j,k) = mix(tsolid, tsolid2, concentration(i,j,k))
+		enddo
+		enddo
+		enddo
+		call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
+		                      'tsolid_field', auvl)
 	endif
 
 	close(41)

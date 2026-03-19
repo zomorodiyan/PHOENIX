@@ -80,6 +80,7 @@ Output: `.crs` file (time, x, y, z, laser on/off) + `.png` visualization.
 
 ## Species Transport Design Decisions
 
+- Concentration `C` is mass fraction of **primary material**: C=1 = primary (`&material_properties`), C=0 = secondary (`mod_species.f90` constants)
 - `hlatnt` (latent heat) remains a **scalar** — assume both materials have similar values
 - `dgdt` (dγ/dT, thermal Marangoni coefficient) remains a **scalar** — same assumption
 - `dgdc` (dγ/dC, solutal Marangoni coefficient) is a **scalar constant** defined in `mod_species.f90`

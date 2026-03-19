@@ -14,7 +14,10 @@ Create `mod_species.f90` in fortran_new based on `D:\Fortran\dissimilar\program9
   ```
 - No per-cell property arrays (`dens_arr`, `acpa_arr`, etc.) — all composition mixing is computed on-the-fly from the concentration field + scalar pairs (primary/secondary material constants)
 - Species transport active only in melt pool region (same as uvwp): when `T < tsolid_local`, `massdiffusivity` is near-zero
-- Concentration C: 1 = base material (from `&material_properties`), 0 = secondary material (from `mod_species.f90`)
+- Concentration C is a mass fraction of the **primary (base) material**:
+  - **C = 1**: pure primary material — properties from `&material_properties` in `input_param.txt` (e.g. dens, acpa, tsolid=1563K)
+  - **C = 0**: pure secondary material — properties from named constants in `mod_species.f90` (e.g. dens2=8880, acpa2=0.3441, tsolid2=1728K)
+  - **0 < C < 1**: mixed region — properties computed via `mix(prop1, prop2, C) = prop1*C + prop2*(1-C)`
 - Species solver reuses all shared coefficient arrays (`an, as, ae, aw, at, ab, ap, su, sp, apnot`) — solve after momentum/enthalpy so coefficients are free
 - Species arrays are allocated on the global domain, but discretization/source/solver only loop over the melt pool region using `istat,iend,jstat,jend,kstat` from `mod_dimen.f90` (same as uvw momentum equations)
 - Species is solved once per timestep after `iter_loop` exits (not inside the iteration loop), using `delt` for transient term
