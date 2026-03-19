@@ -1187,7 +1187,8 @@
 <h2 id="governing-equations">Governing Equations<a class="headerlink" href="#governing-equations" title="Permanent link">&para;</a></h2>
 <p>AM-CFD solves the coupled thermo-fluid equations for an incompressible Newtonian fluid with phase change in a 3D Cartesian domain.</p>
 <h3 id="continuity-mass-conservation">Continuity (Mass Conservation)<a class="headerlink" href="#continuity-mass-conservation" title="Permanent link">&para;</a></h3>
-<div class="arithmatex">\[\nabla \cdot \vec{u} = 0\]</div>
+<div class="arithmatex">\[\nabla \cdot (\rho \vec{u}) = 0\]</div>
+<p>Density <span class="arithmatex">\(\rho\)</span> varies spatially (solid, liquid, mushy, powder have different densities), so this is not equivalent to <span class="arithmatex">\(\nabla \cdot \vec{u} = 0\)</span>. The pressure correction equation enforces zero net mass flux through each control volume.</p>
 <h3 id="momentum-navier-stokes">Momentum (Navier-Stokes)<a class="headerlink" href="#momentum-navier-stokes" title="Permanent link">&para;</a></h3>
 <div class="arithmatex">\[\rho \frac{\partial \vec{u}}{\partial t} + \rho (\vec{u} \cdot \nabla)\vec{u} = -\nabla p + \nabla \cdot (\mu \nabla \vec{u}) + \vec{S}_u\]</div>
 <p>Source terms <span class="arithmatex">\(\vec{S}_u\)</span>:</p>
