@@ -1,5 +1,93 @@
 # Architecture Overview
 
+## Governing Equations
+
+AM-CFD solves the coupled thermo-fluid equations for an incompressible Newtonian fluid with phase change in a 3D Cartesian domain.
+
+### Continuity (Mass Conservation)
+
+$$\nabla \cdot \vec{u} = 0$$
+
+### Momentum (Navier-Stokes)
+
+$$\rho \frac{\partial \vec{u}}{\partial t} + \rho (\vec{u} \cdot \nabla)\vec{u} = -\nabla p + \nabla \cdot (\mu \nabla \vec{u}) + \vec{S}_u$$
+
+Source terms $\vec{S}_u$:
+
+- **Darcy resistance** (mushy zone): $S_D = -\frac{180\mu}{K_0} \frac{(1-f_l)^2}{f_l + \epsilon} \vec{u}$, where $K_0 = 10^{-10}$ m$^2$, $\epsilon = 10^{-3}$
+- **Buoyancy** (w-direction only, Boussinesq): $S_b = \rho g \beta (T - T_s) \hat{k}$
+- **Solid penalty**: When $T \leq T_s$, all coefficients are zeroed and $a_P = 10^{20}$ to enforce $\vec{u} = 0$
+
+### Energy (Enthalpy Formulation)
+
+$$\rho \frac{\partial H}{\partial t} + \rho (\vec{u} \cdot \nabla) H = \nabla \cdot \left(\frac{k}{c_p} \nabla H\right) + S_H$$
+
+Source terms $S_H$:
+
+- **Laser volumetric heating**: $q_{vol} = \frac{P \eta f}{\pi r_s^2 d_s} \exp\left(-\frac{f}{r_s^2}\left[(x-x_b)^2 + (y-y_b)^2\right]\right)$ for $z \geq z_{top} - d_s$
+- **Latent heat**: $S_L = -\rho h_{lat} \frac{\partial f_l}{\partial t}$ (enthalpy-porosity method)
+
+The enthalpy-temperature relationship is piecewise:
+
+| Region | Condition | $H(T)$ | $T(H)$ |
+|--------|-----------|---------|---------|
+| Solid | $T \leq T_s$ | $\frac{a}{2}T^2 + bT$ | $\frac{-b + \sqrt{b^2 + 2aH}}{a}$ |
+| Mushy | $T_s < T < T_l$ | $H_s + \bar{c}_p(T - T_s)$ | $T_s + \Delta T \cdot f_l$ |
+| Liquid | $T \geq T_l$ | $H_l + c_{p,l}(T - T_l)$ | $T_l + (H - H_l)/c_{p,l}$ |
+
+where $a$ = `acpa`, $b$ = `acpb`, $\bar{c}_p$ = `cpavg`, $f_l = (H - H_s)/(H_l - H_s)$.
+
+### Species Transport
+
+$$\rho \frac{\partial C}{\partial t} + \rho (\vec{u} \cdot \nabla) C = \nabla \cdot (\rho D_m \nabla C)$$
+
+where $C$ is the mass fraction of primary material, $D_m = 5 \times 10^{-9}$ m$^2$/s. Solved once per timestep after the iteration loop. See [Species Transport](../species/overview.md) for details.
+
+### Material Properties
+
+Temperature-dependent (and composition-dependent when `species_flag=1`):
+
+| Property | Liquid | Solid | Powder |
+|----------|--------|-------|--------|
+| Density $\rho$ | `denl` | `dens` | `pden` |
+| Viscosity $\mu$ | `viscos` | $10^{10}$ (rigid) | $10^{10}$ |
+| Diffusivity $\alpha$ | $k_l/c_{p,l}$ | $(a_k T + b_k)/(a_c T + b_c)$ | $(a_{pk} T + b_{pk})/(a_{pc} T + b_{pc})$ |
+
+In the mushy zone ($T_s < T < T_l$), properties are linearly interpolated by liquid fraction $f_l$.
+
+## Boundary Conditions
+
+### Top Surface ($z = z_{max}$, free surface)
+
+- **Thermal**: Combined radiation + convection loss
+
+$$q_{top} = h_{top}(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)$$
+
+- **Velocity**: Marangoni stress (thermal + solutal)
+
+$$u_{surface} = u_{below} + \frac{f_l}{\mu / \Delta z} \left(\frac{d\gamma}{dT}\frac{\partial T}{\partial x} + \frac{d\gamma}{dC}\frac{\partial C}{\partial x}\right)$$
+
+$$v_{surface} = v_{below} + \frac{f_l}{\mu / \Delta z} \left(\frac{d\gamma}{dT}\frac{\partial T}{\partial y} + \frac{d\gamma}{dC}\frac{\partial C}{\partial y}\right)$$
+
+The solutal Marangoni term ($d\gamma/dC$) is only active when `species_flag=1`.
+
+- **w-velocity**: $w_{surface} = 0$ (flat free surface approximation)
+- **Pressure**: Zero-gradient
+
+### Bottom Surface ($z = 0$)
+
+- **Thermal**: Convection to ambient: $q_{bottom} = h_{bottom}(T - T_{bottom})$
+- **Velocity**: No-slip ($\vec{u} = 0$, solid substrate)
+
+### Side Walls ($x = 0$, $x = L_x$, $y = 0$, $y = L_y$)
+
+- **Thermal**: Convection to ambient: $q_{side} = h_{side}(T - T_{side})$
+- **Velocity**: No-slip ($\vec{u} = 0$)
+
+### Species (all boundaries)
+
+- **Zero-flux Neumann**: $\frac{\partial C}{\partial n} = 0$ on all 6 faces
+
 ## Program Flow
 
 ```
