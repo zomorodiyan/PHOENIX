@@ -1,6 +1,6 @@
 #!/bin/bash
 # Verify localnum=0..5: run origin ONCE, then for each localnum run only fortran_new and compare.
-# Run from AMCFD folder: bash verify_nl_report.sh
+# Run from PHOENIX folder: bash verify_nl_report.sh
 BASEDIR="$(cd "$(dirname "$0")" && pwd)"
 REPORT="$BASEDIR/compare_report/nl_verification_report.txt"
 REPORT_DIR="$BASEDIR/compare_report"

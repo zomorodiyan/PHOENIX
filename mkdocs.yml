@@ -1,7 +1,7 @@
-site_name: AM-CFD
-site_description: Additive Manufacturing CFD Solver — Fortran + OpenMP
-repo_url: https://github.com/DrZGan/AMCFD
-repo_name: DrZGan/AMCFD
+site_name: PHOENIX
+site_description: "PHOENIX: Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution"
+repo_url: https://github.com/DrZGan/PHOENIX
+repo_name: DrZGan/PHOENIX
 
 theme:
   name: material

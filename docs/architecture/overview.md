@@ -2,7 +2,7 @@
 
 ## Governing Equations
 
-AM-CFD solves the coupled thermo-fluid equations for an incompressible Newtonian fluid with phase change in a 3D Cartesian domain.
+PHOENIX solves the coupled thermo-fluid equations for an incompressible Newtonian fluid with phase change in a 3D Cartesian domain.
 
 ### Continuity (Mass Conservation)
 

@@ -86,7 +86,7 @@ Binary structured-grid VTK files, viewable in ParaView.
 
 ```
 ============================================
-  AM-CFD Module Timing Report
+  PHOENIX Module Timing Report
 ============================================
   Total iterations (itertot): 17055
   Total CPU time:     2513.425 s
@@ -104,7 +104,7 @@ Binary structured-grid VTK files, viewable in ParaView.
 
 ```
 ============================================
-  AM-CFD Memory Report
+  PHOENIX Memory Report
 ============================================
   VmPeak:  ...   (peak virtual memory)
   VmHWM:   ...   (peak physical RAM — use this to size your machine)

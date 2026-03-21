@@ -1,5 +1,5 @@
 #!/bin/bash
-# AM-CFD Build Script
+# PHOENIX Build Script
 # Compiles the Fortran CFD code with OpenMP parallelization
 
 set -e  # Exit on error
@@ -7,7 +7,7 @@ set -e  # Exit on error
 # Full clean (clean.sh)
 bash clean.sh
 
-echo "Compiling AM-CFD..."
+echo "Compiling PHOENIX..."
 
 # Compile all modules and main program
 # Order matters: dependencies must be compiled first

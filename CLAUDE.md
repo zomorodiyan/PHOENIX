@@ -1,6 +1,6 @@
-# AMCFD Project
+# PHOENIX Project
 
-Additive Manufacturing CFD solver — Fortran + OpenMP.
+PHOENIX: Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution — Fortran + OpenMP.
 
 ## Principles
 
@@ -11,7 +11,7 @@ Additive Manufacturing CFD solver — Fortran + OpenMP.
 ## Project Structure
 
 ```
-AMCFD/
+PHOENIX/
 ├── fortran_new/          # Active simulation code
 │   ├── main.f90          # Entry point
 │   ├── mod_*.f90         # Fortran modules (one per file)

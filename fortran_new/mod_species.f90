@@ -487,7 +487,7 @@ subroutine write_species_vtk(outputnum)
 	! ASCII header
 	open(unit=42, file=trim(fname))
 	write(42,'(A)') '# vtk DataFile Version 3.0'
-	write(42,'(A)') 'AMCFD Species Concentration'
+	write(42,'(A)') 'PHOENIX Species Concentration'
 	write(42,'(A)') 'BINARY'
 	write(42,'(A)') 'DATASET STRUCTURED_GRID'
 	write(42,'(A,I0,A,I0,A,I0)') 'DIMENSIONS ', gridx, ' ', gridy, ' ', gridz

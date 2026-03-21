@@ -1,5 +1,5 @@
 #!/bin/bash
-# AM-CFD Build Script — compile only
+# PHOENIX Build Script — compile only
 set -e
 
 # Clean build artifacts only (preserve results)
@@ -7,7 +7,7 @@ find . -maxdepth 1 -name "*.o" -exec rm -f '{}' \;
 find . -maxdepth 1 -name "*.mod" -exec rm -f '{}' \;
 find . -maxdepth 1 -name "cluster_main*" -exec rm -f '{}' \;
 
-echo "Compiling AM-CFD..."
+echo "Compiling PHOENIX..."
 
 gfortran -fopenmp -O3 -march=native -c \
     mod_precision.f90 \

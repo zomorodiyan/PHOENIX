@@ -134,7 +134,7 @@ subroutine Cust_Out
 
 	! Write VTK legacy format header (ASCII)
 	write(41,'(A)') '# vtk DataFile Version 3.0'
-	write(41,'(A)') 'AMCFD Simulation Output'
+	write(41,'(A)') 'PHOENIX Simulation Output'
 	write(41,'(A)') 'BINARY'
 	write(41,'(A)') 'DATASET STRUCTURED_GRID'
 	write(41,'(A,I0,A,I0,A,I0)') 'DIMENSIONS ', gridx, ' ', gridy, ' ', gridz

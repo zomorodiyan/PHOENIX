@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare last time-step data from two AMCFD output.txt files."""
+"""Compare last time-step data from two PHOENIX output.txt files."""
 import re, sys
 
 def parse_output(path):

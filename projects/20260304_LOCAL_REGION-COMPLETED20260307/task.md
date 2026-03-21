@@ -279,9 +279,9 @@ The following commands may be executed without user confirmation:
 
 `compile.sh` already handles clean, compile, and run (it calls `clean.sh`, compiles all modules, links, and executes `./cluster_main`). So a single command is sufficient:
 
-- `cd /mnt/d/Fortran/AMCFD/fortran_new && bash compile.sh` — clean + compile + run (all-in-one)
-- `cd /mnt/d/Fortran/AMCFD/fortran_new && bash clean.sh` — clean build artifacts only
-- `cd /mnt/d/Fortran/AMCFD/fortran_new && ./cluster_main` — run simulation only (if already compiled)
+- `cd /mnt/d/Fortran/PHOENIX/fortran_new && bash compile.sh` — clean + compile + run (all-in-one)
+- `cd /mnt/d/Fortran/PHOENIX/fortran_new && bash clean.sh` — clean build artifacts only
+- `cd /mnt/d/Fortran/PHOENIX/fortran_new && ./cluster_main` — run simulation only (if already compiled)
 
 **Test & Analysis:**
 - `bash projects/20260304_LOCAL_REGION/run_verification.sh` — run verification tests

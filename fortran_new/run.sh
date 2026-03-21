@@ -1,5 +1,5 @@
 #!/bin/bash
-# AM-CFD Run Script
+# PHOENIX Run Script
 # Usage: bash run.sh <case_name> [omp_threads]
 set -e
 

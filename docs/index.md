@@ -1,8 +1,8 @@
-# AM-CFD
+# PHOENIX
 
-**Additive Manufacturing Computational Fluid Dynamics Solver**
+**Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution**
 
-AM-CFD is a Fortran + OpenMP solver for simulating thermo-fluid dynamics in laser-based additive manufacturing (AM) processes such as Laser Powder Bed Fusion (LPBF) and Directed Energy Deposition (DED).
+PHOENIX is a Fortran + OpenMP solver for simulating thermo-fluid dynamics in laser-based additive manufacturing (AM) processes such as Laser Powder Bed Fusion (LPBF) and Directed Energy Deposition (DED).
 
 ## Key Features
 
@@ -40,7 +40,7 @@ Results are written to `fortran_new/result/mycase/`.
 ## Project Structure
 
 ```
-AMCFD/
+PHOENIX/
 ├── fortran_new/          # Active simulation code
 │   ├── main.f90          # Entry point
 │   ├── mod_*.f90         # Fortran modules (one per file)

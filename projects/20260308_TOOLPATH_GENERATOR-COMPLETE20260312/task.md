@@ -125,8 +125,8 @@ Verify:
 
 ---
 
-## Task 5 — Integration Test with AMCFD Simulation
-Use the toolpath generator to create a toolpath and run the AMCFD simulation with it.
+## Task 5 — Integration Test with PHOENIX Simulation
+Use the toolpath generator to create a toolpath and run the PHOENIX simulation with it.
 No Fortran source code modifications allowed — only replace the toolpath file and adjust `input_param.txt`.
 
 ### Setup

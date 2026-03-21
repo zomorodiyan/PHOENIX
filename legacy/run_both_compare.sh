@@ -2,7 +2,7 @@
 # Kill, clean, compile, run both fortran_origin and fortran_new, then compare:
 #   - output.txt (all fields, all blocks)
 #   - VTK files
-# Run from AMCFD folder: bash run_both_compare.sh
+# Run from PHOENIX folder: bash run_both_compare.sh
 BASEDIR="$(cd "$(dirname "$0")" && pwd)"
 REPORT_DIR="$BASEDIR/compare_report"
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-12}

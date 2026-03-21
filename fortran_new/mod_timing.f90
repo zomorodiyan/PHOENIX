@@ -83,7 +83,7 @@ subroutine write_memory_report(file_prefix)
 
 	open(unit=lun, file=trim(file_prefix)//'memory_report.txt', action='write', status='replace')
 	write(lun,'(a)') '============================================'
-	write(lun,'(a)') '  AM-CFD Memory Report'
+	write(lun,'(a)') '  PHOENIX Memory Report'
 	write(lun,'(a)') '  (from /proc/self/status at end of run)'
 	write(lun,'(a)') '============================================'
 	write(lun,'(a)') ''
@@ -155,7 +155,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 
 	open(unit=lun, file=trim(file_prefix)//'timing_report.txt', action='write', status='replace')
 	write(lun,'(a)') '============================================'
-	write(lun,'(a)') '  AM-CFD Module Timing Report'
+	write(lun,'(a)') '  PHOENIX Module Timing Report'
 	write(lun,'(a)') '  (CPU time accumulated in main loop)'
 	write(lun,'(a)') '============================================'
 	write(lun,'(a,i0)') '  Total iterations (itertot): ', itertot

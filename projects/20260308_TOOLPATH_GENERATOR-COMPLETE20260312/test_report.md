@@ -71,7 +71,7 @@
 
 ---
 
-## Task 5: AMCFD Integration Test
+## Task 5: PHOENIX Integration Test
 
 - Generated toolpath: start=(0.5, 0.5, 0.6975) mm, size_x=3mm, size_y=3mm, scan_axis=x, bidir, hatch=0.1mm, speed=1.23 m/s, turnaround=0.5ms
 - Replaced `B26.crs` with generated toolpath (original backed up as `B26_original.crs`)

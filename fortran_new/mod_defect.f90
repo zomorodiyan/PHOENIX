@@ -241,7 +241,7 @@ subroutine write_defect_report()
 	! --- Write defect_report.txt ---
 	open(unit=lun, file=trim(file_prefix)//'defect_report.txt', action='write', status='replace')
 	write(lun,'(a)') '============================================'
-	write(lun,'(a)') '  AM-CFD Defect Report'
+	write(lun,'(a)') '  PHOENIX Defect Report'
 	write(lun,'(a)') '  Method: maxtemp_determ'
 	write(lun,'(a)') '============================================'
 	write(lun,'(a)')
@@ -306,7 +306,7 @@ subroutine write_defect_vtk(fieldname, field)
 	! ASCII header
 	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk')
 	write(lun,'(A)') '# vtk DataFile Version 3.0'
-	write(lun,'(A)') 'AMCFD '//trim(fieldname)//' field'
+	write(lun,'(A)') 'PHOENIX '//trim(fieldname)//' field'
 	write(lun,'(A)') 'BINARY'
 	write(lun,'(A)') 'DATASET STRUCTURED_GRID'
 	write(lun,'(A,I0,A,I0,A,I0)') 'DIMENSIONS ', gridx, ' ', gridy, ' ', gridz

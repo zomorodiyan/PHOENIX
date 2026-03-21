@@ -98,7 +98,7 @@ All boundaries use **zero-flux Neumann** (dC/dn = 0):
 
 This is physically appropriate — no species flux through domain walls.
 
-## Comparison with fortran_new (AMCFD version)
+## Comparison with fortran_new (PHOENIX version)
 
 | Feature | dissimilar (program931) | fortran_new (mod_species.f90) |
 |---|---|---|
