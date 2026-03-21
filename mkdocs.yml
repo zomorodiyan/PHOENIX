@@ -1,5 +1,5 @@
 site_name: PHOENIX
-site_description: "PHOENIX: Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution"
+site_description: "PHOENIX: A hybrid physics-based and AI-accelerated solver for simulating process-to-microstructure evolution in laser-based additive manufacturing"
 repo_url: https://github.com/DrZGan/PHOENIX
 repo_name: DrZGan/PHOENIX
 

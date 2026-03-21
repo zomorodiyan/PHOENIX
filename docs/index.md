@@ -2,7 +2,7 @@
 
 **Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution**
 
-PHOENIX is a Fortran + OpenMP solver for simulating thermo-fluid dynamics in laser-based additive manufacturing (AM) processes such as Laser Powder Bed Fusion (LPBF) and Directed Energy Deposition (DED).
+PHOENIX is a hybrid physics-based and AI-accelerated Fortran + OpenMP solver for simulating process-to-microstructure evolution in laser-based additive manufacturing (LPBF, DED).
 
 ## Key Features
 
