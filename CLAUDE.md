@@ -92,7 +92,7 @@ Output: `.crs` file (time, x, y, z, laser on/off) + `.png` visualization.
 - All code comments and documentation in English
 - One module per `.f90` file, named `mod_<name>.f90`
 - `fortran_new/` is the active development folder — all code changes go here
-- `legacy/` is read-only reference code — **never modify** files in `legacy/`
+- `legacy/` is read-only reference code — **never modify** files in `legacy/`, including renaming, refactoring, or any text substitutions. Legacy files must remain exactly as they are.
 - Do not modify Fortran source code unless the task explicitly requires it
 - When adding features, minimize impact on existing modules
 - Prefer editing existing files over creating new ones

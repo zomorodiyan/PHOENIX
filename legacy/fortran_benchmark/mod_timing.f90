@@ -88,7 +88,7 @@ subroutine write_timing_report(itertot, timet_end)
 
 	open(unit=lun, file='result/timing_report.txt', action='write', status='replace')
 	write(lun,'(a)') '============================================'
-	write(lun,'(a)') '  PHOENIX Module Timing Report'
+	write(lun,'(a)') '  AM-CFD Module Timing Report'
 	write(lun,'(a)') '  (CPU time accumulated in main loop)'
 	write(lun,'(a)') '============================================'
 	write(lun,'(a,i0)') '  Total iterations (itertot): ', itertot

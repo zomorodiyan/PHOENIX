@@ -3,7 +3,7 @@
 # Both run in parallel; script waits for both to finish, then summarizes.
 SCRIPTDIR="$(cd "$(dirname "$0")" && pwd)"
 BASEDIR="$(cd "$SCRIPTDIR/.." && pwd)"
-# Comparison scripts live in PHOENIX (BASEDIR)
+# Comparison scripts live in AMCFD (BASEDIR)
 export OMP_NUM_THREADS=${OMP_NUM_THREADS:-12}
 export GFORTRAN_UNBUFFERED_ALL=1
 echo "=============================================="
