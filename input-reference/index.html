@@ -558,6 +558,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#microstructure_params-solidification-microstructure-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;microstructure_params — Solidification Microstructure (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crack_params-crack-risk-prediction-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;crack_params — Crack Risk Prediction (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1022,6 +1044,28 @@
     <span class="md-ellipsis">
       
         &amp;output_control — Output Settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#microstructure_params-solidification-microstructure-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;microstructure_params — Solidification Microstructure (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#crack_params-crack-risk-prediction-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        &amp;crack_params — Crack Risk Prediction (optional)
       
     </span>
   </a>
@@ -1566,8 +1610,86 @@ $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T
 <td>Enable species transport (0=off, 1=on)</td>
 <td>0</td>
 </tr>
+<tr>
+<td><code>micro_flag</code></td>
+<td>-</td>
+<td>Enable solidification microstructure prediction (0=off, 1=on)</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>crack_flag</code></td>
+<td>-</td>
+<td>Enable crack risk prediction (0=off, 1=on)</td>
+<td>0</td>
+</tr>
 </tbody>
 </table>
+<h3 id="microstructure_params-solidification-microstructure-optional"><code>&amp;microstructure_params</code> — Solidification Microstructure (optional)<a class="headerlink" href="#microstructure_params-solidification-microstructure-optional" title="Permanent link">&para;</a></h3>
+<p>Only read when <code>micro_flag=1</code>. All parameters have defaults for IN718.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>a1_pdas</code></td>
+<td>m</td>
+<td>PDAS prefactor</td>
+<td>50e-6</td>
+</tr>
+<tr>
+<td><code>a2_sdas</code></td>
+<td>m</td>
+<td>SDAS prefactor</td>
+<td>10e-6</td>
+</tr>
+<tr>
+<td><code>n1_pdas</code></td>
+<td>-</td>
+<td>PDAS exponent for G</td>
+<td>-0.5</td>
+</tr>
+<tr>
+<td><code>n2_pdas</code></td>
+<td>-</td>
+<td>PDAS exponent for R</td>
+<td>-0.25</td>
+</tr>
+<tr>
+<td><code>n3_sdas</code></td>
+<td>-</td>
+<td>SDAS exponent for cooling rate</td>
+<td>-0.333</td>
+</tr>
+</tbody>
+</table>
+<p>PDAS: <span class="arithmatex">\(\lambda_1 = a_1 \cdot G^{n_1} \cdot R^{n_2}\)</span>, SDAS: <span class="arithmatex">\(\lambda_2 = a_2 \cdot \dot{T}^{n_3}\)</span></p>
+<h3 id="crack_params-crack-risk-prediction-optional"><code>&amp;crack_params</code> — Crack Risk Prediction (optional)<a class="headerlink" href="#crack_params-crack-risk-prediction-optional" title="Permanent link">&para;</a></h3>
+<p>Only read when <code>crack_flag=1</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Unit</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>delta_t_btr</code></td>
+<td>K</td>
+<td>Brittle Temperature Range width below T_solidus</td>
+<td>100.0</td>
+</tr>
+</tbody>
+</table>
+<p>CSI = <span class="arithmatex">\(\int_{BTR} \alpha \cdot |\dot{T}| \, dt\)</span> where BTR = <span class="arithmatex">\([T_s - \Delta T_{BTR}, \, T_s]\)</span></p>
 
 
 
