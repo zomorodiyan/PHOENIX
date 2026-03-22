@@ -11,6 +11,9 @@ PHOENIX is a hybrid physics-based and AI-accelerated solver for simulating proce
 - **Dissimilar metal mixing**: Species transport with composition-dependent material properties (two-way coupling)
 - **Local/global solver**: Adaptive solver scheduling — solves only the melt pool region for most time steps, full domain periodically
 - **Defect prediction**: Post-simulation analysis of lack-of-fusion and keyhole porosity from max temperature field
+- **Solidification microstructure**: Thermal gradient G, solidification rate R, PDAS/SDAS prediction at the solidification front
+- **Crack risk prediction**: Crack susceptibility index (CSI) from thermal strain in the Brittle Temperature Range
+- **Melt pool tracking**: Time-series logging of melt pool length, depth, width, volume, and D/W aspect ratio with auto-generated plots
 - **OpenMP parallelization**: Shared-memory parallelism for all hot loops (TDMA, discretization, source terms)
 - **VTK output**: Binary structured-grid VTK files for ParaView visualization
 
@@ -26,6 +29,8 @@ The solver models:
 - **Species transport**: Convection-diffusion of concentration field with molecular diffusivity
 - **Powder layer**: Distinct thermal properties for unconsolidated powder
 - **Defect prediction**: Post-simulation detection of lack-of-fusion ($T_{max} < T_s$, incomplete melting) and keyhole porosity ($T_{max} > T_b$, excessive vaporization) from peak temperature history within the build layer
+- **Solidification microstructure**: Computes thermal gradient G, solidification rate R, cooling rate, primary dendrite arm spacing (PDAS), and secondary dendrite arm spacing (SDAS) at the moment each cell solidifies
+- **Crack risk**: Crack susceptibility index (CSI) = accumulated thermal strain while material is in the Brittle Temperature Range (BTR) near solidus
 
 ## Quick Start
 
