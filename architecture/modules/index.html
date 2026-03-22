@@ -11,10 +11,6 @@
       
       
       
-        <link rel="prev" href="../overview/">
-      
-      
-        <link rel="next" href="../solver/">
       
       
         
@@ -437,10 +433,8 @@
       
   
   
-    
   
   
-  
     
     
       
@@ -459,11 +453,13 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -484,7 +480,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -527,1249 +523,6 @@
                 
   
   
-    
-  
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Module Reference
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Module Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#mod_precisionf90-precision" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_precision.f90 — precision
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_constf90-constant" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_const.f90 — constant
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_cfd_utilsf90-cfd_utils" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_cfd_utils.f90 — cfd_utils
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_cfd_utils.f90 — cfd_utils">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#temp_to_enthalpyt-acpa-acpb-acpl-tsolid-tliquid-hsmelt-hlcal-deltemp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        temp_to_enthalpy(T, acpa, acpb, acpl, tsolid, tliquid, hsmelt, hlcal, deltemp)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#harmonic_meanval1-val2-frac" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        harmonic_mean(val1, val2, frac)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#power_law_coeffdiff-flux" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        power_law_coeff(diff, flux)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#darcy_resistanceviscos-fracl" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        darcy_resistance(viscos, fracl)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_paramf90-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_param.f90 — parameters
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_param.f90 — parameters">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#read_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        read_data()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_geomf90-geometry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_geom.f90 — geometry
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_geom.f90 — geometry">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#generate_grid" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        generate_grid()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#generate_1d_gridnzones-zones-ncv-powr-vel_grid-scalar_grid-n-nm1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        generate_1d_grid(nzones, zones, ncv, powr, vel_grid, scalar_grid, n, nm1)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#geometric-quantities-computed" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Geometric quantities computed:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_field_dataf90-field_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_field_data.f90 — field_data
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_field_data.f90 — field_data">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_field_datanni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_field_data(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_coeff_dataf90-coeff_data" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_coeff_data.f90 — coeff_data
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_coeff_data.f90 — coeff_data">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_coeff_datanni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_coeff_data(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_sim_statef90-sim_state" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_sim_state.f90 — sim_state
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_initf90-initialization" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_init.f90 — initialization
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_init.f90 — initialization">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#initialize" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        initialize()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_laserf90-laserinput" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_laser.f90 — laserinput
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_laser.f90 — laserinput">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#laser_beam" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        laser_beam()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_toolpathf90-toolpath" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_toolpath.f90 — toolpath
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_toolpath.f90 — toolpath">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#read_toolpath" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        read_toolpath()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#read_coordinates" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        read_coordinates()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_dimenf90-dimensions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_dimen.f90 — dimensions
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_dimen.f90 — dimensions">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pool_sizeilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        pool_size(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_local_enthalpy.f90 — local_enthalpy
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_local_enthalpy.f90 — local_enthalpy">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compute_delt_eff" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        compute_delt_eff()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_skipped-is_local" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_skipped(..., is_local)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_propf90-property" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_prop.f90 — property
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_prop.f90 — property">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#propertiesilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        properties(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_speciesf90-species" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_species.f90 — species
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_species.f90 — species">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#key-functions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Key functions:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_boundf90-boundary" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_bound.f90 — boundary
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_bound.f90 — boundary">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#bound_uvidir" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        bound_uv(idir)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bound_w" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        bound_w()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bound_pp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        bound_pp()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_discretf90-discretization" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_discret.f90 — discretization
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_discret.f90 — discretization">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#discretize_momentumidir" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        discretize_momentum(idir)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#discretize_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#discretize_pp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        discretize_pp()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_entotf90-entotemp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_entot.f90 — entotemp
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_entot.f90 — entotemp">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#enthalpy_to_tempilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_sourf90-source" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_sour.f90 — source
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_sour.f90 — source">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#source_momentumidir" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        source_momentum(idir)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#source_pp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        source_pp()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#source_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        source_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_residf90-residue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_resid.f90 — residue
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_resid.f90 — residue">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#calc_momentum_residualvel-resor_out-calc_refmom" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        calc_momentum_residual(vel, resor_out, calc_refmom)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#calc_enthalpy_residualilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        calc_enthalpy_residual(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#calc_pressure_residual" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        calc_pressure_residual()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_solvef90-solver" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_solve.f90 — solver
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_solve.f90 — solver">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tdma_solve_3d_2field-klo-khi-jlo-jhi-ibc-ilo-ihi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        tdma_solve_3d_2(field, klo, khi, jlo, jhi, ibc, ilo, ihi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#solution_uvwfield-solution_enthalpyilo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        solution_uvw(field) / solution_enthalpy(ilo,...)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cleanuvw" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        cleanuvw()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_convergef90-convergence" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_converge.f90 — convergence
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_converge.f90 — convergence">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#enhance_converge_speedilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        enhance_converge_speed(ilo, ihi, jlo, jhi, klo, khi)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_revisef90-revision" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_revise.f90 — revision
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_revise.f90 — revision">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#revision_p" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        revision_p()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_fluxf90-fluxes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_flux.f90 — fluxes
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_flux.f90 — fluxes">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#heat_fluxes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        heat_fluxes()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_defectf90-defect_field" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_defect.f90 — defect_field
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_defect.f90 — defect_field">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#arrays" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Arrays
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#allocate_defectnni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_defect(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_max_temp" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_max_temp()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compute_defect_determ" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        compute_defect_determ()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compute_scan_range" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        compute_scan_range()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#point_in_scan_regionpx-py" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        point_in_scan_region(px, py)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#write_defect_report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        write_defect_report()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#write_defect_vtkfieldname-field" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        write_defect_vtk(fieldname, field)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#maxtemp_stochas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        maxtemp_stochas()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_timingf90-timing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_timing.f90 — timing
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_timing.f90 — timing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#write_timing_reportitertot-timet_end-wall_elapsed-file_prefix" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#write_memory_reportfile_prefix" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        write_memory_report(file_prefix)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_printf90-printing" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_print.f90 — printing
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_print.f90 — printing">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#outputres" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        outputres()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cust_out" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cust_Out()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#init_thermal_history-write_thermal_historytimet-finalize_thermal_history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        init_thermal_history() / write_thermal_history(timet) / finalize_thermal_history()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#init_meltpool_history-write_meltpool_historytimet-finalize_meltpool_history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        init_meltpool_history() / write_meltpool_history(timet) / finalize_meltpool_history()
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#write_vtk_scalarunit-filename-name-field-write_vtk_vector" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        write_vtk_scalar(unit, filename, name, field) / write_vtk_vector(...)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_microstructuref90-microstructure_mod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_microstructure.f90 — microstructure_mod
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_microstructure.f90 — microstructure_mod">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_microstructurenni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_microstructure(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_microstructuredt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_microstructure(dt)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#report_microstructure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        report_microstructure()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_crack_riskf90-crack_risk_mod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_crack_risk.f90 — crack_risk_mod
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_crack_risk.f90 — crack_risk_mod">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_crack_risknni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_crack_risk(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_crack_riskdt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_crack_risk(dt)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compute_crack_report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        compute_crack_report()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
   
   
     <li class="md-nav__item">
@@ -1789,6 +542,187 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Module Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Module Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/core/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/solver/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solver Modules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/physics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Physics Modules
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../modules/postprocess/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Post-Processing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 

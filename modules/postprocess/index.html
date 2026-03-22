@@ -11,6 +11,10 @@
       
       
       
+        <link rel="prev" href="../physics/">
+      
+      
+        <link rel="next" href="../../species/overview/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>Species Transport — Task Tracking - PHOENIX</title>
+        <title>Post-Processing - PHOENIX</title>
       
     
     
@@ -74,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#species-transport-task-tracking" class="md-skip">
+        <a href="#post-processing-modules" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Species Transport — Task Tracking
+              Post-Processing
             
           </span>
         </div>
@@ -433,8 +437,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -453,13 +459,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -480,7 +484,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -551,8 +555,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -570,13 +576,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
@@ -597,7 +601,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -615,7 +619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../modules/core/" class="md-nav__link">
+      <a href="../core/" class="md-nav__link">
         
   
   
@@ -643,7 +647,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../modules/solver/" class="md-nav__link">
+      <a href="../solver/" class="md-nav__link">
         
   
   
@@ -671,7 +675,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../modules/physics/" class="md-nav__link">
+      <a href="../physics/" class="md-nav__link">
         
   
   
@@ -696,10 +700,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../modules/postprocess/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Post-Processing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -715,6 +746,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mod_defectf90-defect_field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_defect.f90 — defect_field
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_microstructuref90-microstructure_mod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_microstructure.f90 — microstructure_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_crack_riskf90-crack_risk_mod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_crack_risk.f90 — crack_risk_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_printf90-printing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_print.f90 — printing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_timingf90-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_timing.f90 — timing
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -800,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../overview/" class="md-nav__link">
+      <a href="../../species/overview/" class="md-nav__link">
         
   
   
@@ -882,10 +988,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#completed" class="md-nav__link">
+  <a href="#mod_defectf90-defect_field" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Completed
+        mod_defect.f90 — defect_field
       
     </span>
   </a>
@@ -893,10 +999,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#key-design-decisions" class="md-nav__link">
+  <a href="#mod_microstructuref90-microstructure_mod" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Key Design Decisions
+        mod_microstructure.f90 — microstructure_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_crack_riskf90-crack_risk_mod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_crack_risk.f90 — crack_risk_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_printf90-printing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_print.f90 — printing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_timingf90-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_timing.f90 — timing
       
     </span>
   </a>
@@ -923,24 +1062,55 @@
   
 
 
-<h1 id="species-transport-task-tracking">Species Transport — Task Tracking<a class="headerlink" href="#species-transport-task-tracking" title="Permanent link">&para;</a></h1>
-<p>Current status of species transport implementation. See <code>projects/20260312_SPECIES/task.md</code> for full details.</p>
-<h2 id="completed">Completed<a class="headerlink" href="#completed" title="Permanent link">&para;</a></h2>
+<h1 id="post-processing-modules">Post-Processing Modules<a class="headerlink" href="#post-processing-modules" title="Permanent link">&para;</a></h1>
+<p>Defect prediction, microstructure, crack risk, output, timing.</p>
+<hr />
+<h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code><a class="headerlink" href="#mod_defectf90-defect_field" title="Permanent link">&para;</a></h2>
+<p>Post-simulation defect detection from peak temperature history.</p>
 <ul>
-<li>[x] <strong>Phase 0</strong>: Infrastructure — memory report, compile script improvements</li>
-<li>[x] <strong>Phase 1</strong>: Scaffolding — <code>species_flag</code> input, <code>mod_species.f90</code> creation</li>
-<li>[x] <strong>Phase 2</strong>: Solver core — FVM discretization, TDMA, block correction, boundary conditions, wiring into main loop</li>
-<li>[x] <strong>Milestone</strong>: One-way coupling validated — concentration field correct, &lt;1% overhead</li>
-<li>[x] <strong>Phase 3</strong>: Two-way coupling — composition-dependent properties in <code>mod_prop</code>, <code>mod_entot</code>, <code>mod_sour</code>, <code>mod_solve</code>, <code>main</code></li>
-<li>[x] <strong>Phase 4</strong>: Solutal Marangoni — <code>dgdc_const = -0.3 N/m</code> in <code>mod_bound</code></li>
-<li>[x] <strong>Phase 5</strong>: Two-way coupling validated — correct mixing, +16% property coupling overhead</li>
+<li><code>update_max_temp()</code> — called every timestep, tracks maximum temperature per cell</li>
+<li><code>compute_defect_determ()</code> — classifies cells: lack-of-fusion (<span class="arithmatex">\(T_{max} &lt; T_s\)</span>), sound, keyhole (<span class="arithmatex">\(T_{max} &gt; T_b\)</span>)</li>
+<li><code>write_defect_report()</code> — volumetric defect fractions, VTK output (<code>maxtemp.vtk</code>, <code>defect.vtk</code>)</li>
+<li><code>compute_scan_range()</code> / <code>point_in_scan_region()</code> — builds convex hull of scanned region from toolpath, used by all post-processing modules</li>
 </ul>
-<h2 id="key-design-decisions">Key Design Decisions<a class="headerlink" href="#key-design-decisions" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="mod_microstructuref90-microstructure_mod">mod_microstructure.f90 — <code>microstructure_mod</code><a class="headerlink" href="#mod_microstructuref90-microstructure_mod" title="Permanent link">&para;</a></h2>
+<p>Solidification microstructure prediction. Enabled by <code>micro_flag=1</code>. <strong>Only updates during global solver timesteps.</strong></p>
 <ul>
-<li><strong>Inline computation</strong> (not per-cell arrays): all composition mixing computed on-the-fly via <code>mix()</code>. Zero memory overhead, ~16% CPU overhead from extra multiplications in hot loops.</li>
-<li><strong>Melt pool region only</strong>: species solver uses same indices as momentum (<code>istatp1:iendm1, jstat:jend, kstat:nkm1</code>). Overhead &lt;1%.</li>
-<li><strong>Shared coefficient arrays</strong>: species reuses <code>an, as, ae, aw, at, ab, ap, su, sp, apnot</code> — solved after iteration loop when arrays are free.</li>
-<li><strong>Scalar simplifications</strong>: <code>hlatnt</code>, <code>dgdt</code>, <code>beta</code>, <code>emiss</code> remain scalars (assume similar values for both materials).</li>
+<li><code>update_microstructure(dt)</code> — detects solidification events (<code>fracl</code> drops to 0), computes:<ul>
+<li>Cooling rate <code>|dT/dt|</code></li>
+<li>Thermal gradient <code>G = |∇T|</code> (central differences, one-sided at boundaries)</li>
+<li>Solidification rate <code>R = |dT/dt| / G</code></li>
+<li>PDAS: <span class="arithmatex">\(\lambda_1 = a_1 \cdot G^{n_1} \cdot R^{n_2}\)</span></li>
+<li>SDAS: <span class="arithmatex">\(\lambda_2 = a_2 \cdot |\dot{T}|^{n_3}\)</span></li>
+</ul>
+</li>
+<li><code>report_microstructure()</code> — statistics + single <code>microstructure.vtk</code> with 5 scalar fields</li>
+</ul>
+<hr />
+<h2 id="mod_crack_riskf90-crack_risk_mod">mod_crack_risk.f90 — <code>crack_risk_mod</code><a class="headerlink" href="#mod_crack_riskf90-crack_risk_mod" title="Permanent link">&para;</a></h2>
+<p>Crack risk from thermal strain in the Brittle Temperature Range (BTR). Enabled by <code>crack_flag=1</code>. <strong>Only updates during global solver timesteps.</strong></p>
+<ul>
+<li><code>update_crack_risk(dt)</code> — detects solidification, accumulates BTR strain:<ul>
+<li>CSI <span class="arithmatex">\(= \int_{BTR} \alpha \cdot |\dot{T}| \, dt\)</span> where BTR <span class="arithmatex">\(= [T_s - \Delta T_{BTR}, T_s]\)</span></li>
+</ul>
+</li>
+<li><code>compute_crack_report()</code> — statistics + single <code>crack_risk.vtk</code> with 4 scalar fields</li>
+</ul>
+<hr />
+<h2 id="mod_printf90-printing">mod_print.f90 — <code>printing</code><a class="headerlink" href="#mod_printf90-printing" title="Permanent link">&para;</a></h2>
+<p>All output routines:</p>
+<ul>
+<li><code>outputres()</code> — per-timestep text log (residuals, pool size, energy balance)</li>
+<li><code>Cust_Out()</code> — VTK snapshots at <code>outputintervel</code> frequency (T, velocity, vis, diff, den, solidID, localfield, fracl, [concentration, tsolid_field])</li>
+<li><code>init/write/finalize_thermal_history()</code> — temperature at 10 monitoring points + Python plot</li>
+<li><code>init/write/finalize_meltpool_history()</code> — melt pool geometry time-series + Python plot (global steps only)</li>
+</ul>
+<hr />
+<h2 id="mod_timingf90-timing">mod_timing.f90 — <code>timing</code><a class="headerlink" href="#mod_timingf90-timing" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>write_timing_report()</code> — CPU time breakdown by module (17 categories)</li>
+<li><code>write_memory_report()</code> — peak memory from <code>/proc/self/status</code></li>
 </ul>
 
 

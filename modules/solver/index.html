@@ -11,26 +11,28 @@
       
       
       
-        <link rel="prev" href="../species/overview/">
+        <link rel="prev" href="../core/">
       
+      
+        <link rel="next" href="../physics/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
     
     
       
-        <title>Output & Visualization - PHOENIX</title>
+        <title>Solver Modules - PHOENIX</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,9 +51,9 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/custom.css">
+      <link rel="stylesheet" href="../../stylesheets/custom.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -76,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#output-visualization" class="md-skip">
+        <a href="#solver-modules" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="PHOENIX" class="md-header__button md-logo" aria-label="PHOENIX" data-md-component="logo">
+    <a href="../.." title="PHOENIX" class="md-header__button md-logo" aria-label="PHOENIX" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -112,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Output & Visualization
+              Solver Modules
             
           </span>
         </div>
@@ -228,7 +230,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="PHOENIX" class="md-nav__button md-logo" aria-label="PHOENIX" data-md-component="logo">
+    <a href="../.." title="PHOENIX" class="md-nav__button md-logo" aria-label="PHOENIX" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -258,7 +260,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -347,7 +349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../getting-started/" class="md-nav__link">
+      <a href="../../getting-started/" class="md-nav__link">
         
   
   
@@ -375,7 +377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../input-reference/" class="md-nav__link">
+      <a href="../../input-reference/" class="md-nav__link">
         
   
   
@@ -403,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../toolpath/" class="md-nav__link">
+      <a href="../../toolpath/" class="md-nav__link">
         
   
   
@@ -435,8 +437,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -455,13 +459,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -482,7 +484,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -500,7 +502,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/overview/" class="md-nav__link">
+      <a href="../../architecture/overview/" class="md-nav__link">
         
   
   
@@ -528,7 +530,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../architecture/solver/" class="md-nav__link">
+      <a href="../../architecture/solver/" class="md-nav__link">
         
   
   
@@ -553,8 +555,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -572,13 +576,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
@@ -599,7 +601,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -617,7 +619,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../modules/core/" class="md-nav__link">
+      <a href="../core/" class="md-nav__link">
         
   
   
@@ -642,10 +644,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../modules/solver/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Solver Modules
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -661,6 +690,136 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mod_propf90-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_prop.f90 — property
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_boundf90-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_bound.f90 — boundary
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_discretf90-discretization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_discret.f90 — discretization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_sourf90-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_sour.f90 — source
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_entotf90-entotemp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_entot.f90 — entotemp
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_solvef90-solver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_solve.f90 — solver
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_convergef90-convergence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_converge.f90 — convergence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_revisef90-revision" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_revise.f90 — revision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_residf90-residue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_resid.f90 — residue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_fluxf90-fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_flux.f90 — fluxes
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -673,7 +832,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../modules/physics/" class="md-nav__link">
+      <a href="../physics/" class="md-nav__link">
         
   
   
@@ -701,7 +860,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../modules/postprocess/" class="md-nav__link">
+      <a href="../postprocess/" class="md-nav__link">
         
   
   
@@ -802,7 +961,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../species/overview/" class="md-nav__link">
+      <a href="../../species/overview/" class="md-nav__link">
         
   
   
@@ -834,37 +993,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Output & Visualization
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../output/" class="md-nav__link">
         
   
   
@@ -880,164 +1012,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#output-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Output Files
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#outputtxt-format" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        output.txt Format
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#vtk-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        VTK Files
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="VTK Files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#scalar-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Scalar Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vector-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Vector Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#opening-in-paraview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Opening in ParaView
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#timing-report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Timing Report
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#memory-report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Memory Report
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#defect-report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Defect Report
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#microstructure-report-micro_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Microstructure Report (micro_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#crack-risk-report-crack_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Crack Risk Report (crack_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#melt-pool-history" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Melt Pool History
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1069,10 +1043,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#output-files" class="md-nav__link">
+  <a href="#mod_propf90-property" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Output Files
+        mod_prop.f90 — property
       
     </span>
   </a>
@@ -1080,10 +1054,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#outputtxt-format" class="md-nav__link">
+  <a href="#mod_boundf90-boundary" class="md-nav__link">
     <span class="md-ellipsis">
       
-        output.txt Format
+        mod_bound.f90 — boundary
       
     </span>
   </a>
@@ -1091,60 +1065,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#vtk-files" class="md-nav__link">
+  <a href="#mod_discretf90-discretization" class="md-nav__link">
     <span class="md-ellipsis">
       
-        VTK Files
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="VTK Files">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#scalar-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Scalar Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#vector-fields" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Vector Fields
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#opening-in-paraview" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Opening in ParaView
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#timing-report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Timing Report
+        mod_discret.f90 — discretization
       
     </span>
   </a>
@@ -1152,10 +1076,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#memory-report" class="md-nav__link">
+  <a href="#mod_sourf90-source" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Memory Report
+        mod_sour.f90 — source
       
     </span>
   </a>
@@ -1163,10 +1087,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#defect-report" class="md-nav__link">
+  <a href="#mod_entotf90-entotemp" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Defect Report
+        mod_entot.f90 — entotemp
       
     </span>
   </a>
@@ -1174,10 +1098,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#microstructure-report-micro_flag1" class="md-nav__link">
+  <a href="#mod_solvef90-solver" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Microstructure Report (micro_flag=1)
+        mod_solve.f90 — solver
       
     </span>
   </a>
@@ -1185,10 +1109,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#crack-risk-report-crack_flag1" class="md-nav__link">
+  <a href="#mod_convergef90-convergence" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Crack Risk Report (crack_flag=1)
+        mod_converge.f90 — convergence
       
     </span>
   </a>
@@ -1196,10 +1120,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#melt-pool-history" class="md-nav__link">
+  <a href="#mod_revisef90-revision" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Melt Pool History
+        mod_revise.f90 — revision
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_residf90-residue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_resid.f90 — residue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_fluxf90-fluxes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_flux.f90 — fluxes
       
     </span>
   </a>
@@ -1226,423 +1172,57 @@
   
 
 
-<h1 id="output-visualization">Output &amp; Visualization<a class="headerlink" href="#output-visualization" title="Permanent link">&para;</a></h1>
-<p>All output files are written to <code>fortran_new/result/&lt;case_name&gt;/</code>.</p>
-<h2 id="output-files">Output Files<a class="headerlink" href="#output-files" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>File</th>
-<th>Description</th>
-<th>When</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;case&gt;_output.txt</code></td>
-<td>Iteration-by-iteration text log</td>
-<td>Every time step</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_vtkmov{N}.vtk</code></td>
-<td>Binary VTK structured grid</td>
-<td>Every <code>outputintervel</code> steps</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_timing_report.txt</code></td>
-<td>CPU time breakdown by module</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_memory_report.txt</code></td>
-<td>Peak memory usage (VmHWM, VmRSS)</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_defect_report.txt</code></td>
-<td>Defect fraction summary</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_maxtemp.vtk</code></td>
-<td>Max temperature field (VTK)</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_defect.vtk</code></td>
-<td>Defect classification field (VTK)</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_thermal_history.txt</code></td>
-<td>Temperature at 10 monitoring points</td>
-<td>Every time step</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_thermal_history.png</code></td>
-<td>Temperature evolution plot</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_meltpool_history.txt</code></td>
-<td>Melt pool length, depth, width, volume, Tpeak</td>
-<td>Every global step</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_meltpool_history.png</code></td>
-<td>Melt pool geometry evolution plot</td>
-<td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_micro_report.txt</code></td>
-<td>Microstructure statistics (G, R, PDAS, SDAS)</td>
-<td>End of simulation (micro_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_microstructure.vtk</code></td>
-<td>Microstructure fields (VTK, multi-scalar)</td>
-<td>End of simulation (micro_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_crack_report.txt</code></td>
-<td>Crack risk statistics (CSI, strain rate)</td>
-<td>End of simulation (crack_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_crack_risk.vtk</code></td>
-<td>Crack risk fields (VTK, multi-scalar)</td>
-<td>End of simulation (crack_flag=1)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="outputtxt-format">output.txt Format<a class="headerlink" href="#outputtxt-format" title="Permanent link">&para;</a></h2>
-<p>Each time step produces a 4-line block:</p>
-<div class="highlight"><pre><span></span><code>  time  iter  time/iter  tot_iter  res_enth  res_mass  res_u  res_v  res_w  [res_spec]
- 2.10E-05   60    0.006        60   1.2E-04   5.0E-02  1.3E-02  ...
-
-  Tmax        umax       vmax         wmax       length       depth     width
-  1594.47   0.00E+00    0.00E+00    0.00E+00   ...
-
-  north  south  top  toploss  bottom  west  east  hout  accu  hin  heatvol  ratio
-    0.0    0.0    0.0    0.0    0.0    0.0    0.0   0.0   0.0   0.0   0.0   0.00
-
-progress%  beam_posx  beam_posy  beam_posz  power  scanspeed  speedx  speedy
-     0.70  5.258E-04  2.000E-03  7.000E-04  300.0    1.230    1.230    0.000
-</code></pre></div>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>res_enth</code></td>
-<td>Enthalpy equation residual</td>
-</tr>
-<tr>
-<td><code>res_mass</code></td>
-<td>Mass conservation (pressure correction) residual</td>
-</tr>
-<tr>
-<td><code>res_u/v/w</code></td>
-<td>Momentum residuals</td>
-</tr>
-<tr>
-<td><code>res_spec</code></td>
-<td>Species residual (only when <code>species_flag=1</code>)</td>
-</tr>
-<tr>
-<td><code>Tmax</code></td>
-<td>Peak temperature in domain (K)</td>
-</tr>
-<tr>
-<td><code>umax/vmax/wmax</code></td>
-<td>Peak velocities (m/s)</td>
-</tr>
-<tr>
-<td><code>length/depth/width</code></td>
-<td>Melt pool dimensions (m)</td>
-</tr>
-<tr>
-<td><code>ratio</code></td>
-<td>Energy balance ratio (should be ~1.0)</td>
-</tr>
-<tr>
-<td><code>progress%</code></td>
-<td>Simulation progress (%)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="vtk-files">VTK Files<a class="headerlink" href="#vtk-files" title="Permanent link">&para;</a></h2>
-<p>Binary structured-grid VTK files, viewable in ParaView.</p>
-<h3 id="scalar-fields">Scalar Fields<a class="headerlink" href="#scalar-fields" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Field Name</th>
-<th>Description</th>
-<th>Unit</th>
-<th>Always</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>T</code></td>
-<td>Temperature</td>
-<td>K</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>vis</code></td>
-<td>Viscosity</td>
-<td>Pa*s</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>diff</code></td>
-<td>Thermal diffusivity</td>
-<td>m^2/s</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>den</code></td>
-<td>Density</td>
-<td>kg/m^3</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>solidID</code></td>
-<td>Solidification track ID</td>
-<td>-</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>local</code></td>
-<td>Local solver region marker</td>
-<td>-</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>fracl</code></td>
-<td>Liquid fraction (0=solid, 1=liquid)</td>
-<td>-</td>
-<td>Yes</td>
-</tr>
-<tr>
-<td><code>concentration</code></td>
-<td>Species mass fraction (C=1: primary)</td>
-<td>-</td>
-<td>species_flag=1</td>
-</tr>
-<tr>
-<td><code>tsolid_field</code></td>
-<td>Composition-dependent solidus</td>
-<td>K</td>
-<td>species_flag=1</td>
-</tr>
-</tbody>
-</table>
-<h3 id="vector-fields">Vector Fields<a class="headerlink" href="#vector-fields" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Field Name</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>Velocity</code></td>
-<td>Flow velocity (interpolated to cell centers)</td>
-<td>m/s</td>
-</tr>
-</tbody>
-</table>
-<h3 id="opening-in-paraview">Opening in ParaView<a class="headerlink" href="#opening-in-paraview" title="Permanent link">&para;</a></h3>
-<ol>
-<li>File → Open → select <code>&lt;case&gt;_vtkmov*.vtk</code></li>
-<li>Click "Apply"</li>
-<li>Select scalar/vector field from dropdown</li>
-<li>Use animation controls to step through time</li>
-</ol>
-<div class="admonition tip">
-<p class="admonition-title">Useful ParaView Filters</p>
+<h1 id="solver-modules">Solver Modules<a class="headerlink" href="#solver-modules" title="Permanent link">&para;</a></h1>
+<p>FVM discretization, SIMPLE algorithm, TDMA solver, convergence acceleration.</p>
+<hr />
+<h2 id="mod_propf90-property">mod_prop.f90 — <code>property</code><a class="headerlink" href="#mod_propf90-property" title="Permanent link">&para;</a></h2>
+<p>Updates material properties (viscosity, diffusivity, density) based on temperature and phase state. Three regimes: solid, mushy, liquid. Powder cells use reduced properties. When <code>species_flag=1</code>, uses composition-weighted mixing via <code>mix()</code>.</p>
+<hr />
+<h2 id="mod_boundf90-boundary">mod_bound.f90 — <code>boundary</code><a class="headerlink" href="#mod_boundf90-boundary" title="Permanent link">&para;</a></h2>
+<p>Boundary conditions for all equations:</p>
 <ul>
-<li><strong>Threshold</strong>: Show only melt pool (<code>T &gt; 1563</code>)</li>
-<li><strong>Slice</strong>: Cut through domain to see cross-sections</li>
-<li><strong>Glyph</strong>: Visualize velocity vectors</li>
-<li><strong>Calculator</strong>: Compute derived quantities (e.g., <code>T - 1563</code> for superheat)</li>
+<li><strong>Enthalpy</strong>: radiation + convection (top), convection (sides/bottom), Dirichlet outside local region</li>
+<li><strong>Momentum</strong>: Marangoni stress at free surface (thermal + solutal), no-slip elsewhere</li>
+<li><strong>Pressure correction</strong>: zero in solid region</li>
 </ul>
-</div>
-<h2 id="timing-report">Timing Report<a class="headerlink" href="#timing-report" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>============================================
-  PHOENIX Module Timing Report
-============================================
-  Total iterations (itertot): 17055
-  Total CPU time:     2513.425 s
-  Total wall time:      765.089 s
---------------------------------------------
-  Module              |   Time(s)   |   Ratio(%)
---------------------------------------------
-             mod_prop |     440.355  |   17.52%
-             mod_sour |     406.017  |   16.15%
-             ...
-           mod_species|       4.355  |    0.17%
-</code></pre></div>
-<h2 id="memory-report">Memory Report<a class="headerlink" href="#memory-report" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>============================================
-  PHOENIX Memory Report
-============================================
-  VmPeak:  ...   (peak virtual memory)
-  VmHWM:   ...   (peak physical RAM — use this to size your machine)
-  VmRSS:   ...   (current physical RAM at report time)
-  VmData:  ...   (heap + stack, excludes shared libraries)
-</code></pre></div>
-<h2 id="defect-report">Defect Report<a class="headerlink" href="#defect-report" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code>  === Defect Analysis (maxtemp_determ) ===
-  Defect fraction:           X.XXXXXX %
-  Lack-of-fusion fraction:   X.XXXXXX %
-  Keyhole porosity fraction: X.XXXXXX %
-</code></pre></div>
-<p>Spatial distribution available in <code>&lt;case&gt;_defect.vtk</code> and <code>&lt;case&gt;_maxtemp.vtk</code>.</p>
-<h2 id="microstructure-report-micro_flag1">Microstructure Report (micro_flag=1)<a class="headerlink" href="#microstructure-report-micro_flag1" title="Permanent link">&para;</a></h2>
-<p>Computed at the moment each cell solidifies (liquid fraction drops to 0). Only updated during global solver timesteps.</p>
-<div class="highlight"><pre><span></span><code>  === Microstructure Analysis ===
-  Solidified cells: 16013
-  G (K/m):   min= 1.15E+06  max= 2.93E+07
-  R (m/s):   min= 3.51E-03  max= 1.16E+00
-  PDAS (m):  min= 2.01E-08  max= 8.06E-08
-  SDAS (m):  min= 6.65E-08  max= 3.39E-07
-</code></pre></div>
-<p>VTK file <code>&lt;case&gt;_microstructure.vtk</code> contains 5 scalar fields:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cooling_rate</code></td>
-<td>Cooling rate at solidification</td>
-<td>K/s</td>
-</tr>
-<tr>
-<td><code>thermal_gradient</code></td>
-<td>Temperature gradient magnitude G</td>
-<td>K/m</td>
-</tr>
-<tr>
-<td><code>solidification_rate</code></td>
-<td>Solidification front velocity R</td>
-<td>m/s</td>
-</tr>
-<tr>
-<td><code>PDAS</code></td>
-<td>Primary dendrite arm spacing</td>
-<td>m</td>
-</tr>
-<tr>
-<td><code>SDAS</code></td>
-<td>Secondary dendrite arm spacing</td>
-<td>m</td>
-</tr>
-</tbody>
-</table>
-<h2 id="crack-risk-report-crack_flag1">Crack Risk Report (crack_flag=1)<a class="headerlink" href="#crack-risk-report-crack_flag1" title="Permanent link">&para;</a></h2>
-<p>Tracks thermal strain accumulated while material passes through the Brittle Temperature Range (BTR). Only updated during global solver timesteps.</p>
-<div class="highlight"><pre><span></span><code>  === Crack Risk Analysis ===
-  Max CSI:            6.20E-02
-  Mean CSI:           2.26E-03
-  Max cooling rate:   3.44E+06 K/s
-  High-risk frac:     1.842253 %
-</code></pre></div>
-<p>VTK file <code>&lt;case&gt;_crack_risk.vtk</code> contains 4 scalar fields:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>crack_csi</code></td>
-<td>Crack susceptibility index (accumulated thermal strain in BTR)</td>
-<td>-</td>
-</tr>
-<tr>
-<td><code>cooling_rate_solid</code></td>
-<td>Cooling rate at solidification</td>
-<td>K/s</td>
-</tr>
-<tr>
-<td><code>strain_rate_solid</code></td>
-<td>Thermal strain rate at solidification (β × dT/dt)</td>
-<td>1/s</td>
-</tr>
-<tr>
-<td><code>btr_time</code></td>
-<td>Cumulative time spent in BTR</td>
-<td>s</td>
-</tr>
-</tbody>
-</table>
-<h2 id="melt-pool-history">Melt Pool History<a class="headerlink" href="#melt-pool-history" title="Permanent link">&para;</a></h2>
-<p>Time-series log of melt pool geometry, recorded every global solver timestep.</p>
-<table>
-<thead>
-<tr>
-<th>Column</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>time</td>
-<td>Simulation time</td>
-<td>s</td>
-</tr>
-<tr>
-<td>length</td>
-<td>Melt pool length (along scan)</td>
-<td>m</td>
-</tr>
-<tr>
-<td>depth</td>
-<td>Melt pool depth (from surface)</td>
-<td>m</td>
-</tr>
-<tr>
-<td>width</td>
-<td>Melt pool width (transverse)</td>
-<td>m</td>
-</tr>
-<tr>
-<td>volume</td>
-<td>Melt pool volume (from liquid fraction)</td>
-<td>m³</td>
-</tr>
-<tr>
-<td>Tpeak</td>
-<td>Peak temperature in domain</td>
-<td>K</td>
-</tr>
-<tr>
-<td>laser_on</td>
-<td>Laser state (1=on, 0=off)</td>
-<td>-</td>
-</tr>
-</tbody>
-</table>
-<p>Auto-generated plot: <code>&lt;case&gt;_meltpool_history.png</code> (4-panel: length, depth/width, volume, Tpeak).</p>
+<hr />
+<h2 id="mod_discretf90-discretization">mod_discret.f90 — <code>discretization</code><a class="headerlink" href="#mod_discretf90-discretization" title="Permanent link">&para;</a></h2>
+<p>FVM discretization using power-law scheme:</p>
+<ul>
+<li><code>discretize_momentum(idir)</code> — u/v/w momentum with staggered grid interpolation</li>
+<li><code>discretize_enthalpy(...)</code> — energy equation with <code>delt_eff</code> for local solver</li>
+<li><code>discretize_pp()</code> — pressure correction equation</li>
+</ul>
+<hr />
+<h2 id="mod_sourf90-source">mod_sour.f90 — <code>source</code><a class="headerlink" href="#mod_sourf90-source" title="Permanent link">&para;</a></h2>
+<p>Source terms:</p>
+<ul>
+<li><strong>Momentum</strong>: Darcy resistance (mushy zone), buoyancy (Boussinesq), solid zeroing</li>
+<li><strong>Enthalpy</strong>: volumetric laser source (Gaussian), latent heat, latent heat advection</li>
+<li><strong>Pressure</strong>: mass conservation assembly</li>
+</ul>
+<hr />
+<h2 id="mod_entotf90-entotemp">mod_entot.f90 — <code>entotemp</code><a class="headerlink" href="#mod_entotf90-entotemp" title="Permanent link">&para;</a></h2>
+<p>Inverts enthalpy → temperature relationship. Handles solid/mushy/liquid regimes. When <code>species_flag=1</code>, uses composition-dependent H-T curve via <code>mix()</code>.</p>
+<hr />
+<h2 id="mod_solvef90-solver">mod_solve.f90 — <code>solver</code><a class="headerlink" href="#mod_solvef90-solver" title="Permanent link">&para;</a></h2>
+<ul>
+<li><code>tdma_solve_3d_2(...)</code> — OpenMP line-by-line TDMA with double k-sweep and per-thread buffers</li>
+<li><code>solution_uvw/enthalpy(...)</code> — convenience wrappers</li>
+<li><code>cleanuvw()</code> — zeros velocity in solid cells and above boiling point</li>
+</ul>
+<hr />
+<h2 id="mod_convergef90-convergence">mod_converge.f90 — <code>convergence</code><a class="headerlink" href="#mod_convergef90-convergence" title="Permanent link">&para;</a></h2>
+<p>Block correction: accumulates j-k plane coefficients into 1D system along x, solves with TDMA. Reduces low-frequency errors.</p>
+<hr />
+<h2 id="mod_revisef90-revision">mod_revise.f90 — <code>revision</code><a class="headerlink" href="#mod_revisef90-revision" title="Permanent link">&para;</a></h2>
+<p>SIMPLE pressure-velocity correction: updates velocity from pressure correction field.</p>
+<hr />
+<h2 id="mod_residf90-residue">mod_resid.f90 — <code>residue</code><a class="headerlink" href="#mod_residf90-residue" title="Permanent link">&para;</a></h2>
+<p>Residual computation for convergence monitoring: enthalpy, mass, momentum (weighted by reference values).</p>
+<hr />
+<h2 id="mod_fluxf90-fluxes">mod_flux.f90 — <code>fluxes</code><a class="headerlink" href="#mod_fluxf90-fluxes" title="Permanent link">&para;</a></h2>
+<p>Energy balance: boundary losses on all 6 faces, heat accumulation, energy ratio for convergence checking.</p>
 
 
 
@@ -1698,10 +1278,10 @@ progress%  beam_posx  beam_posy  beam_posz  power  scanspeed  speedx  speedy
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "navigation.indexes", "content.code.copy", "search.highlight", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
         <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       
