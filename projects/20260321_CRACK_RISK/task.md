@@ -190,3 +190,23 @@ Insert `mod_crack_risk.f90` after `mod_defect.f90` in the compile order.
 - No Young's modulus needed — CSI is a strain-based indicator, not stress
 - Future extension: add Kou criterion (|dT/d(fs^1/2)|) using fracl data
 - Future extension: combine with species transport for composition-dependent BTR
+
+---
+
+## Completion Log (2026-03-21)
+
+All tasks implemented and validated:
+
+- **mod_crack_risk.f90** created with `allocate_crack_risk`, `update_crack_risk`, `compute_crack_report`, `write_crack_vtk`
+- **crack_flag** added to `&output_control` (default 0)
+- **&crack_params** namelist added (delta_t_btr)
+- Integrated into main.f90, compile.sh
+- VTK output: crack_csi, cool_rate_solid, strain_rate_solid, btr_time
+
+### Validation Results (2x2mm, IN718, 300W volumetric)
+- Max CSI: 0.0695 (7% strain) — physically reasonable
+- Mean CSI: 0.0098 (~1%)
+- Max cooling rate at solidification: 5.32 MK/s ✓
+- Max strain rate: 265.8 /s ✓ (beta × cooling rate)
+- High-risk cells (CSI > 1%): 77,120 / 297,003 = 26%
+- delta_T_BTR = 100 K, beta = 5e-5

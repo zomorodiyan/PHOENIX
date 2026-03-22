@@ -62,6 +62,7 @@ program main
 	call OpenFiles
 	call initialize
 	call init_thermal_history
+	call init_meltpool_history
 
 	if (species_flag == 1) then
 		call allocate_species
@@ -412,6 +413,7 @@ program main
 		if (species_flag == 1) conc_old = concentration
 		call Cust_Out
 		call write_thermal_history(timet)
+		call write_meltpool_history(timet)
 		call cpu_time(t1)
 		t_other = t_other + (t1 - t0)
 
@@ -425,6 +427,7 @@ program main
 
 	call EndTime
 	call finalize_thermal_history
+	call finalize_meltpool_history
 
 	wall_elapsed = omp_get_wtime() - wall_start
 

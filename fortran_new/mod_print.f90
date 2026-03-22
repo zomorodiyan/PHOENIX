@@ -242,6 +242,8 @@ subroutine Cust_Out
 	                      'solidID', solidfield)
 	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 	                      'local', localfield)
+	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
+	                      'fracl', fracl)
 
 	if (species_flag == 1) then
 		call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
@@ -505,5 +507,110 @@ subroutine finalize_thermal_history
 		' && python3 '//trim(adjustl(case_name))// &
 		'_plot_thermal_history.py', wait=.true.)
 end subroutine finalize_thermal_history
+
+!********************************************************************
+subroutine init_meltpool_history
+	open(unit=48, file=trim(file_prefix)//'meltpool_history.txt', status='replace')
+	write(48,'(a)') '# Melt Pool Geometry History'
+	write(48,'(a)') '# time(s)  length(m)  depth(m)  width(m)  volume(m3)  D/W  Tpeak(K)  laser_on'
+	close(48)
+end subroutine init_meltpool_history
+
+!********************************************************************
+subroutine write_meltpool_history(t)
+	real(wp), intent(in) :: t
+	real(wp) :: mp_volume, dw_ratio
+	integer :: ii, jj, kk
+
+	! Compute melt pool volume from liquid fraction
+	mp_volume = 0.0_wp
+	!$OMP PARALLEL DO PRIVATE(ii,jj,kk) REDUCTION(+:mp_volume)
+	do kk = 2, nkm1
+	do jj = 2, njm1
+	do ii = 2, nim1
+		if (fracl(ii,jj,kk) > 0.0_wp) then
+			mp_volume = mp_volume + fracl(ii,jj,kk) * volume(ii,jj,kk)
+		endif
+	enddo
+	enddo
+	enddo
+	!$OMP END PARALLEL DO
+
+	! Depth/width aspect ratio
+	if (width > 0.0_wp) then
+		dw_ratio = depth / width
+	else
+		dw_ratio = 0.0_wp
+	endif
+
+	open(unit=48, file=trim(file_prefix)//'meltpool_history.txt', status='old', position='append')
+	write(48,'(es12.5,2x,es12.5,2x,es12.5,2x,es12.5,2x,es12.5,2x,f8.4,2x,f10.2,2x,i1)') &
+		t, alen, depth, width, mp_volume, dw_ratio, tpeak, &
+		merge(1, 0, toolmatrix(PathNum,5) >= laser_on_threshold)
+	close(48)
+end subroutine write_meltpool_history
+
+!********************************************************************
+subroutine finalize_meltpool_history
+	integer :: lun
+	lun = 48
+
+	! Write Python plotting script
+	open(unit=lun, file=trim(file_prefix)//'plot_meltpool.py', status='replace')
+	write(lun,'(a)') 'import numpy as np'
+	write(lun,'(a)') 'import matplotlib'
+	write(lun,'(a)') 'matplotlib.use("Agg")'
+	write(lun,'(a)') 'import matplotlib.pyplot as plt'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'data = np.loadtxt("'//trim(adjustl(case_name))//'_meltpool_history.txt", comments="#")'
+	write(lun,'(a)') 'if data.ndim == 1: data = data[np.newaxis, :]'
+	write(lun,'(a)') 't = data[:, 0] * 1e3  # ms'
+	write(lun,'(a)') 'length = data[:, 1] * 1e6  # um'
+	write(lun,'(a)') 'depth  = data[:, 2] * 1e6  # um'
+	write(lun,'(a)') 'width  = data[:, 3] * 1e6  # um'
+	write(lun,'(a)') 'volume = data[:, 4] * 1e9  # mm^3 (1e-9 m^3 = 1 mm^3)'
+	write(lun,'(a)') 'dw     = data[:, 5]'
+	write(lun,'(a)') 'tpeak  = data[:, 6]'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'fig, axes = plt.subplots(5, 1, figsize=(12, 14), sharex=True)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'axes[0].plot(t, length, "b-", lw=0.8)'
+	write(lun,'(a)') 'axes[0].set_ylabel("Length (um)")'
+	write(lun,'(a)') 'axes[0].set_title("Melt Pool Geometry History")'
+	write(lun,'(a)') 'axes[0].grid(True, alpha=0.3)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'axes[1].plot(t, depth, "r-", lw=0.8)'
+	write(lun,'(a)') 'axes[1].plot(t, width, "g-", lw=0.8)'
+	write(lun,'(a)') 'axes[1].set_ylabel("Size (um)")'
+	write(lun,'(a)') 'axes[1].legend(["Depth", "Width"], fontsize=8)'
+	write(lun,'(a)') 'axes[1].grid(True, alpha=0.3)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'axes[2].plot(t, dw, "k-", lw=0.8)'
+	write(lun,'(a)') 'axes[2].axhline(0.5, color="red", ls="--", lw=0.8, label="keyhole threshold")'
+	write(lun,'(a)') 'axes[2].set_ylabel("D/W Ratio")'
+	write(lun,'(a)') 'axes[2].legend(fontsize=8)'
+	write(lun,'(a)') 'axes[2].grid(True, alpha=0.3)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'axes[3].plot(t, volume, "m-", lw=0.8)'
+	write(lun,'(a)') 'axes[3].set_ylabel("Volume (mm$^3$)")'
+	write(lun,'(a)') 'axes[3].grid(True, alpha=0.3)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'axes[4].plot(t, tpeak, "r-", lw=0.8)'
+	write(lun,'(a)') 'axes[4].axhline(2650, color="red", ls="--", lw=0.8, label="T_boiling")'
+	write(lun,'(a)') 'axes[4].set_ylabel("T_peak (K)")'
+	write(lun,'(a)') 'axes[4].set_xlabel("Time (ms)")'
+	write(lun,'(a)') 'axes[4].legend(fontsize=8)'
+	write(lun,'(a)') 'axes[4].grid(True, alpha=0.3)'
+	write(lun,'(a)') ''
+	write(lun,'(a)') 'plt.tight_layout()'
+	write(lun,'(a)') 'plt.savefig("'//trim(adjustl(case_name))//'_meltpool_history.png", dpi=150)'
+	write(lun,'(a)') 'print("Saved '//trim(adjustl(case_name))//'_meltpool_history.png")'
+	close(lun)
+
+	! Run Python script
+	call execute_command_line('cd '//trim(result_dir)// &
+		' && python3 '//trim(adjustl(case_name))// &
+		'_plot_meltpool.py', wait=.true.)
+end subroutine finalize_meltpool_history
 
 end module printing
