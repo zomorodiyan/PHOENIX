@@ -479,5 +479,38 @@ Writes binary VTK file every `outputintervel` steps. Fields: Velocity (vector), 
 ### `init_thermal_history()` / `write_thermal_history(timet)` / `finalize_thermal_history()`
 Tracks temperature at 10 monitoring points throughout simulation. Generates Python plotting script and PNG at end.
 
+### `init_meltpool_history()` / `write_meltpool_history(timet)` / `finalize_meltpool_history()`
+Tracks melt pool length, depth, width, volume, and peak temperature. Only recorded during global solver timesteps. Generates Python plot script and PNG at end.
+
 ### `write_vtk_scalar(unit, filename, name, field)` / `write_vtk_vector(...)`
 Binary VTK writers: ASCII header (SCALARS/VECTORS + LOOKUP_TABLE) followed by big-endian float32 data.
+
+---
+
+## mod_microstructure.f90 — `microstructure_mod`
+
+Solidification microstructure prediction. Enabled by `micro_flag=1`. Only updates during global solver timesteps.
+
+### `allocate_microstructure(nni, nnj, nnk)`
+Allocates arrays: `cool_rate_micro`, `therm_grad`, `solid_rate`, `pdas_arr`, `sdas_arr`, `micro_solidified`.
+
+### `update_microstructure(dt)`
+Called each global timestep. Detects solidification events (`fraclnot > 0` → `fracl ≤ 0`). At solidification: computes cooling rate `|dT/dt|`, thermal gradient `G = |∇T|` (central differences), solidification rate `R = |dT/dt| / G`, PDAS `λ₁ = a₁ G^n₁ R^n₂`, SDAS `λ₂ = a₂ |dT/dt|^n₃`. Only records the first solidification event per cell.
+
+### `report_microstructure()`
+Post-simulation. Computes min/max/mean statistics over solidified cells in the scan region. Writes `micro_report.txt` and a single `microstructure.vtk` with 5 scalar fields.
+
+---
+
+## mod_crack_risk.f90 — `crack_risk_mod`
+
+Crack risk prediction from thermal strain in the Brittle Temperature Range (BTR). Enabled by `crack_flag=1`. Only updates during global solver timesteps.
+
+### `allocate_crack_risk(nni, nnj, nnk)`
+Allocates arrays: `cool_rate_solid`, `strain_rate_solid`, `btr_time`, `crack_risk_arr`, `crack_solidified`.
+
+### `update_crack_risk(dt)`
+Called each global timestep. Detects solidification (stores cooling rate and strain rate = β × |dT/dt|). Accumulates BTR strain: when `T_solidus - ΔT_BTR < T < T_solidus`, adds `β × |dT/dt| × dt` to the crack susceptibility index (CSI).
+
+### `compute_crack_report()`
+Post-simulation. Computes statistics, identifies high-risk cells (CSI > 1%). Writes `crack_report.txt` and a single `crack_risk.vtk` with 4 scalar fields.
