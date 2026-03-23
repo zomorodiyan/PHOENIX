@@ -7,6 +7,19 @@ module microstructure_mod
 ! primary dendrite arm spacing (PDAS), and secondary dendrite arm spacing (SDAS)
 ! at the moment each cell solidifies (fracl transitions from >0 to 0).
 !
+! Input namelist (in input_param.txt):
+!   &microstructure_params a1_pdas=50e-6, a2_sdas=10e-6, n1_pdas=-0.5, n2_pdas=-0.25, n3_sdas=-0.333 /
+!
+!   a1_pdas  (m)  - PDAS prefactor, alloy-specific (default: 50 um for IN718)
+!   a2_sdas  (m)  - SDAS prefactor, alloy-specific (default: 10 um for IN718)
+!   n1_pdas  (-)  - PDAS exponent for thermal gradient G (Kurz-Fisher: -0.5)
+!   n2_pdas  (-)  - PDAS exponent for solidification rate R (Kurz-Fisher: -0.25)
+!   n3_sdas  (-)  - SDAS exponent for cooling rate (Kattamis-Flemings: -1/3)
+!
+! Models:
+!   PDAS: lambda_1 = a1_pdas * G^n1_pdas * R^n2_pdas
+!   SDAS: lambda_2 = a2_sdas * |dT/dt|^n3_sdas
+!
 	use precision
 	use geometry
 	use initialization

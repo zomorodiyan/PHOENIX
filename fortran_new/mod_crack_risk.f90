@@ -6,6 +6,18 @@ module crack_risk_mod
 ! from thermal strain rate and time spent in the Brittle Temperature Range.
 ! CSI = accumulated thermal strain in BTR = integral of alpha * |dT/dt| dt.
 !
+! Input namelist (in input_param.txt):
+!   &crack_params delta_t_btr=100.0 /
+!
+!   delta_t_btr  (K) - BTR width below T_solidus (default: 100 K for IN718)
+!                      BTR = [T_solidus - delta_t_btr, T_solidus]
+!                      Material has near-zero ductility in this range;
+!                      thermal strain accumulated here drives cracking.
+!
+! Output:
+!   CSI = integral of beta * |dT/dt| * dt over time spent in BTR
+!   where beta = thermal expansion coefficient (from &material_properties)
+!
 	use precision
 	use geometry
 	use initialization
