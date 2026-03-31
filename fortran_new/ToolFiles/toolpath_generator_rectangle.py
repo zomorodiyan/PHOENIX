@@ -37,6 +37,8 @@ Input parameters:
   --turnaround_time Time with laser off between tracks (s) [default: 0.0005]
   --rotation_angle  CCW rotation of rectangle about its center (degrees) [default: 0]
   --output          Output .crs filename [default: toolpath.crs]
+  --domain_x        Domain size in X for plot axis limits (m) [default: auto]
+  --domain_y        Domain size in Y for plot axis limits (m) [default: auto]
   --test            Run all built-in test cases
 """
 
@@ -134,6 +136,8 @@ def generate_toolpath(
     turnaround_time=0.0005,
     output_filename="toolpath.crs",
     rotation_angle=0.0,
+    domain_x=None,
+    domain_y=None,
 ):
     """Generate a laser scan toolpath filling a rectangular region."""
 
@@ -255,7 +259,7 @@ def generate_toolpath(
         size_x, size_y, scan_axis, bidirectional,
         hatch_spacing, actual_hatch, scan_speed,
         turnaround_time, rotation_angle, n_tracks,
-        output_filename,
+        output_filename, domain_x, domain_y,
     )
 
     return waypoints, corners_x, corners_y
@@ -268,7 +272,7 @@ def plot_toolpath(
     size_x, size_y, scan_axis, bidirectional,
     hatch_spacing, actual_hatch, scan_speed,
     turnaround_time, rotation_angle, n_tracks,
-    output_filename,
+    output_filename, domain_x=None, domain_y=None,
 ):
     """Plot the toolpath as arrows with rectangle outline."""
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
@@ -302,6 +306,12 @@ def plot_toolpath(
     ax.set_ylabel("Y (mm)")
     ax.set_aspect("equal")
     ax.grid(True, alpha=0.3)
+
+    # Set axis limits to domain size if provided
+    if domain_x is not None:
+        ax.set_xlim(0, domain_x * 1e3)
+    if domain_y is not None:
+        ax.set_ylim(0, domain_y * 1e3)
 
     # Parameter text block at the top (3 lines)
     bidir_str = "bidirectional" if bidirectional else "unidirectional"
@@ -350,6 +360,10 @@ if __name__ == "__main__":
     parser.add_argument("--turnaround_time", type=float, default=0.0005)
     parser.add_argument("--rotation_angle", type=float, default=0.0)
     parser.add_argument("--output", type=str, default="toolpath.crs")
+    parser.add_argument("--domain_x", type=float, default=None,
+                        help="Domain size in X for plot limits (m)")
+    parser.add_argument("--domain_y", type=float, default=None,
+                        help="Domain size in Y for plot limits (m)")
     args = parser.parse_args()
 
     # Convert center coordinates to start coordinates if provided
@@ -365,4 +379,5 @@ if __name__ == "__main__":
         hatch_spacing=args.hatch_spacing, scan_speed=args.scan_speed,
         turnaround_time=args.turnaround_time,
         output_filename=args.output, rotation_angle=args.rotation_angle,
+        domain_x=args.domain_x, domain_y=args.domain_y,
     )

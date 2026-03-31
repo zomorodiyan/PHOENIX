@@ -25,10 +25,9 @@ module parameters
 		thconsa, thconsb, thconl, beta, emiss, dgdtp
 	real(wp) layerheight, pden, pcpa, pcpb, pthcona, pthconb
 	real(wp) delt, timax, urfu, urfv, urfw, urfp, urfh
-	real(wp) local_half_x, local_half_y, local_depth_z
 	real(wp) xzone(nx1),yzone(ny1),zzone(nz1),powrx(nx1),powry(ny1),powrz(nz1)
 	real(wp) htci, htcj, htck1, htckn, tempWest, tempEast, tempNorth, tempBottom, tempPreheat, tempAmb	
-	integer nzx, nzy, nzz, maxit, localnum, outputintervel
+	integer nzx, nzy, nzz, maxit, outputintervel
 	integer ncvx(nx1),ncvy(ny1),ncvz(nz1)
 	character(len=256) :: toolpath_file = './ToolFiles/B26.crs'
 	character(len=128) :: case_name = 'default'
@@ -43,11 +42,17 @@ module parameters
 	namelist / numerical_relax / maxit, delt, timax, urfu, urfv, urfw, urfp, urfh
 	namelist / boundary_conditions / htci, htcj, htck1, htckn, tempWest, tempEast, tempNorth, &
 		tempBottom, tempPreheat, tempAmb
-	namelist / local_solver / localnum, local_half_x, local_half_y, local_depth_z
 	integer species_flag
-	integer micro_flag
-	integer crack_flag
-	namelist / output_control / outputintervel, case_name, toolpath_file, species_flag, micro_flag, crack_flag
+
+	! Adaptive mesh parameters
+	integer  :: adaptive_flag = 0
+	real(wp) :: amr_local_half_x = 1.0e-3_wp
+	real(wp) :: amr_local_half_y = 2.0e-4_wp
+	real(wp) :: amr_dx_fine = 10.0e-6_wp
+	integer  :: remesh_interval = 20
+
+	namelist / output_control / outputintervel, case_name, toolpath_file, species_flag
+	namelist / adaptive_mesh / adaptive_flag, amr_local_half_x, amr_local_half_y, amr_dx_fine, remesh_interval
 
 	contains
 
@@ -56,8 +61,6 @@ subroutine read_data
 	integer i,j,k
 
 	species_flag = 0  ! default: no species transport
-	micro_flag = 0    ! default: no microstructure prediction
-	crack_flag = 0    ! default: no crack risk prediction
 
 	open(unit=10,file='./inputfile/input_param.txt',form='formatted')
 	
@@ -93,11 +96,11 @@ subroutine read_data
 	READ (10, NML=boundary_conditions)
 	!read boudary parameters
 
-	READ (10, NML=local_solver)
-	! read two-level local solver parameters
-
 	READ (10, NML=output_control)
 	! read output control parameters
+
+	READ (10, NML=adaptive_mesh)
+	! read adaptive mesh parameters
 
 	close(10)    ! close file 10
 

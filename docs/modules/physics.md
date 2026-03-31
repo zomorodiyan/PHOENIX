@@ -1,6 +1,6 @@
 # Physics Modules
 
-Laser, toolpath, melt pool detection, species transport, local solver.
+Laser, toolpath, melt pool detection, species transport, adaptive mesh.
 
 ---
 
@@ -26,13 +26,15 @@ Melt pool detection from temperature field:
 
 ---
 
-## mod_local_enthalpy.f90 — `local_enthalpy`
+## mod_adaptive_mesh.f90 — `adaptive_mesh_mod`
 
-Adaptive local/global solver scheduling:
+Movable adaptive structured mesh in X-Y that follows the laser/melt pool. Enabled by `adaptive_flag=1`.
 
-- `get_enthalpy_region()` — determines if step is local or global (every `localnum+1` steps)
-- `compute_delt_eff()` — effective timestep for skipped cells: `delt × (n_skipped + 1)`
-- `update_skipped()` — tracks skip counts per cell
+- `amr_init()` — initializes the refined region after grid generation
+- `amr_check_remesh(step_idx)` — checks if remeshing is needed (every `remesh_interval` steps)
+- `amr_regenerate_grid()` — rebuilds X-Y grid with refined region centered on laser
+- `amr_interpolate_all_fields()` — interpolates all fields from old grid to new grid
+- `amr_validate_grid()` — sanity checks on new grid
 
 ---
 

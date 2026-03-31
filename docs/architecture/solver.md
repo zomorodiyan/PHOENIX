@@ -19,7 +19,6 @@ main.f90
 ├── allocate_source(ni, nj, nk)          [mod_sour.f90]
 ├── allocate_print(ni, nj, nk)           [mod_print.f90]
 ├── allocate_laser(ni, nj)               [mod_laser.f90]
-├── allocate_skipped(ni, nj, nk)         [mod_local_enthalpy.f90]
 ├── allocate_defect(ni, nj, nk)          [mod_defect.f90]
 ├── OpenFiles()                          [mod_print.f90]
 ├── initialize()                         [mod_init.f90]
@@ -29,10 +28,8 @@ main.f90
 ├── [if species_flag == 1]
 │     ├── allocate_species()             [mod_species.f90]
 │     └── init_species()                 [mod_species.f90]
-├── [if micro_flag == 1]
-│     └── allocate_microstructure()      [mod_microstructure.f90]
-├── [if crack_flag == 1]
-│     └── allocate_crack_risk()          [mod_crack_risk.f90]
+├── [if adaptive_flag == 1]
+│     └── amr_init()                     [mod_adaptive_mesh.f90]
 │
 │ ══════════════ TIME STEPPING LOOP ══════════════
 │
@@ -40,10 +37,11 @@ main.f90
 │   │
 │   ├── laser_beam()                     [mod_laser.f90]
 │   ├── read_coordinates()               [mod_toolpath.f90]
-│   ├── get_enthalpy_region()            [mod_local_enthalpy.f90]
-│   │     └── compute_local_region()     [mod_local_enthalpy.f90]
-│   ├── update_localfield()              [mod_local_enthalpy.f90]
-│   ├── compute_delt_eff()               [mod_local_enthalpy.f90]
+│   ├── [if adaptive_flag == 1]
+│   │     ├── amr_check_remesh(step_idx) [mod_adaptive_mesh.f90]
+│   │     ├── amr_regenerate_grid()      [mod_adaptive_mesh.f90]
+│   │     ├── amr_interpolate_all_fields() [mod_adaptive_mesh.f90]
+│   │     └── amr_validate_grid()        [mod_adaptive_mesh.f90]
 │   │
 │   │ ──────────── ITERATION LOOP ────────────
 │   │
@@ -115,13 +113,7 @@ main.f90
 │   │         ├── [concentration clip]   (inline, [0,1])
 │   │         └── calc_species_residual()[mod_species.f90]
 │   │
-│   ├── update_skipped()                 [mod_local_enthalpy.f90]
 │   ├── update_max_temp()                [mod_defect.f90]
-│   ├── [if global step]
-│   │   ├── [if micro_flag == 1]
-│   │   │   └── update_microstructure()  [mod_microstructure.f90]
-│   │   └── [if crack_flag == 1]
-│   │       └── update_crack_risk()      [mod_crack_risk.f90]
 │   ├── CalTime()                        [mod_print.f90]
 │   ├── outputres()                      [mod_print.f90]
 │   │
@@ -132,20 +124,13 @@ main.f90
 │   │     ├── write_vtk_vector()         [mod_print.f90]
 │   │     └── write_vtk_scalar() ×8-10   [mod_print.f90]
 │   ├── write_thermal_history()          [mod_print.f90]
-│   └── [if global step]
-│       └── write_meltpool_history()     [mod_print.f90]
+│   └── write_meltpool_history()         [mod_print.f90]
 │
 │ ══════════════ POST-SIMULATION ══════════════
 │
 ├── compute_defect_determ()              [mod_defect.f90]
 ├── write_defect_report()                [mod_defect.f90]
 │     └── write_defect_vtk() ×2         [mod_defect.f90]
-├── [if micro_flag == 1]
-│     └── report_microstructure()        [mod_microstructure.f90]
-│           └── write_micro_vtk_combined() (1 VTK, 5 scalars)
-├── [if crack_flag == 1]
-│     └── compute_crack_report()         [mod_crack_risk.f90]
-│           └── write_crack_vtk_combined() (1 VTK, 4 scalars)
 ├── EndTime()                            [mod_print.f90]
 ├── finalize_thermal_history()           [mod_print.f90]
 ├── finalize_meltpool_history()          [mod_print.f90]
@@ -171,7 +156,6 @@ The enthalpy equation is solved first (before momentum) because material propert
 | Condition | Criterion |
 |-----------|-----------|
 | Laser on (heating) | `resorh < 1e-5` AND `0.99 < ratio < 1.01` |
-| Laser on (local step) | `resorh < 1e-5` (no ratio check) |
 | Laser off (cooling) | `resorh < 1e-6` |
 | Max iterations | `niter >= maxit` (forced exit) |
 

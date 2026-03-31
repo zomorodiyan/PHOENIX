@@ -101,13 +101,14 @@ main.f90
 │   ├── generate_grid()       ← Build non-uniform 3D mesh
 │   ├── allocate_fields()     ← Allocate all field arrays
 │   ├── initialize()          ← Set initial conditions
-│   └── allocate_species()    ← [if species_flag=1]
+│   ├── allocate_species()    ← [if species_flag=1]
+│   └── amr_init()            ← [if adaptive_flag=1]
 │
 ├── Time Stepping Loop (timet < timax)
 │   │
 │   ├── laser_beam()          ← Update beam position
 │   ├── read_coordinates()    ← Record beam state
-│   ├── get_enthalpy_region() ← Determine local/global solve
+│   ├── [if adaptive_flag=1]  ← AMR check + regenerate grid
 │   │
 │   ├── Iteration Loop (niter < maxit)
 │   │   │
@@ -132,7 +133,6 @@ main.f90
 │   │   ├── species_bc()       ← [if species_flag=1]
 │   │   └── solve_species()    ← [if species_flag=1] FVM + TDMA for concentration
 │   │
-│   ├── update_skipped()       ← Track local solver step counts
 │   ├── update_max_temp()      ← Defect analysis accumulation
 │   ├── outputres()            ← Print residuals to output.txt
 │   ├── Cust_Out()             ← Write VTK (every outputintervel steps)
@@ -174,7 +174,7 @@ mod_precision       ← Foundation: working precision (single/double)
               └── mod_init         ← Initialization wrapper
               └── mod_laser        ← Laser beam positioning + heat distribution
               └── mod_dimen        ← Melt pool size detection
-              └── mod_local_enthalpy ← Local/global solver scheduling
+              └── mod_adaptive_mesh  ← Adaptive mesh (AMR) for laser tracking
               └── mod_resid        ← Residual calculations
               └── mod_species      ← Species transport (dissimilar metals)
               └── mod_prop         ← Temperature/composition-dependent properties
@@ -192,13 +192,16 @@ mod_precision       ← Foundation: working precision (single/double)
               └── mod_defect       ← Defect detection and output
 ```
 
-## Local Solver
+## Adaptive Mesh
 
-The local solver is a key optimization. Instead of solving the full domain every time step, it alternates:
+When `adaptive_flag=1`, the solver uses a movable adaptive structured mesh that follows the laser/melt pool in X-Y. The refined region (cell size `amr_dx_fine`) is centered on the current laser position, with coarser cells outside.
 
-1. **Local steps** (`localnum` consecutive): Only solve enthalpy in a small region around the melt pool. Momentum is solved in the melt pool region regardless.
-2. **Global step** (every `localnum+1`): Solve enthalpy on the full domain.
+Key behavior:
 
-Skipped cells accumulate an effective time step: `delt_eff = delt * (n_skipped + 1)`, so when they are finally solved, the transient term correctly accounts for the elapsed time.
+1. **Initialization**: `amr_init()` sets up the initial refined region after grid generation.
+2. **Remesh check**: Every `remesh_interval` timesteps, `amr_check_remesh()` determines if the laser has moved far enough to warrant regridding.
+3. **Grid regeneration**: `amr_regenerate_grid()` rebuilds the X-Y grid with the refined region centered on the current laser position.
+4. **Field interpolation**: `amr_interpolate_all_fields()` maps all field data from the old grid to the new grid.
+5. **Validation**: `amr_validate_grid()` checks grid integrity (monotonicity, positive volumes, correct domain extent).
 
-This typically provides **3-5x speedup** with minimal accuracy impact, since heat conduction far from the melt pool is slow and doesn't need frequent updates.
+This allows using fine resolution only where needed (near the melt pool) while keeping the total cell count manageable.

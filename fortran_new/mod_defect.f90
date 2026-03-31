@@ -3,7 +3,7 @@
 module defect_field
 !______________________________________________________________________________
 ! Defect detection module: computes max_temp and defect arrays over one layer.
-! Supports multiple methods (currently: maxtemp_determ, maxtemp_stochas placeholder).
+! When adaptive_flag==1, uses independent uniform mesh for history tracking.
 !
 	use precision
 	use geometry
@@ -18,9 +18,21 @@ module defect_field
 	real(wp), parameter :: k_lof = 0.9_wp    ! lack-of-fusion calibration (range 0-1)
 	real(wp), parameter :: k_kep = 1.0_wp    ! keyhole porosity scaling
 
-	! --- Arrays (full X-Y, limited Z range) ---
-	real(wp), allocatable :: max_temp(:,:,:)  ! (ni, nj, nk) - only k_def_lo:k_def_hi active
+	! --- Arrays (on simulation mesh when adaptive_flag==0, on uniform mesh when ==1) ---
+	real(wp), allocatable :: max_temp(:,:,:)
 	real(wp), allocatable :: defect_arr(:,:,:)
+
+	! --- Uniform defect mesh (only allocated when adaptive_flag==1) ---
+	integer :: def_ni = 0, def_nj = 0
+	integer :: def_nim1 = 0, def_njm1 = 0
+	real(wp), allocatable :: def_x(:), def_y(:)   ! cell center positions
+	real(wp), allocatable :: temp_def(:,:,:)       ! interpolated temp buffer
+
+	! --- Index mapping: AMR mesh -> uniform defect mesh ---
+	integer, allocatable  :: def_imap_lo(:), def_imap_hi(:)
+	real(wp), allocatable :: def_imap_w(:)
+	integer, allocatable  :: def_jmap_lo(:), def_jmap_hi(:)
+	real(wp), allocatable :: def_jmap_w(:)
 
 	! --- Z range for defect computation ---
 	integer :: k_def_lo, k_def_hi
@@ -37,12 +49,7 @@ module defect_field
 !********************************************************************
 subroutine allocate_defect(nni, nnj, nnk)
 	integer, intent(in) :: nni, nnj, nnk
-	integer :: k
-
-	allocate(max_temp(nni, nnj, nnk))
-	allocate(defect_arr(nni, nnj, nnk))
-	max_temp = tempPreheat
-	defect_arr = 0.0_wp
+	integer :: k, i
 
 	! Determine k range: from top (nkm1) down to z(nk) - layerheight
 	k_def_hi = nkm1
@@ -52,25 +59,144 @@ subroutine allocate_defect(nni, nnj, nnk)
 		k_def_lo = k
 	enddo
 
+	if (adaptive_flag == 1) then
+		! Uniform defect mesh
+		def_ni = nint(dimx / amr_dx_fine) + 2
+		def_nj = nint(dimy / amr_dx_fine) + 2
+		def_nim1 = def_ni - 1
+		def_njm1 = def_nj - 1
+
+		allocate(def_x(def_ni), def_y(def_nj))
+		do i = 1, def_ni
+			def_x(i) = (real(i, wp) - 1.5_wp) * amr_dx_fine
+		enddo
+		do i = 1, def_nj
+			def_y(i) = (real(i, wp) - 1.5_wp) * amr_dx_fine
+		enddo
+		! Clamp boundary nodes
+		def_x(1) = 0.0_wp
+		def_x(def_ni) = dimx
+		def_y(1) = 0.0_wp
+		def_y(def_nj) = dimy
+
+		allocate(max_temp(def_ni, def_nj, nnk))
+		allocate(defect_arr(def_ni, def_nj, nnk))
+		allocate(temp_def(def_ni, def_nj, nnk))
+		max_temp = tempPreheat
+		defect_arr = 0.0_wp
+		temp_def = tempPreheat
+
+		! Allocate mapping arrays
+		allocate(def_imap_lo(def_ni), def_imap_hi(def_ni), def_imap_w(def_ni))
+		allocate(def_jmap_lo(def_nj), def_jmap_hi(def_nj), def_jmap_w(def_nj))
+
+		! Build initial mapping
+		call defect_update_map()
+	else
+		allocate(max_temp(nni, nnj, nnk))
+		allocate(defect_arr(nni, nnj, nnk))
+		max_temp = tempPreheat
+		defect_arr = 0.0_wp
+	endif
+
 end subroutine allocate_defect
 
 !********************************************************************
-subroutine update_max_temp()
-! Called every time step: update max_temp where current temp exceeds it.
-! Only processes the single-layer Z range.
-	integer :: i, j, k
+subroutine defect_update_map()
+! Rebuild index mapping from AMR simulation mesh to uniform defect mesh.
+	integer :: i, j_lo
+	real(wp) :: xn
 
-	!$OMP PARALLEL DO PRIVATE(i, j, k)
-	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
-		if (temp(i,j,k) > max_temp(i,j,k)) then
-			max_temp(i,j,k) = temp(i,j,k)
+	j_lo = 1
+	do i = 1, def_ni
+		xn = def_x(i)
+		do while (j_lo < ni - 1 .and. x(j_lo + 1) < xn)
+			j_lo = j_lo + 1
+		enddo
+		def_imap_lo(i) = j_lo
+		def_imap_hi(i) = min(j_lo + 1, ni)
+		if (def_imap_lo(i) == def_imap_hi(i)) then
+			def_imap_w(i) = 0.0_wp
+		else
+			def_imap_w(i) = (xn - x(def_imap_lo(i))) / (x(def_imap_hi(i)) - x(def_imap_lo(i)))
+			def_imap_w(i) = max(0.0_wp, min(1.0_wp, def_imap_w(i)))
 		endif
+	enddo
+
+	j_lo = 1
+	do i = 1, def_nj
+		xn = def_y(i)
+		do while (j_lo < nj - 1 .and. y(j_lo + 1) < xn)
+			j_lo = j_lo + 1
+		enddo
+		def_jmap_lo(i) = j_lo
+		def_jmap_hi(i) = min(j_lo + 1, nj)
+		if (def_jmap_lo(i) == def_jmap_hi(i)) then
+			def_jmap_w(i) = 0.0_wp
+		else
+			def_jmap_w(i) = (xn - y(def_jmap_lo(i))) / (y(def_jmap_hi(i)) - y(def_jmap_lo(i)))
+			def_jmap_w(i) = max(0.0_wp, min(1.0_wp, def_jmap_w(i)))
+		endif
+	enddo
+end subroutine defect_update_map
+
+!********************************************************************
+subroutine defect_interp_temp()
+! Interpolate temp from AMR mesh to uniform defect mesh.
+	integer :: i, j, k, i1, i2, j1, j2
+	real(wp) :: wx, wy
+
+	!$OMP PARALLEL DO PRIVATE(i, j, k, i1, i2, j1, j2, wx, wy)
+	do k = k_def_lo, k_def_hi
+	do j = 2, def_njm1
+	do i = 2, def_nim1
+		i1 = def_imap_lo(i); i2 = def_imap_hi(i); wx = def_imap_w(i)
+		j1 = def_jmap_lo(j); j2 = def_jmap_hi(j); wy = def_jmap_w(j)
+		temp_def(i,j,k) = (1.0_wp-wx)*(1.0_wp-wy) * temp(i1,j1,k) + &
+		                   wx*(1.0_wp-wy)           * temp(i2,j1,k) + &
+		                   (1.0_wp-wx)*wy           * temp(i1,j2,k) + &
+		                   wx*wy                    * temp(i2,j2,k)
 	enddo
 	enddo
 	enddo
 	!$OMP END PARALLEL DO
+end subroutine defect_interp_temp
+
+!********************************************************************
+subroutine update_max_temp()
+! Called every time step: update max_temp where current temp exceeds it.
+	integer :: i, j, k
+	integer :: i_hi, j_hi
+
+	if (adaptive_flag == 1) then
+		! Interpolate temp to uniform mesh first
+		call defect_interp_temp()
+		i_hi = def_nim1
+		j_hi = def_njm1
+		!$OMP PARALLEL DO PRIVATE(i, j, k)
+		do k = k_def_lo, k_def_hi
+		do j = 2, j_hi
+		do i = 2, i_hi
+			if (temp_def(i,j,k) > max_temp(i,j,k)) then
+				max_temp(i,j,k) = temp_def(i,j,k)
+			endif
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
+	else
+		!$OMP PARALLEL DO PRIVATE(i, j, k)
+		do k = k_def_lo, k_def_hi
+		do j = 2, njm1
+		do i = 2, nim1
+			if (temp(i,j,k) > max_temp(i,j,k)) then
+				max_temp(i,j,k) = temp(i,j,k)
+			endif
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
+	endif
 
 end subroutine update_max_temp
 
@@ -78,12 +204,21 @@ end subroutine update_max_temp
 subroutine compute_defect_determ()
 ! Called after simulation completes: compute defect array from max_temp.
 	integer :: i, j, k
+	integer :: i_hi, j_hi
+
+	if (adaptive_flag == 1) then
+		i_hi = def_nim1
+		j_hi = def_njm1
+	else
+		i_hi = nim1
+		j_hi = njm1
+	endif
 
 	! Step 1: Compute defect values
 	!$OMP PARALLEL DO PRIVATE(i, j, k)
 	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
+	do j = 2, j_hi
+	do i = 2, i_hi
 		if (max_temp(i,j,k) < tsolid) then
 			defect_arr(i,j,k) = -k_lof
 		else if (max_temp(i,j,k) > tboiling) then
@@ -100,17 +235,31 @@ subroutine compute_defect_determ()
 	call compute_scan_range()
 
 	! Step 3: Clean up — zero defect outside scanned region (convex hull)
-	!$OMP PARALLEL DO PRIVATE(i, j, k)
-	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
-		if (.not. point_in_scan_region(x(i), y(j))) then
-			defect_arr(i,j,k) = 0.0_wp
-		endif
-	enddo
-	enddo
-	enddo
-	!$OMP END PARALLEL DO
+	if (adaptive_flag == 1) then
+		!$OMP PARALLEL DO PRIVATE(i, j, k)
+		do k = k_def_lo, k_def_hi
+		do j = 2, def_njm1
+		do i = 2, def_nim1
+			if (.not. point_in_scan_region(def_x(i), def_y(j))) then
+				defect_arr(i,j,k) = 0.0_wp
+			endif
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
+	else
+		!$OMP PARALLEL DO PRIVATE(i, j, k)
+		do k = k_def_lo, k_def_hi
+		do j = 2, njm1
+		do i = 2, nim1
+			if (.not. point_in_scan_region(x(i), y(j))) then
+				defect_arr(i,j,k) = 0.0_wp
+			endif
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
+	endif
 
 end subroutine compute_defect_determ
 
@@ -123,7 +272,6 @@ end subroutine maxtemp_stochas
 !********************************************************************
 subroutine compute_scan_range()
 ! Build scan region polygon from all track endpoints.
-! Left boundary (bottom→top) + right boundary (top→bottom) = CCW polygon.
 	integer :: n, ntracks, i
 	real(wp) :: x1, x2, y1
 	real(wp) :: left_x(TOOLLINES), left_y(TOOLLINES)
@@ -133,10 +281,9 @@ subroutine compute_scan_range()
 	do n = 2, TOOLLINES
 		if (toolmatrix(n,1) < -0.5_wp) exit
 		if (toolmatrix(n,5) >= laser_on_threshold) then
-			! Track: from n-1 (laser off, start) to n (laser on, end)
 			x1 = toolmatrix(n-1,2)
 			x2 = toolmatrix(n,2)
-			y1 = toolmatrix(n-1,3)   ! same y as toolmatrix(n,3) for x-scan
+			y1 = toolmatrix(n-1,3)
 			ntracks = ntracks + 1
 			left_x(ntracks)  = min(x1, x2)
 			left_y(ntracks)  = y1
@@ -147,7 +294,6 @@ subroutine compute_scan_range()
 
 	if (ntracks == 0) return
 
-	! Build CCW polygon: right boundary (bottom→top) + left boundary (top→bottom)
 	n_hull = 0
 	do i = 1, ntracks
 		n_hull = n_hull + 1
@@ -160,7 +306,6 @@ subroutine compute_scan_range()
 		hull_y(n_hull) = left_y(i)
 	enddo
 
-	! AABB for reporting
 	x_scan_min = minval(left_x(1:ntracks))
 	x_scan_max = maxval(right_x(1:ntracks))
 	y_scan_min = left_y(1)
@@ -170,8 +315,6 @@ end subroutine compute_scan_range
 
 !********************************************************************
 function point_in_scan_region(px, py) result(inside)
-! Check if point (px, py) is inside the convex hull using cross-product test.
-! Hull vertices must be in counter-clockwise order.
 	real(wp), intent(in) :: px, py
 	logical :: inside
 	integer :: i, j
@@ -197,26 +340,37 @@ end function point_in_scan_region
 
 !********************************************************************
 subroutine write_defect_report()
-! Compute defect metrics and write defect_report.txt and VTK output.
 	integer :: i, j, k
 	integer, parameter :: lun = 89
 	real(wp) :: v_cell, v_total, v_defect, v_lof, v_kep
 	real(wp) :: frac_defect, frac_lof, frac_kep
 	real(kind=4) :: val4
 	integer :: gridx, gridy, gridk, npts
-	character(len=3) :: cTemp
+	integer :: i_hi, j_hi
+	real(wp) :: dx_def, dy_def
 
-	! --- Compute metrics over scan range × layer height ---
+	if (adaptive_flag == 1) then
+		i_hi = def_nim1
+		j_hi = def_njm1
+	else
+		i_hi = nim1
+		j_hi = njm1
+	endif
+
 	v_total  = 0.0_wp
-	v_defect = 0.0_wp
 	v_lof    = 0.0_wp
 	v_kep    = 0.0_wp
 
 	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
-		if (.not. point_in_scan_region(x(i), y(j))) cycle
-		v_cell = volume(i,j,k)
+	do j = 2, j_hi
+	do i = 2, i_hi
+		if (adaptive_flag == 1) then
+			if (.not. point_in_scan_region(def_x(i), def_y(j))) cycle
+			v_cell = amr_dx_fine * amr_dx_fine * (zw(k+1)-zw(k))
+		else
+			if (.not. point_in_scan_region(x(i), y(j))) cycle
+			v_cell = volume(i,j,k)
+		endif
 		v_total = v_total + v_cell
 		if (defect_arr(i,j,k) < 0.0_wp) then
 			v_lof = v_lof + abs(defect_arr(i,j,k)) * v_cell
@@ -238,7 +392,6 @@ subroutine write_defect_report()
 		frac_kep    = 0.0_wp
 	endif
 
-	! --- Write defect_report.txt ---
 	open(unit=lun, file=trim(file_prefix)//'defect_report.txt', action='write', status='replace')
 	write(lun,'(a)') '============================================'
 	write(lun,'(a)') '  PHOENIX Defect Report'
@@ -276,14 +429,12 @@ subroutine write_defect_report()
 	write(lun,'(a)') '============================================'
 	close(lun)
 
-	! Print summary to output file
 	write(9,'(a)') ''
 	write(9,'(a)') '  === Defect Analysis (maxtemp_determ) ==='
 	write(9,'(a,f10.6,a)') '  Defect fraction:         ', frac_defect * 100.0_wp, ' %'
 	write(9,'(a,f10.6,a)') '  Lack-of-fusion fraction: ', frac_lof * 100.0_wp, ' %'
 	write(9,'(a,f10.6,a)') '  Keyhole porosity fraction:', frac_kep * 100.0_wp, ' %'
 
-	! --- Write VTK files for max_temp and defect ---
 	call write_defect_vtk('maxtemp', max_temp)
 	call write_defect_vtk('defect', defect_arr)
 
@@ -294,16 +445,24 @@ subroutine write_defect_vtk(fieldname, field)
 	character(len=*), intent(in) :: fieldname
 	real(wp), intent(in) :: field(:,:,:)
 	integer :: i, j, k, npts
-	integer :: gridx, gridy, gridz
+	integer :: gridx, gridy, gridz, i_hi, j_hi
 	real(kind=4) :: val4
 	integer, parameter :: lun = 90
 
-	gridx = nim1 - 2 + 1   ! 2:nim1
-	gridy = njm1 - 2 + 1
+	if (adaptive_flag == 1) then
+		gridx = def_nim1 - 2 + 1
+		gridy = def_njm1 - 2 + 1
+		i_hi = def_nim1
+		j_hi = def_njm1
+	else
+		gridx = nim1 - 2 + 1
+		gridy = njm1 - 2 + 1
+		i_hi = nim1
+		j_hi = njm1
+	endif
 	gridz = k_def_hi - k_def_lo + 1
 	npts = gridx * gridy * gridz
 
-	! ASCII header
 	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk')
 	write(lun,'(A)') '# vtk DataFile Version 3.0'
 	write(lun,'(A)') 'PHOENIX '//trim(fieldname)//' field'
@@ -313,33 +472,35 @@ subroutine write_defect_vtk(fieldname, field)
 	write(lun,'(A,I0,A)') 'POINTS ', npts, ' float'
 	close(lun)
 
-	! Binary coordinates
 	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', &
 	     access='stream', form='unformatted', position='append', convert='big_endian')
 	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
-		val4 = real(x(i), 4); write(lun) val4
-		val4 = real(y(j), 4); write(lun) val4
+	do j = 2, j_hi
+	do i = 2, i_hi
+		if (adaptive_flag == 1) then
+			val4 = real(def_x(i), 4); write(lun) val4
+			val4 = real(def_y(j), 4); write(lun) val4
+		else
+			val4 = real(x(i), 4); write(lun) val4
+			val4 = real(y(j), 4); write(lun) val4
+		endif
 		val4 = real(z(k), 4); write(lun) val4
 	enddo
 	enddo
 	enddo
 	close(lun)
 
-	! POINT_DATA + SCALARS + LOOKUP_TABLE headers (ASCII)
 	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', position='append')
 	write(lun,'(A,I0)') 'POINT_DATA ', npts
 	write(lun,'(A)') 'SCALARS '//trim(fieldname)//' float 1'
 	write(lun,'(A)') 'LOOKUP_TABLE default'
 	close(lun)
 
-	! Binary field data
 	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', &
 	     access='stream', form='unformatted', position='append', convert='big_endian')
 	do k = k_def_lo, k_def_hi
-	do j = 2, njm1
-	do i = 2, nim1
+	do j = 2, j_hi
+	do i = 2, i_hi
 		val4 = real(field(i,j,k), 4)
 		write(lun) val4
 	enddo

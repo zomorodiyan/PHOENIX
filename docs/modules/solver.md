@@ -14,7 +14,7 @@ Updates material properties (viscosity, diffusivity, density) based on temperatu
 
 Boundary conditions for all equations:
 
-- **Enthalpy**: radiation + convection (top), convection (sides/bottom), Dirichlet outside local region
+- **Enthalpy**: radiation + convection (top), convection (sides/bottom)
 - **Momentum**: Marangoni stress at free surface (thermal + solutal), no-slip elsewhere
 - **Pressure correction**: zero in solid region
 
@@ -25,7 +25,7 @@ Boundary conditions for all equations:
 FVM discretization using power-law scheme:
 
 - `discretize_momentum(idir)` — u/v/w momentum with staggered grid interpolation
-- `discretize_enthalpy(...)` — energy equation with `delt_eff` for local solver
+- `discretize_enthalpy(...)` — energy equation with `delt` for transient term
 - `discretize_pp()` — pressure correction equation
 
 ---

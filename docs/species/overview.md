@@ -91,7 +91,7 @@ Defined as named constants in `mod_species.f90`:
 - Timing: Once per timestep, after iteration loop exits
 - Under-relaxation: `urfspecies = 0.7`
 - Clipping: concentration forced to [0, 1] after each solve
-- Transient: uses `delt` (not `delt_eff`) — species is always solved globally
+- Transient: uses `delt`
 
 ## Performance
 

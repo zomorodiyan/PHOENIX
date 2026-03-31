@@ -61,7 +61,7 @@ Carman-Kozeny model for mushy zone: $S = \frac{180 \mu}{K_0} \frac{(1-f_l)^2}{f_
 Reads all simulation parameters from `input_param.txt`.
 
 ### `read_data()`
-Parses geometry (zones, CVs, exponents) and 7 namelist groups. Creates result directory `result/<case_name>/` automatically.
+Parses geometry (zones, CVs, exponents) and namelist groups. Creates result directory `result/<case_name>/` automatically.
 
 See [Input File Reference](../input-reference.md) for parameter details.
 
@@ -107,7 +107,6 @@ Allocates all arrays to `(nni, nnj, nnk)`:
 | `temp, tnot` | Current and previous temperature |
 | `fracl, fraclnot` | Current and previous liquid fraction |
 | `solidfield` | Track ID that solidified each cell |
-| `localfield` | Local solver region visualization |
 
 ---
 
@@ -200,19 +199,24 @@ These indices are used by momentum solver, species solver, and velocity cleanup.
 
 ---
 
-## mod_local_enthalpy.f90 — `local_enthalpy`
+## mod_adaptive_mesh.f90 — `adaptive_mesh_mod`
 
-### `get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)`
-Determines if current step is local or global:
+Movable adaptive structured mesh in X-Y that follows the laser/melt pool. Enabled by `adaptive_flag=1` in the `&adaptive_mesh` namelist.
 
-- Global: every `localnum+1` steps, or first step
-- Local: otherwise, returns small region around melt pool
+### `amr_init()`
+Called once after `generate_grid` and field allocation. Sets up the initial refined region centered on the first laser position.
 
-### `compute_delt_eff()`
-Updates effective time step for all cells: `delt_eff(i,j,k) = delt * (n_skipped(i,j,k) + 1)`.
+### `amr_check_remesh(step_idx)`
+Called every time step after `laser_beam`. Checks whether the mesh needs to be regenerated (every `remesh_interval` steps).
 
-### `update_skipped(..., is_local)`
-Increments skip counter for cells outside current solve region; resets to 0 for solved cells.
+### `amr_regenerate_grid()`
+Rebuilds the X-Y grid so that the refined region (cell size `amr_dx_fine`) is centered on the current laser/melt pool position, with coarser cells outside.
+
+### `amr_interpolate_all_fields()`
+Interpolates all field arrays (velocity, pressure, enthalpy, temperature, liquid fraction, etc.) from the old grid to the newly generated grid.
+
+### `amr_validate_grid()`
+Sanity checks on the new grid: verifies monotonicity, positive volumes, and correct total domain extent.
 
 ---
 
@@ -269,10 +273,9 @@ No-slip condition at melt pool boundaries for w-velocity.
 ### `bound_pp()`
 Zero pressure correction in solid region.
 
-### `bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)`
+### `bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi)`
 - **Top surface**: radiation + convection loss
 - **Other faces**: convection to ambient
-- **Local mode**: Dirichlet (frozen values) outside local region
 
 ---
 
@@ -290,7 +293,7 @@ FVM discretization for u (idir=1), v (idir=2), w (idir=3):
 7. Adds pressure gradient and cross-derivative source terms
 
 ### `discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)`
-Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses `delt_eff` for transient term (local solver compensation).
+Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses `delt` for the transient term.
 
 ### `discretize_pp()`
 Pressure-correction equation using velocity correction coefficients from momentum solve.
@@ -390,7 +393,7 @@ Computes energy balance: boundary conduction losses on all 6 faces, heat accumul
 
 ## mod_defect.f90 — `defect_field`
 
-Post-simulation defect detection based on maximum temperature history. Identifies lack-of-fusion (incomplete melting) and keyhole porosity (excessive vaporization) within the powder layer.
+Post-simulation defect detection based on maximum temperature history. Identifies lack-of-fusion (incomplete melting) and keyhole porosity (excessive vaporization) within the powder layer. Supports uniform defect mesh when `adaptive_flag==1`.
 
 ### Parameters
 
@@ -474,43 +477,19 @@ Reads `/proc/self/status` for VmPeak, VmHWM (peak physical RAM), VmRSS, VmData.
 Writes one block per time step to `output.txt`: residuals, velocities, pool dimensions, energy balance, progress.
 
 ### `Cust_Out()`
-Writes binary VTK file every `outputintervel` steps. Fields: Velocity (vector), T, vis, diff, den, solidID, localfield. When `species_flag=1`: adds concentration and tsolid_field.
+Writes binary VTK file every `outputintervel` steps. Fields: Velocity (vector), T, vis, diff, den, solidID, fracl. When `species_flag=1`: adds concentration and tsolid_field.
 
 ### `init_thermal_history()` / `write_thermal_history(timet)` / `finalize_thermal_history()`
 Tracks temperature at 10 monitoring points throughout simulation. Generates Python plotting script and PNG at end.
 
+### `update_thermal_history_indices()`
+Recomputes the grid indices of thermal history monitoring points after an AMR remesh event. Called by the adaptive mesh module when the grid changes.
+
 ### `init_meltpool_history()` / `write_meltpool_history(timet)` / `finalize_meltpool_history()`
-Tracks melt pool length, depth, width, volume, and peak temperature. Only recorded during global solver timesteps. Generates Python plot script and PNG at end.
+Tracks melt pool length, depth, width, volume, and peak temperature. Generates Python plot script and PNG at end.
 
 ### `write_vtk_scalar(unit, filename, name, field)` / `write_vtk_vector(...)`
 Binary VTK writers: ASCII header (SCALARS/VECTORS + LOOKUP_TABLE) followed by big-endian float32 data.
 
 ---
 
-## mod_microstructure.f90 — `microstructure_mod`
-
-Solidification microstructure prediction. Enabled by `micro_flag=1`. Only updates during global solver timesteps.
-
-### `allocate_microstructure(nni, nnj, nnk)`
-Allocates arrays: `cool_rate_micro`, `therm_grad`, `solid_rate`, `pdas_arr`, `sdas_arr`, `micro_solidified`.
-
-### `update_microstructure(dt)`
-Called each global timestep. Detects solidification events (`fraclnot > 0` → `fracl ≤ 0`). At solidification: computes cooling rate `|dT/dt|`, thermal gradient `G = |∇T|` (central differences), solidification rate `R = |dT/dt| / G`, PDAS `λ₁ = a₁ G^n₁ R^n₂`, SDAS `λ₂ = a₂ |dT/dt|^n₃`. Only records the first solidification event per cell.
-
-### `report_microstructure()`
-Post-simulation. Computes min/max/mean statistics over solidified cells in the scan region. Writes `micro_report.txt` and a single `microstructure.vtk` with 5 scalar fields.
-
----
-
-## mod_crack_risk.f90 — `crack_risk_mod`
-
-Crack risk prediction from thermal strain in the Brittle Temperature Range (BTR). Enabled by `crack_flag=1`. Only updates during global solver timesteps.
-
-### `allocate_crack_risk(nni, nnj, nnk)`
-Allocates arrays: `cool_rate_solid`, `strain_rate_solid`, `btr_time`, `crack_risk_arr`, `crack_solidified`.
-
-### `update_crack_risk(dt)`
-Called each global timestep. Detects solidification (stores cooling rate and strain rate = β × |dT/dt|). Accumulates BTR strain: when `T_solidus - ΔT_BTR < T < T_solidus`, adds `β × |dT/dt| × dt` to the crack susceptibility index (CSI).
-
-### `compute_crack_report()`
-Post-simulation. Computes statistics, identifies high-risk cells (CSI > 1%). Writes `crack_report.txt` and a single `crack_risk.vtk` with 4 scalar fields.

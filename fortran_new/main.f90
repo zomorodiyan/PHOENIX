@@ -30,10 +30,8 @@ program main
 	use toolpath
 	use timing
 	use omp_lib
-	use local_enthalpy
 	use defect_field
-	use microstructure_mod
-	use crack_risk_mod
+	use adaptive_mesh_mod
 	use species, only: allocate_species, init_species, &
 		species_bc, solve_species, concentration, conc_old, &
 		mix, tsolid2
@@ -42,7 +40,6 @@ program main
 	integer i,j,k
 	integer step_idx
 	integer ilo, ihi, jlo, jhi, klo, khi
-	logical is_local
 	real(wp) amaxres
 	real(wp) t0, t1
 	real(wp) t_step_wall
@@ -55,12 +52,10 @@ program main
 	call allocate_source(ni, nj, nk)
 	call allocate_print(ni, nj, nk)
 	call allocate_laser(ni, nj)
-	call allocate_skipped(ni, nj, nk)
 	call allocate_defect(ni, nj, nk)
-	if (micro_flag == 1) call allocate_microstructure(ni, nj, nk)
-	if (crack_flag == 1) call allocate_crack_risk(ni, nj, nk)
 	call OpenFiles
 	call initialize
+	if (adaptive_flag == 1) call amr_init()
 	call init_thermal_history
 	call init_meltpool_history
 
@@ -76,6 +71,9 @@ program main
 	step_idx=0
 	timet=small
 
+	! Full-domain solve indices (always global)
+	ilo = 2; ihi = nim1; jlo = 2; jhi = njm1; klo = 2; khi = nkm1
+
 !------time stepping loop------------------------------------
 	time_loop: do while (timet.lt.timax)
 		timet=timet+delt
@@ -87,21 +85,18 @@ program main
 		call cpu_time(t0)
 		call laser_beam
 		call read_coordinates
-!		call calcRHF   ! RHF disabled
-		call get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)
-		call update_localfield(ilo, ihi, jlo, jhi, klo, khi)
 		call cpu_time(t1)
 		t_laser = t_laser + (t1 - t0)
 
-		call cpu_time(t0)
-		call compute_delt_eff()
-		call cpu_time(t1)
-		t_skipped_mgmt = t_skipped_mgmt + (t1 - t0)
-
-		if (is_local) then
-			write(9,'(A,I6,A)') '  Step', step_idx, ' => LOCAL enthalpy solve'
-		else
-			write(9,'(A,I6,A)') '  Step', step_idx, ' => GLOBAL enthalpy solve'
+		if (adaptive_flag == 1) then
+			call amr_check_remesh(step_idx)
+			if (amr_needs_remesh) then
+				call amr_regenerate_grid()
+				call amr_validate_grid()
+				call update_thermal_history_indices()
+				call defect_update_map()
+				amr_needs_remesh = .false.
+			endif
 		endif
 
 !-----iteration loop within each time step----------------
@@ -116,7 +111,7 @@ program main
 			t_prop = t_prop + (t1 - t0)
 
 			call cpu_time(t0)
-			call bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
+			call bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
 			call cpu_time(t1)
 			t_bound = t_bound + (t1 - t0)
 
@@ -271,27 +266,16 @@ program main
 			endif
 
 !-----convergence criterion------------
-			if (.not. is_local) then
-				call cpu_time(t0)
-				call heat_fluxes
-				call cpu_time(t1)
-				t_flux = t_flux + (t1 - t0)
-			else
-				! Zero flux diagnostics (heat_fluxes skipped during local steps)
-				flux_west=0.0_wp; flux_east=0.0_wp
-				flux_top=0.0_wp;  flux_bottom=0.0_wp
-				flux_north=0.0_wp; flux_south=0.0_wp
-				heatout=0.0_wp; accul=0.0_wp; heatvol=0.0_wp; ratio=0.0_wp
-			endif
+			call cpu_time(t0)
+			call heat_fluxes
+			call cpu_time(t1)
+			t_flux = t_flux + (t1 - t0)
+
 			amaxres=max(resorm, resoru,resorv,resorw)
 
 			if(toolmatrix(PathNum,5) .ge. laser_on_threshold)then
 				! Laser on: transient-state criteria (heating stage)
-				if (is_local) then
-					if(resorh.lt.conv_res_heat) exit iter_loop
-				else
-					if(resorh.lt.conv_res_heat .and. ratio.le.ratio_upper .and. ratio.ge.ratio_lower) exit iter_loop
-				endif
+				if(resorh.lt.conv_res_heat .and. ratio.le.ratio_upper .and. ratio.ge.ratio_lower) exit iter_loop
 			else
 				! Laser off: transient-state criteria (cooling stage)
 				if(resorh.lt.conv_res_cool) exit iter_loop
@@ -309,16 +293,7 @@ program main
 		endif
 
 		call cpu_time(t0)
-		call update_skipped(ilo, ihi, jlo, jhi, klo, khi, is_local)
-		call cpu_time(t1)
-		t_skipped_mgmt = t_skipped_mgmt + (t1 - t0)
-
-		call cpu_time(t0)
 		call update_max_temp()
-		if (.not. is_local) then
-			if (micro_flag == 1) call update_microstructure(delt)
-			if (crack_flag == 1) call update_crack_risk(delt)
-		endif
 		call cpu_time(t1)
 		t_defect = t_defect + (t1 - t0)
 
@@ -328,7 +303,7 @@ program main
 		call cpu_time(t1)
 		t_print = t_print + (t1 - t0)
 
-		! Accumulate heating/cooling and local/global wall-clock time
+		! Accumulate heating/cooling wall-clock time
 		t_step_wall = omp_get_wtime() - t_step_start
 		if (toolmatrix(PathNum,5) .ge. laser_on_threshold) then
 			t_heating = t_heating + t_step_wall
@@ -337,85 +312,32 @@ program main
 			t_cooling = t_cooling + t_step_wall
 			n_cooling = n_cooling + 1
 		endif
-		if (is_local) then
-			t_local_step  = t_local_step  + t_step_wall
-			n_local_step  = n_local_step  + 1
-		else
-			t_global_step = t_global_step + t_step_wall
-			n_global_step = n_global_step + 1
-		endif
 
 		call cpu_time(t0)
-		if (is_local) then
-			! Local step: velocity update for all cells
-			!$OMP PARALLEL DO PRIVATE(i,j,k)
-			do k=1,nk
-			do j=1,nj
-			do i=1,ni
-				if(temp(i,j,k).le.merge(mix(tsolid,tsolid2,concentration(i,j,k)), tsolid, species_flag==1)) then
-					uVel(i,j,k)=0.0
-					vVel(i,j,k)=0.0
-					wVel(i,j,k)=0.0
-				endif
-				unot(i,j,k)=uVel(i,j,k)
-				vnot(i,j,k)=vVel(i,j,k)
-				wnot(i,j,k)=wVel(i,j,k)
-			enddo
-			enddo
-			enddo
-			!$OMP END PARALLEL DO
-			! Only update hnot/tnot/fraclnot for cells inside the local region
-			!$OMP PARALLEL DO PRIVATE(i,j,k)
-			do k=klo,khi
-			do j=jlo,jhi
-			do i=ilo,ihi
-				tnot(i,j,k)=temp(i,j,k)
-				hnot(i,j,k)=enthalpy(i,j,k)
-				fraclnot(i,j,k)=fracl(i,j,k)
-			enddo
-			enddo
-			enddo
-			!$OMP END PARALLEL DO
-			! Restore enthalpy/temp/fracl outside local region from hnot
-			!$OMP PARALLEL DO PRIVATE(i,j,k)
-			do k=1,nk
-			do j=1,nj
-			do i=1,ni
-				if (i < ilo .or. i > ihi .or. j < jlo .or. j > jhi .or. k < klo .or. k > khi) then
-					enthalpy(i,j,k)=hnot(i,j,k)
-					temp(i,j,k)=tnot(i,j,k)
-					fracl(i,j,k)=fraclnot(i,j,k)
-				endif
-			enddo
-			enddo
-			enddo
-			!$OMP END PARALLEL DO
-		else
-			! Global step: update all cells
-			!$OMP PARALLEL DO PRIVATE(i,j,k)
-			do k=1,nk
-			do j=1,nj
-			do i=1,ni
-				if(temp(i,j,k).le.merge(mix(tsolid,tsolid2,concentration(i,j,k)), tsolid, species_flag==1)) then
-					uVel(i,j,k)=0.0
-					vVel(i,j,k)=0.0
-					wVel(i,j,k)=0.0
-				endif
-				unot(i,j,k)=uVel(i,j,k)
-				vnot(i,j,k)=vVel(i,j,k)
-				wnot(i,j,k)=wVel(i,j,k)
-				tnot(i,j,k)=temp(i,j,k)
-				hnot(i,j,k)=enthalpy(i,j,k)
-				fraclnot(i,j,k)=fracl(i,j,k)
-			enddo
-			enddo
-			enddo
-			!$OMP END PARALLEL DO
-		endif
+		! Global step: update all cells
+		!$OMP PARALLEL DO PRIVATE(i,j,k)
+		do k=1,nk
+		do j=1,nj
+		do i=1,ni
+			if(temp(i,j,k).le.merge(mix(tsolid,tsolid2,concentration(i,j,k)), tsolid, species_flag==1)) then
+				uVel(i,j,k)=0.0
+				vVel(i,j,k)=0.0
+				wVel(i,j,k)=0.0
+			endif
+			unot(i,j,k)=uVel(i,j,k)
+			vnot(i,j,k)=vVel(i,j,k)
+			wnot(i,j,k)=wVel(i,j,k)
+			tnot(i,j,k)=temp(i,j,k)
+			hnot(i,j,k)=enthalpy(i,j,k)
+			fraclnot(i,j,k)=fracl(i,j,k)
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
 		if (species_flag == 1) conc_old = concentration
 		call Cust_Out
 		call write_thermal_history(timet)
-		if (.not. is_local) call write_meltpool_history(timet)
+		call write_meltpool_history(timet)
 		call cpu_time(t1)
 		t_other = t_other + (t1 - t0)
 
@@ -424,8 +346,6 @@ program main
 	! Post-simulation analysis (before EndTime closes output file)
 	call compute_defect_determ()
 	call write_defect_report()
-	if (micro_flag == 1) call report_microstructure()
-	if (crack_flag == 1) call compute_crack_report()
 
 	call EndTime
 	call finalize_thermal_history

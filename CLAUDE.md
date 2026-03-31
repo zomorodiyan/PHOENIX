@@ -77,6 +77,8 @@ Output: `.crs` file (time, x, y, z, laser on/off) + `.png` visualization.
 - Each project: `projects/YYYYMMDD_PROJECT_NAME/task.md`
 - On completion: rename to `YYYYMMDD_PROJECT_NAME-COMPLETEDYYYYMMDD`
 - `task.md` contains objective, numbered tasks, and notes
+- When executing `task.md`, generate `log.md` in the same project folder recording every step with **system timestamps** (e.g., `[2026-03-30 14:23:05]`). Include: commands run, compilation output, errors encountered, decisions made.
+- Final results and validation data go in `results.md` in the same project folder.
 
 ## Species Transport Design Decisions
 

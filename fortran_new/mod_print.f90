@@ -24,6 +24,14 @@ module printing
 	integer, parameter :: n_thist = 10
 	integer :: thist_i(n_thist), thist_j(n_thist), thist_k(n_thist)
 	logical :: thist_init = .false.
+
+	! Physical coordinates for monitoring points (promoted from init_thermal_history for AMR remesh)
+	real(wp) :: thist_px(n_thist) = &
+		[0.4e-3_wp, 1.0e-3_wp, 1.6e-3_wp, 1.0e-3_wp, 1.0e-3_wp, &
+		 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp]
+	real(wp) :: thist_py(n_thist) = &
+		[1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, &
+		 1.05e-3_wp, 1.2e-3_wp, 1.5e-3_wp, 1.8e-3_wp, 1.0e-3_wp]
 	real(wp), allocatable :: auvl(:,:,:),avvl(:,:,:),awvl(:,:,:)  ! velocity field at central nodes
 
 	integer, private:: i,j,k,ist,gridx, gridy, gridz ! calcu how many grids should be output in different axis
@@ -241,8 +249,6 @@ subroutine Cust_Out
 	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 	                      'solidID', solidfield)
 	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
-	                      'local', localfield)
-	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 	                      'fracl', fracl)
 
 	if (species_flag == 1) then
@@ -380,26 +386,26 @@ end subroutine OpenFiles
 
 !********************************************************************
 ! 10 representative monitoring points (physical coordinates, metres):
-!  P1  (1.0mm, 0.50mm, 0.695mm) - scan track 1, near start, surface
-!  P2  (2.0mm, 0.50mm, 0.695mm) - scan track 1, centre,    surface
-!  P3  (3.0mm, 0.50mm, 0.695mm) - scan track 1, near end,  surface
-!  P4  (2.0mm, 0.50mm, 0.660mm) - scan track 1, centre,    40 um depth
-!  P5  (2.0mm, 0.50mm, 0.600mm) - scan track 1, centre,   100 um depth
-!  P6  (2.0mm, 0.60mm, 0.695mm) - 100 um offset from track 1, surface
-!  P7  (2.0mm, 0.65mm, 0.695mm) - midpoint between track 1 and 2
-!  P8  (2.0mm, 0.80mm, 0.695mm) - scan track 2, centre,    surface
-!  P9  (2.0mm, 1.50mm, 0.695mm) - far from scan, surface (substrate ref)
-!  P10 (2.0mm, 0.50mm, 0.200mm) - deep substrate below track 1
+!  P1  (0.4mm, 1.0mm, 0.695mm) - central track (track 7), near start, surface
+!  P2  (1.0mm, 1.0mm, 0.695mm) - central track, mid-length, surface
+!  P3  (1.6mm, 1.0mm, 0.695mm) - central track, near end, surface
+!  P4  (1.0mm, 1.0mm, 0.660mm) - centre, 40 um depth
+!  P5  (1.0mm, 1.0mm, 0.600mm) - centre, 100 um depth
+!  P6  (1.0mm, 1.05mm, 0.695mm) - midpoint between track 7 and 8, surface
+!  P7  (1.0mm, 1.2mm, 0.695mm) - 2 hatches from centre (track 9), surface
+!  P8  (1.0mm, 1.5mm, 0.695mm) - near edge of scanned region (track 12), surface
+!  P9  (1.0mm, 1.8mm, 0.695mm) - outside scanned region, substrate surface
+!  P10 (1.0mm, 1.0mm, 0.200mm) - deep substrate below centre
 !********************************************************************
 subroutine init_thermal_history
 	integer :: p, ip, jp, kp
 	real(wp) :: dx, dy, dz, dmin
 	real(wp), parameter :: px(n_thist) = &
-		[1.0e-3_wp, 2.0e-3_wp, 3.0e-3_wp, 2.0e-3_wp, 2.0e-3_wp, &
-		 2.0e-3_wp, 2.0e-3_wp, 2.0e-3_wp, 2.0e-3_wp, 2.0e-3_wp]
+		[0.4e-3_wp, 1.0e-3_wp, 1.6e-3_wp, 1.0e-3_wp, 1.0e-3_wp, &
+		 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp]
 	real(wp), parameter :: py(n_thist) = &
-		[0.50e-3_wp, 0.50e-3_wp, 0.50e-3_wp, 0.50e-3_wp, 0.50e-3_wp, &
-		 0.60e-3_wp, 0.65e-3_wp, 0.80e-3_wp, 1.50e-3_wp, 0.50e-3_wp]
+		[1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, 1.0e-3_wp, &
+		 1.05e-3_wp, 1.2e-3_wp, 1.5e-3_wp, 1.8e-3_wp, 1.0e-3_wp]
 	real(wp), parameter :: pz(n_thist) = &
 		[0.695e-3_wp, 0.695e-3_wp, 0.695e-3_wp, 0.660e-3_wp, 0.600e-3_wp, &
 		 0.695e-3_wp, 0.695e-3_wp, 0.695e-3_wp, 0.695e-3_wp, 0.200e-3_wp]
@@ -430,11 +436,10 @@ subroutine init_thermal_history
 	open(unit=47, file=trim(file_prefix)//'thermal_history.txt', status='replace')
 	write(47,'(a)') '# Thermal History - 10 Monitoring Points'
 	write(47,'(a)') '# Columns: time(s)  T1..T10 (K)'
-	write(47,'(a)') '# Point coordinates (nearest cell centres):'
+	write(47,'(a)') '# Point physical coordinates:'
 	do p = 1, n_thist
-		write(47,'(a,i2,a,3(es10.3,a),a,3(i4,a))') &
-			'#  P', p, ':  x=', x(thist_i(p)), 'm  y=', y(thist_j(p)), 'm  z=', z(thist_k(p)), 'm', &
-			'   => i=', thist_i(p), '  j=', thist_j(p), '  k=', thist_k(p), ''
+		write(47,'(a,i2,a,3(es10.3,a))') &
+			'#  P', p, ':  x=', thist_px(p), 'm  y=', thist_py(p), 'm  z=', pz(p), 'm'
 	enddo
 	write(47,'(a)',advance='no') '#  time(s)    '
 	do p = 1, n_thist
@@ -476,15 +481,15 @@ subroutine finalize_thermal_history
 	write(lun,'(a)') 'if data.ndim == 1: data = data[np.newaxis, :]'
 	write(lun,'(a)') 't = data[:, 0] * 1e3  # ms'
 	write(lun,'(a)') 'labels = ['
-	write(lun,'(a)') '    "P1: track1 start surface",'
-	write(lun,'(a)') '    "P2: track1 centre surface",'
-	write(lun,'(a)') '    "P3: track1 end surface",'
-	write(lun,'(a)') '    "P4: track1 centre 40um",'
-	write(lun,'(a)') '    "P5: track1 centre 100um",'
-	write(lun,'(a)') '    "P6: 100um offset surface",'
-	write(lun,'(a)') '    "P7: midtrack surface",'
-	write(lun,'(a)') '    "P8: track2 centre surface",'
-	write(lun,'(a)') '    "P9: far substrate surface",'
+	write(lun,'(a)') '    "P1: track7 start surface",'
+	write(lun,'(a)') '    "P2: centre surface",'
+	write(lun,'(a)') '    "P3: track7 end surface",'
+	write(lun,'(a)') '    "P4: centre 40um depth",'
+	write(lun,'(a)') '    "P5: centre 100um depth",'
+	write(lun,'(a)') '    "P6: inter-track surface",'
+	write(lun,'(a)') '    "P7: 2-hatch offset surface",'
+	write(lun,'(a)') '    "P8: scan edge surface",'
+	write(lun,'(a)') '    "P9: outside scan surface",'
 	write(lun,'(a)') '    "P10: deep substrate",'
 	write(lun,'(a)') ']'
 	write(lun,'(a)') 'fig, ax = plt.subplots(figsize=(12, 6))'
@@ -598,5 +603,28 @@ subroutine finalize_meltpool_history
 		' && python3 '//trim(adjustl(case_name))// &
 		'_plot_meltpool.py', wait=.true.)
 end subroutine finalize_meltpool_history
+
+!********************************************************************
+subroutine update_thermal_history_indices()
+! Re-find nearest cell indices for monitoring points after AMR remesh (X-Y only).
+	integer :: p, ip, jp
+	real(wp) :: dx, dy, dmin
+	if (.not. thist_init) return
+	do p = 1, n_thist
+		dmin = 1.0e30_wp
+		do ip = 2, nim1
+			dx = (x(ip) - thist_px(p))**2
+			if (dx > dmin) cycle
+			do jp = 2, njm1
+				dy = dx + (y(jp) - thist_py(p))**2
+				if (dy < dmin) then
+					dmin = dy
+					thist_i(p) = ip
+					thist_j(p) = jp
+				endif
+			enddo
+		enddo
+	enddo
+end subroutine update_thermal_history_indices
 
 end module printing

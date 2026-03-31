@@ -21,7 +21,7 @@ gfortran -fopenmp -O3 -march=native -c \
     mod_init.f90 \
     mod_laser.f90 \
     mod_dimen.f90 \
-    mod_local_enthalpy.f90 \
+    mod_adaptive_mesh.f90 \
     mod_resid.f90 \
     mod_species.f90 \
     mod_prop.f90 \
@@ -37,8 +37,6 @@ gfortran -fopenmp -O3 -march=native -c \
     mod_toolpath.f90 \
     mod_timing.f90 \
     mod_defect.f90 \
-    mod_microstructure.f90 \
-    mod_crack_risk.f90 \
     main.f90
 
 gfortran -fopenmp -O3 -march=native *.o -o cluster_main

@@ -137,17 +137,6 @@ Powder properties apply to cells in the top `layerheight` of the domain that hav
 The top surface uses combined convection + radiation:
 $$q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)$$
 
-### `&local_solver` — Adaptive Solver
-
-| Parameter | Unit | Description | Example |
-|-----------|------|-------------|---------|
-| `localnum` | - | Number of local steps between global steps | 4 |
-| `local_half_x` | m | Half-width of local region in x | 1.0e-3 |
-| `local_half_y` | m | Half-width of local region in y | 2.0e-4 |
-| `local_depth_z` | m | Depth of local region in z | 2.0e-4 |
-
-The local solver only updates enthalpy in a small region around the melt pool for `localnum` consecutive steps, then solves the full domain. This provides significant speedup (typically 3-5x) with minimal accuracy loss.
-
 ### `&output_control` — Output Settings
 
 | Parameter | Unit | Description | Example |
@@ -156,29 +145,15 @@ The local solver only updates enthalpy in a small region around the melt pool fo
 | `case_name` | - | Case identifier (sets output directory name) | 'testcase' |
 | `toolpath_file` | - | Path to toolpath file (.crs) | './ToolFiles/B26.crs' |
 | `species_flag` | - | Enable species transport (0=off, 1=on) | 0 |
-| `micro_flag` | - | Enable solidification microstructure prediction (0=off, 1=on) | 0 |
-| `crack_flag` | - | Enable crack risk prediction (0=off, 1=on) | 0 |
 
-### `&microstructure_params` — Solidification Microstructure (optional)
+### `&adaptive_mesh` — Adaptive Mesh
 
-Only read when `micro_flag=1`. All parameters have defaults for IN718.
-
-| Parameter | Unit | Description | Default |
+| Parameter | Type | Description | Default |
 |-----------|------|-------------|---------|
-| `a1_pdas` | m | PDAS prefactor | 50e-6 |
-| `a2_sdas` | m | SDAS prefactor | 10e-6 |
-| `n1_pdas` | - | PDAS exponent for G | -0.5 |
-| `n2_pdas` | - | PDAS exponent for R | -0.25 |
-| `n3_sdas` | - | SDAS exponent for cooling rate | -0.333 |
+| `adaptive_flag` | integer (0 or 1) | Enable adaptive mesh | 0 |
+| `amr_local_half_x` | real (m) | Initial half-length of refined region in x | 1.0e-3 |
+| `amr_local_half_y` | real (m) | Initial half-length of refined region in y | 2.0e-4 |
+| `amr_dx_fine` | real (m) | Refined cell size | 10.0e-6 |
+| `remesh_interval` | integer | Regrid every N timesteps | 20 |
 
-PDAS: $\lambda_1 = a_1 \cdot G^{n_1} \cdot R^{n_2}$, SDAS: $\lambda_2 = a_2 \cdot \dot{T}^{n_3}$
-
-### `&crack_params` — Crack Risk Prediction (optional)
-
-Only read when `crack_flag=1`.
-
-| Parameter | Unit | Description | Default |
-|-----------|------|-------------|---------|
-| `delta_t_btr` | K | Brittle Temperature Range width below T_solidus | 100.0 |
-
-CSI = $\int_{BTR} \alpha \cdot |\dot{T}| \, dt$ where BTR = $[T_s - \Delta T_{BTR}, \, T_s]$
+When `adaptive_flag=1`, the mesh is regenerated every `remesh_interval` timesteps so that the refined region (cell size `amr_dx_fine`, half-extents `amr_local_half_x` x `amr_local_half_y`) follows the laser/melt pool position. Cells outside the refined region use coarser spacing.

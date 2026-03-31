@@ -20,7 +20,6 @@ module timing
 	real(wp), save :: t_print   = 0.0_wp   ! mod_print (CalTime, outputres, Cust_Out)
 	real(wp), save :: t_laser   = 0.0_wp   ! laser/toolpath (laser_beam, read_coordinates, calcRHF)
 	real(wp), save :: t_other   = 0.0_wp   ! copy loop and misc
-	real(wp), save :: t_skipped_mgmt = 0.0_wp  ! skipped-step management
 	real(wp), save :: t_defect   = 0.0_wp   ! defect max_temp update
 	real(wp), save :: t_species  = 0.0_wp   ! species transport (solve_species)
 
@@ -29,12 +28,6 @@ module timing
 	real(wp), save :: t_cooling   = 0.0_wp   ! wall-clock time in laser-off steps
 	integer,  save :: n_heating   = 0        ! number of laser-on time steps
 	integer,  save :: n_cooling   = 0        ! number of laser-off time steps
-
-	! Local / global step wall-clock time
-	real(wp), save :: t_local_step  = 0.0_wp ! wall-clock time in local steps
-	real(wp), save :: t_global_step = 0.0_wp ! wall-clock time in global steps
-	integer,  save :: n_local_step  = 0      ! number of local time steps
-	integer,  save :: n_global_step = 0      ! number of global time steps
 
 	! Subroutine-level (for modules >10%): mod_sour, mod_discret, mod_solve
 	real(wp), save :: t_sour_momentum  = 0.0_wp   ! source_momentum(1+2+3)
@@ -112,7 +105,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	real(wp), intent(in) :: timet_end
 	real(wp), intent(in) :: wall_elapsed
 	character(len=*), intent(in) :: file_prefix
-	integer, parameter :: lun = 88, nmod = 17
+	integer, parameter :: lun = 88, nmod = 16
 	integer :: ihr, imin, isec
 	real(wp) :: t_total, t_sum
 	real(wp) :: pct, pct_glob
@@ -121,7 +114,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	integer :: idx(nmod), i, j, itmp
 
 	t_total = t_prop + t_bound + t_discret + t_sour + t_resid + t_converge + &
-	          t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_skipped_mgmt + t_defect + t_species + t_other
+	          t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_other
 	if (t_total <= 0.0_wp) t_total = 1.0_wp
 
 	t_list(1) = t_prop;    name_list(1) = 'mod_prop'
@@ -137,10 +130,9 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	t_list(11) = t_revise; name_list(11) = 'mod_revise'
 	t_list(12) = t_print;  name_list(12) = 'mod_print'
 	t_list(13) = t_laser;  name_list(13) = 'laser/toolpath'
-	t_list(14) = t_skipped_mgmt; name_list(14) = 'skipped-step mgmt'
-	t_list(15) = t_defect; name_list(15) = 'defect (max_temp)'
-	t_list(16) = t_species; name_list(16) = 'mod_species'
-	t_list(17) = t_other;  name_list(17) = 'other (copy/misc)'
+	t_list(14) = t_defect; name_list(14) = 'defect (max_temp)'
+	t_list(15) = t_species; name_list(15) = 'mod_species'
+	t_list(16) = t_other;  name_list(16) = 'other (copy/misc)'
 	do i = 1, nmod
 		idx(i) = i
 	enddo
@@ -176,7 +168,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	enddo
 	write(lun,'(a)') '--------------------------------------------'
 	t_sum = t_prop + t_bound + t_discret + t_sour + t_resid + t_converge + &
-	        t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_skipped_mgmt + t_defect + t_species + t_other
+	        t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_other
 	write(lun,'(a,f12.3)') '  Sum (check):         ', t_sum
 	write(lun,'(a)') '============================================'
 	write(lun,'(a)') ''
@@ -233,14 +225,6 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 		100.0_wp * t_heating / max(t_heating + t_cooling, 1.0e-10_wp), '%'
 	write(lun,'(a,f12.3,a,i6,a,f6.2,a)') '  Cooling (laser off)', t_cooling, '  s |', n_cooling, ' steps |', &
 		100.0_wp * t_cooling / max(t_heating + t_cooling, 1.0e-10_wp), '%'
-	write(lun,'(a)') '--------------------------------------------'
-	write(lun,'(a)') ''
-	write(lun,'(a)') '  Local vs Global Step (wall-clock)'
-	write(lun,'(a)') '--------------------------------------------'
-	write(lun,'(a,f12.3,a,i6,a,f6.2,a)') '  Local  steps       ', t_local_step,  '  s |', n_local_step,  ' steps |', &
-		100.0_wp * t_local_step  / max(t_local_step + t_global_step, 1.0e-10_wp), '%'
-	write(lun,'(a,f12.3,a,i6,a,f6.2,a)') '  Global steps       ', t_global_step, '  s |', n_global_step, ' steps |', &
-		100.0_wp * t_global_step / max(t_local_step + t_global_step, 1.0e-10_wp), '%'
 	write(lun,'(a)') '============================================'
 	close(lun)
 end subroutine write_timing_report

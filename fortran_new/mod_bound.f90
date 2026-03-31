@@ -77,9 +77,8 @@ subroutine bound_pp
 end subroutine bound_pp
 
 !********************************************************************
-subroutine bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
+subroutine bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
 	integer, intent(in) :: ilo, ihi, jlo, jhi, klo, khi
-	logical, intent(in) :: is_local
 	integer i,j,k
 	real(wp) ctmp1,hlossradia,hlossconvec
 
@@ -95,57 +94,6 @@ subroutine bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
 	enddo
 	enddo
 
-	if (is_local) then
-!-----local mode: non-top boundaries use frozen cell enthalpies (Dirichlet)
-!     Ghost cells already hold their frozen values (restored from hnot),
-!     providing natural conduction BCs. No adiabatic override needed.
-!     Apply domain boundary BCs where local region touches domain faces.
-		if (klo == 2) then
-			do j=jlo,jhi
-			do i=ilo,ihi
-				hlossconvec=htck1*(temp(i,j,1)-tempAmb)+emiss*sigm*(temp(i,j,1)**4-tempAmb**4)
-				ctmp1=diff(i,j,2)*dzpbinv(2)
-				enthalpy(i,j,1)=enthalpy(i,j,2)-hlossconvec/ctmp1
-			enddo
-			enddo
-		endif
-		if (ilo == 2) then
-			do k=klo,khi
-			do j=jlo,jhi
-				hlossconvec=htci*(temp(1,j,k)-tempAmb)
-				ctmp1=diff(2,j,k)*dxpwinv(2)
-				enthalpy(1,j,k)=enthalpy(2,j,k)-hlossconvec/ctmp1
-			enddo
-			enddo
-		endif
-		if (ihi == nim1) then
-			do k=klo,khi
-			do j=jlo,jhi
-				hlossconvec=htci*(temp(ni,j,k)-tempAmb)
-				ctmp1=diff(nim1,j,k)*dxpwinv(nim1)
-				enthalpy(ni,j,k)=enthalpy(nim1,j,k)-hlossconvec/ctmp1
-			enddo
-			enddo
-		endif
-		if (jlo == 2) then
-			do k=klo,khi
-			do i=ilo,ihi
-				hlossconvec=htcj*(temp(i,1,k)-tempAmb)
-				ctmp1=diff(i,2,k)*dypsinv(2)
-				enthalpy(i,1,k)=enthalpy(i,2,k)-hlossconvec/ctmp1
-			enddo
-			enddo
-		endif
-		if (jhi == njm1) then
-			do k=klo,khi
-			do i=ilo,ihi
-				hlossconvec=htcj*(temp(i,nj,k)-tempAmb)
-				ctmp1=diff(i,njm1,k)*dypsinv(njm1)
-				enthalpy(i,nj,k)=enthalpy(i,njm1,k)-hlossconvec/ctmp1
-			enddo
-			enddo
-		endif
-	else
 !-----k=1 bottom surface
 		do j=jlo,jhi
 		do i=ilo,ihi
@@ -180,7 +128,6 @@ subroutine bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
 			enthalpy(i,nj,k)=enthalpy(i,njm1,k)-hlossconvec/ctmp1
 		enddo
 		enddo
-	endif
 end subroutine bound_enthalpy
 
 end module boundary
