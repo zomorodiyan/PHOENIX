@@ -26,7 +26,8 @@ module defect_field
 	integer :: def_ni = 0, def_nj = 0
 	integer :: def_nim1 = 0, def_njm1 = 0
 	real(wp), allocatable :: def_x(:), def_y(:)   ! cell center positions
-	real(wp), allocatable :: temp_def(:,:,:)       ! interpolated temp buffer
+	real(wp), allocatable :: temp_def(:,:,:)       ! interpolated temp/field buffer
+	real(wp), allocatable :: solidfield_def(:,:,:) ! solidID on uniform defect mesh
 
 	! --- Index mapping: AMR mesh -> uniform defect mesh ---
 	integer, allocatable  :: def_imap_lo(:), def_imap_hi(:)
@@ -82,9 +83,11 @@ subroutine allocate_defect(nni, nnj, nnk)
 		allocate(max_temp(def_ni, def_nj, nnk))
 		allocate(defect_arr(def_ni, def_nj, nnk))
 		allocate(temp_def(def_ni, def_nj, nnk))
+		allocate(solidfield_def(def_ni, def_nj, nnk))
 		max_temp = tempPreheat
 		defect_arr = 0.0_wp
 		temp_def = tempPreheat
+		solidfield_def = 0.0_wp
 
 		! Allocate mapping arrays
 		allocate(def_imap_lo(def_ni), def_imap_hi(def_ni), def_imap_w(def_ni))
@@ -164,21 +167,36 @@ end subroutine defect_interp_temp
 
 !********************************************************************
 subroutine update_max_temp()
-! Called every time step: update max_temp where current temp exceeds it.
+! Called every time step: update max_temp and solidfield_def on defect mesh.
+	use field_data, only: solidfield
 	integer :: i, j, k
 	integer :: i_hi, j_hi
+	real(wp) :: sf_val
 
 	if (adaptive_flag == 1) then
-		! Interpolate temp to uniform mesh first
-		call defect_interp_temp()
 		i_hi = def_nim1
 		j_hi = def_njm1
+		! Step 1: interpolate temp → temp_def, update max_temp
+		call defect_interp_temp()
 		!$OMP PARALLEL DO PRIVATE(i, j, k)
 		do k = k_def_lo, k_def_hi
 		do j = 2, j_hi
 		do i = 2, i_hi
 			if (temp_def(i,j,k) > max_temp(i,j,k)) then
 				max_temp(i,j,k) = temp_def(i,j,k)
+			endif
+		enddo
+		enddo
+		enddo
+		!$OMP END PARALLEL DO
+		! Step 2: interpolate solidfield → temp_def (reuse buffer), update solidfield_def
+		call defect_interp_field(solidfield, temp_def)
+		!$OMP PARALLEL DO PRIVATE(i, j, k)
+		do k = k_def_lo, k_def_hi
+		do j = 2, j_hi
+		do i = 2, i_hi
+			if (temp_def(i,j,k) > 0.5_wp) then
+				solidfield_def(i,j,k) = temp_def(i,j,k)
 			endif
 		enddo
 		enddo
@@ -435,19 +453,19 @@ subroutine write_defect_report()
 	write(9,'(a,f10.6,a)') '  Lack-of-fusion fraction: ', frac_lof * 100.0_wp, ' %'
 	write(9,'(a,f10.6,a)') '  Keyhole porosity fraction:', frac_kep * 100.0_wp, ' %'
 
-	call write_defect_vtk('maxtemp', max_temp)
-	call write_defect_vtk('defect', defect_arr)
+	call write_defect_vtk()
 
 end subroutine write_defect_report
 
 !********************************************************************
-subroutine write_defect_vtk(fieldname, field)
-	character(len=*), intent(in) :: fieldname
-	real(wp), intent(in) :: field(:,:,:)
+subroutine write_defect_vtk()
+! Write single defect.vtk with multiple scalars: defect, maxtemp, solidID.
+	use field_data, only: solidfield
 	integer :: i, j, k, npts
 	integer :: gridx, gridy, gridz, i_hi, j_hi
 	real(kind=4) :: val4
 	integer, parameter :: lun = 90
+	character(len=256) :: vtkfile
 
 	if (adaptive_flag == 1) then
 		gridx = def_nim1 - 2 + 1
@@ -462,17 +480,19 @@ subroutine write_defect_vtk(fieldname, field)
 	endif
 	gridz = k_def_hi - k_def_lo + 1
 	npts = gridx * gridy * gridz
+	vtkfile = trim(file_prefix)//'defect.vtk'
 
-	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk')
+	! --- Header + coordinates ---
+	open(unit=lun, file=trim(vtkfile))
 	write(lun,'(A)') '# vtk DataFile Version 3.0'
-	write(lun,'(A)') 'PHOENIX '//trim(fieldname)//' field'
+	write(lun,'(A)') 'PHOENIX defect analysis'
 	write(lun,'(A)') 'BINARY'
 	write(lun,'(A)') 'DATASET STRUCTURED_GRID'
 	write(lun,'(A,I0,A,I0,A,I0)') 'DIMENSIONS ', gridx, ' ', gridy, ' ', gridz
 	write(lun,'(A,I0,A)') 'POINTS ', npts, ' float'
 	close(lun)
 
-	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', &
+	open(unit=lun, file=trim(vtkfile), &
 	     access='stream', form='unformatted', position='append', convert='big_endian')
 	do k = k_def_lo, k_def_hi
 	do j = 2, j_hi
@@ -490,13 +510,34 @@ subroutine write_defect_vtk(fieldname, field)
 	enddo
 	close(lun)
 
-	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', position='append')
+	! --- POINT_DATA header ---
+	open(unit=lun, file=trim(vtkfile), position='append')
 	write(lun,'(A,I0)') 'POINT_DATA ', npts
-	write(lun,'(A)') 'SCALARS '//trim(fieldname)//' float 1'
+	close(lun)
+
+	! --- Scalar: defect ---
+	call write_defect_scalar(lun, vtkfile, 'defect', defect_arr, i_hi, j_hi)
+
+	! --- Scalar: maxtemp ---
+	call write_defect_scalar(lun, vtkfile, 'maxtemp', max_temp, i_hi, j_hi)
+
+
+end subroutine write_defect_vtk
+
+!********************************************************************
+subroutine write_defect_scalar(lun, vtkfile, name, field, i_hi, j_hi)
+	integer, intent(in) :: lun, i_hi, j_hi
+	character(len=*), intent(in) :: vtkfile, name
+	real(wp), intent(in) :: field(:,:,:)
+	integer :: i, j, k
+	real(kind=4) :: val4
+
+	open(unit=lun, file=trim(vtkfile), position='append')
+	write(lun,'(A)') 'SCALARS '//trim(name)//' float 1'
 	write(lun,'(A)') 'LOOKUP_TABLE default'
 	close(lun)
 
-	open(unit=lun, file=trim(file_prefix)//trim(fieldname)//'.vtk', &
+	open(unit=lun, file=trim(vtkfile), &
 	     access='stream', form='unformatted', position='append', convert='big_endian')
 	do k = k_def_lo, k_def_hi
 	do j = 2, j_hi
@@ -507,7 +548,30 @@ subroutine write_defect_vtk(fieldname, field)
 	enddo
 	enddo
 	close(lun)
+end subroutine write_defect_scalar
 
-end subroutine write_defect_vtk
+!********************************************************************
+subroutine defect_interp_field(field_sim, field_def)
+! Interpolate a 3D field from simulation mesh to uniform defect mesh.
+	real(wp), intent(in) :: field_sim(:,:,:)
+	real(wp), intent(out) :: field_def(:,:,:)
+	integer :: i, j, k, i1, i2, j1, j2
+	real(wp) :: wx, wy
+
+	!$OMP PARALLEL DO PRIVATE(i, j, k, i1, i2, j1, j2, wx, wy)
+	do k = k_def_lo, k_def_hi
+	do j = 2, def_njm1
+	do i = 2, def_nim1
+		i1 = def_imap_lo(i); i2 = def_imap_hi(i); wx = def_imap_w(i)
+		j1 = def_jmap_lo(j); j2 = def_jmap_hi(j); wy = def_jmap_w(j)
+		field_def(i,j,k) = (1.0_wp-wx)*(1.0_wp-wy) * field_sim(i1,j1,k) + &
+		                    wx*(1.0_wp-wy)           * field_sim(i2,j1,k) + &
+		                    (1.0_wp-wx)*wy           * field_sim(i1,j2,k) + &
+		                    wx*wy                    * field_sim(i2,j2,k)
+	enddo
+	enddo
+	enddo
+	!$OMP END PARALLEL DO
+end subroutine defect_interp_field
 
 end module defect_field

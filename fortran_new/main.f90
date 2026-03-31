@@ -91,13 +91,22 @@ program main
 		if (adaptive_flag == 1) then
 			call amr_check_remesh(step_idx)
 			if (amr_needs_remesh) then
+				call cpu_time(t0)
 				call amr_regenerate_grid()
-				call amr_validate_grid()
 				call update_thermal_history_indices()
 				call defect_update_map()
+				call cpu_time(t1)
+				t_amr = t_amr + (t1 - t0)
+				n_amr_remesh = n_amr_remesh + 1
 				amr_needs_remesh = .false.
 			endif
 		endif
+
+!-----pool size from previous timestep (once per timestep, before iter_loop)-----
+		call cpu_time(t0)
+		call pool_size(ilo, ihi, jlo, jhi, klo, khi)
+		call cpu_time(t1)
+		t_dimen = t_dimen + (t1 - t0)
 
 !-----iteration loop within each time step----------------
 		iter_loop: do while (niter.lt.maxit)
@@ -147,11 +156,6 @@ program main
 			call enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
 			call cpu_time(t1)
 			t_entot = t_entot + (t1 - t0)
-
-			call cpu_time(t0)
-			call pool_size(ilo, ihi, jlo, jhi, klo, khi)
-			call cpu_time(t1)
-			t_dimen = t_dimen + (t1 - t0)
 
 			if(tpeak.gt.merge(min(tsolid,tsolid2), tsolid, species_flag==1)) then
 				call cpu_time(t0)

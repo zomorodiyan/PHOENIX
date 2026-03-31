@@ -553,9 +553,44 @@ Create `projects/20260329_ADAPTIVE_MESH/results.md` documenting all execution re
 
 ---
 
+---
+
+## Post-implementation Fixes
+
+### Fix: pool_size rewrite (mod_dimen.f90)
+- Replaced single-point search with **flood-fill + bounding-box** algorithm
+- Flood fill from `tpeak` location finds connected molten region at surface
+- Sub-cell interpolation at bounding-box edges for length, width, depth
+- Handles multi-pool (reports pool containing tpeak), cooling/turnaround
+- `pool_size` moved outside iter_loop (once per timestep, not per iteration)
+- `pool_mask` as module-level array to avoid repeated allocate/deallocate
+- OpenMP on bounding-box and depth scans
+
+### Fix: Thermal history interpolation (mod_print.f90)
+- `write_thermal_history` now does bilinear interpolation at exact physical coordinates instead of reading nearest cell value
+- Eliminates temperature jumps after AMR remesh
+
+### Fix: AMR 20% coarse cell cap (mod_adaptive_mesh.f90)
+- When melt pool grows too large, compute max `half_x/y` that satisfies `n_fine <= n_total/1.2` instead of reverting to previous (possibly also too large) value
+
+### Fix: AMR efficiency optimizations (mod_adaptive_mesh.f90)
+- Skip remesh when beam moves < 5×dx_fine (avoids unnecessary remesh during turnaround)
+- Removed property field interpolation (den/vis/diff recomputed each iteration)
+- Module-level interpolation buffer `amr_tmp` (avoid 15× allocate/deallocate per remesh)
+- Removed `amr_validate_grid` from production loop
+- AMR timing tracked in `t_amr` / `n_amr_remesh`
+
+### Fix: VTK output cleanup
+- Removed `solidID` and `localfield` from vtkmov output
+- Single `defect.vtk` with scalars: `defect`, `maxtemp`
+- `solidfield_def` tracked on uniform defect mesh each timestep (for AMR accuracy)
+- Toolpath generator: added `--domain_x/y` for plot axis limits; generated `center_rot45.crs`
+
+---
+
 ## Notes
 
-- Mesh refinement region can be directly visualized in Paraview from the VTK mesh itself — no need for a separate `localfield` indicator
+- Mesh refinement region can be directly visualized in Paraview from the VTK mesh itself
 - When `adaptive_flag=0`, behavior is identical to the original code (uniform mesh, no remeshing)
 - Coefficient arrays (`ap`, `ae`, `aw`, etc. in `mod_coeff_data.f90`) do NOT need interpolation — they are recomputed each iteration from the geometry
 - All execution results (Phase 1 through Phase 4) are recorded in `results.md`

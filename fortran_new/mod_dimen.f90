@@ -16,6 +16,9 @@ module dimensions
 
 	integer	istat,jstat,kstat,iend,jend,istatp1,iendm1  !
 
+	! Flood-fill mask (module-level to avoid repeated allocate/deallocate)
+	integer, allocatable :: pool_mask(:,:)
+
 	contains
 
 subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
@@ -24,7 +27,6 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 	integer i, j, k
 	integer il, ih, jl, jh
 	integer ipeak, jpeak
-	integer, allocatable :: mask(:,:)  ! 2D flood-fill mask at surface
 	logical :: changed
 
 	il = max(ilo, 2)
@@ -59,7 +61,6 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 		endif
 	enddo
 	enddo
-	! If tpeak not at surface, search all k for surface projection
 	do k = nkm1, 2, -1
 	do j = jl, jh
 	do i = il, ih
@@ -73,47 +74,43 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 10	continue
 
 	! --- 2D flood fill from (ipeak, jpeak) at surface k=nk ---
-	allocate(mask(ni, nj))
-	mask = 0
+	if (.not. allocated(pool_mask)) allocate(pool_mask(ni, nj))
+	pool_mask = 0
 
-	! Seed
 	if (temp(ipeak, jpeak, nk) .gt. tsolid) then
-		mask(ipeak, jpeak) = 1
+		pool_mask(ipeak, jpeak) = 1
 	else
-		! tpeak is below surface; find nearest surface cell above tsolid
-		! Search outward from ipeak, jpeak
 		do j = jl, jh
 		do i = il, ih
 			if (temp(i,j,nk) .gt. tsolid) then
-				if (mask(ipeak,jpeak) == 0) then
+				if (pool_mask(ipeak,jpeak) == 0) then
 					ipeak = i; jpeak = j
-					mask(i,j) = 1
+					pool_mask(i,j) = 1
 				endif
 			endif
 		enddo
 		enddo
 	endif
 
-	! Iterative expansion: mark neighbors that are above tsolid
+	! Iterative expansion
 	changed = .true.
 	do while (changed)
 		changed = .false.
 		do j = jl, jh
 		do i = il, ih
-			if (mask(i,j) == 1) cycle
+			if (pool_mask(i,j) == 1) cycle
 			if (temp(i,j,nk) .le. tsolid) cycle
-			! Check 4-connected neighbors
-			if (i > il .and. mask(i-1,j) == 1) then
-				mask(i,j) = 1; changed = .true.; cycle
+			if (i > il .and. pool_mask(i-1,j) == 1) then
+				pool_mask(i,j) = 1; changed = .true.; cycle
 			endif
-			if (i < ih .and. mask(i+1,j) == 1) then
-				mask(i,j) = 1; changed = .true.; cycle
+			if (i < ih .and. pool_mask(i+1,j) == 1) then
+				pool_mask(i,j) = 1; changed = .true.; cycle
 			endif
-			if (j > jl .and. mask(i,j-1) == 1) then
-				mask(i,j) = 1; changed = .true.; cycle
+			if (j > jl .and. pool_mask(i,j-1) == 1) then
+				pool_mask(i,j) = 1; changed = .true.; cycle
 			endif
-			if (j < jh .and. mask(i,j+1) == 1) then
-				mask(i,j) = 1; changed = .true.; cycle
+			if (j < jh .and. pool_mask(i,j+1) == 1) then
+				pool_mask(i,j) = 1; changed = .true.; cycle
 			endif
 		enddo
 		enddo
@@ -123,9 +120,10 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 	imin = ih; imax = il
 	jmin = jh; jmax = jl
 
+	!$OMP PARALLEL DO PRIVATE(i,j) REDUCTION(min:imin,jmin) REDUCTION(max:imax,jmax)
 	do j = jl, jh
 	do i = il, ih
-		if (mask(i,j) == 1) then
+		if (pool_mask(i,j) == 1) then
 			imin = min(imin, i)
 			imax = max(imax, i)
 			jmin = min(jmin, j)
@@ -133,34 +131,34 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 		endif
 	enddo
 	enddo
+	!$OMP END PARALLEL DO
 
 	if (imax < imin) then
-		deallocate(mask)
 		istat = istart; iend = istart; jstat = jstart; jend = jstart; kstat = nkm1
 		istatp1 = istat + 1; iendm1 = iend - 1
 		return
 	endif
 
 	! --- Sub-cell interpolation at bounding-box edges ---
-	call interp_pool_length(mask, il, ih, jl, jh, alen)
-	call interp_pool_width(mask, il, ih, jl, jh, width)
+	call interp_pool_length(alen)
+	call interp_pool_width(width)
 
 	! --- Depth: deepest k in connected region, with interpolation ---
 	kmin = nkm1
+	!$OMP PARALLEL DO PRIVATE(i,j,k) REDUCTION(min:kmin)
 	do k = 2, nkm1
 	do j = jmin, jmax
 	do i = imin, imax
-		if (mask(i,j) == 1 .and. temp(i,j,k) .gt. tsolid) then
+		if (pool_mask(i,j) == 1 .and. temp(i,j,k) .gt. tsolid) then
 			kmin = min(kmin, k)
 		endif
 	enddo
 	enddo
 	enddo
+	!$OMP END PARALLEL DO
 
-	call interp_pool_depth(mask, depth)
+	call interp_pool_depth(depth)
 	kmax = nkm1
-
-	deallocate(mask)
 
 	! --- Solution domain for momentum equations ---
 	istat = max(imin - 3, 2)
@@ -174,20 +172,20 @@ subroutine pool_size(ilo, ihi, jlo, jhi, klo, khi)
 end subroutine pool_size
 
 !********************************************************************
-subroutine interp_pool_length(mask, il, ih, jl, jh, length)
-! Refine x-extent by interpolating tsolid crossing at left (imin) and right (imax) edges.
-	integer, intent(in) :: mask(:,:), il, ih, jl, jh
+subroutine interp_pool_length(length)
+! Refine x-extent by interpolating tsolid crossing at imin/imax edges.
+! Uses module-level pool_mask, imin, imax, jmin, jmax.
 	real(wp), intent(out) :: length
-	integer :: i, j
+	integer :: j
 	real(wp) :: xlo, xhi, t_in, t_out, frac
 
-	xhi = x(imin)  ! will be pushed right
-	xlo = x(imax)  ! will be pushed left
+	xhi = x(imin)
+	xlo = x(imax)
 
-	! Right edge: for each j in pool, interpolate between imax and imax+1
+	! Left edge: interpolate between imin and imin-1
 	do j = jmin, jmax
-		if (mask(imin,j) /= 1) cycle
-		if (imin > il) then
+		if (pool_mask(imin,j) /= 1) cycle
+		if (imin > 2) then
 			t_in  = temp(imin, j, nk)
 			t_out = temp(imin-1, j, nk)
 			if (t_in > tsolid .and. t_out <= tsolid .and. abs(t_in - t_out) > 1.0_wp) then
@@ -201,9 +199,10 @@ subroutine interp_pool_length(mask, il, ih, jl, jh, length)
 		endif
 	enddo
 
+	! Right edge: interpolate between imax and imax+1
 	do j = jmin, jmax
-		if (mask(imax,j) /= 1) cycle
-		if (imax < ih) then
+		if (pool_mask(imax,j) /= 1) cycle
+		if (imax < nim1) then
 			t_in  = temp(imax, j, nk)
 			t_out = temp(imax+1, j, nk)
 			if (t_in > tsolid .and. t_out <= tsolid .and. abs(t_in - t_out) > 1.0_wp) then
@@ -221,11 +220,10 @@ subroutine interp_pool_length(mask, il, ih, jl, jh, length)
 end subroutine interp_pool_length
 
 !********************************************************************
-subroutine interp_pool_width(mask, il, ih, jl, jh, w)
-! Refine y-extent by interpolating tsolid crossing at bottom (jmin) and top (jmax) edges.
-	integer, intent(in) :: mask(:,:), il, ih, jl, jh
+subroutine interp_pool_width(w)
+! Refine y-extent by interpolating tsolid crossing at jmin/jmax edges.
 	real(wp), intent(out) :: w
-	integer :: i, j
+	integer :: i
 	real(wp) :: ylo, yhi, t_in, t_out, frac
 
 	yhi = y(jmin)
@@ -233,8 +231,8 @@ subroutine interp_pool_width(mask, il, ih, jl, jh, w)
 
 	! Bottom edge
 	do i = imin, imax
-		if (mask(i,jmin) /= 1) cycle
-		if (jmin > jl) then
+		if (pool_mask(i,jmin) /= 1) cycle
+		if (jmin > 2) then
 			t_in  = temp(i, jmin, nk)
 			t_out = temp(i, jmin-1, nk)
 			if (t_in > tsolid .and. t_out <= tsolid .and. abs(t_in - t_out) > 1.0_wp) then
@@ -250,8 +248,8 @@ subroutine interp_pool_width(mask, il, ih, jl, jh, w)
 
 	! Top edge
 	do i = imin, imax
-		if (mask(i,jmax) /= 1) cycle
-		if (jmax < jh) then
+		if (pool_mask(i,jmax) /= 1) cycle
+		if (jmax < njm1) then
 			t_in  = temp(i, jmax, nk)
 			t_out = temp(i, jmax+1, nk)
 			if (t_in > tsolid .and. t_out <= tsolid .and. abs(t_in - t_out) > 1.0_wp) then
@@ -269,21 +267,19 @@ subroutine interp_pool_width(mask, il, ih, jl, jh, w)
 end subroutine interp_pool_width
 
 !********************************************************************
-subroutine interp_pool_depth(mask, dep)
+subroutine interp_pool_depth(dep)
 ! Refine depth by interpolating tsolid crossing at kmin boundary.
-	integer, intent(in) :: mask(:,:)
 	real(wp), intent(out) :: dep
 	integer :: i, j
 	real(wp) :: t_in, t_out, frac, zbot
 
 	dep = z(nk) - z(kmin)
 
-	if (kmin <= 2) return   ! already at domain bottom
+	if (kmin <= 2) return
 
-	! Find maximum interpolated depth across all (i,j) in connected region
 	do j = jmin, jmax
 	do i = imin, imax
-		if (mask(i,j) /= 1) cycle
+		if (pool_mask(i,j) /= 1) cycle
 		t_in  = temp(i, j, kmin)
 		t_out = temp(i, j, kmin-1)
 		if (t_in > tsolid .and. t_out <= tsolid .and. abs(t_in - t_out) > 1.0_wp) then

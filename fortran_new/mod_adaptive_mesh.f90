@@ -30,6 +30,13 @@ module adaptive_mesh_mod
 	real(wp) :: amr_dimx, amr_dimy
 	integer  :: amr_ncvx, amr_ncvy  ! total interior cells in x, y
 
+	! Previous beam position (to skip unnecessary remeshes)
+	real(wp) :: amr_prev_beam_x = -1.0_wp
+	real(wp) :: amr_prev_beam_y = -1.0_wp
+
+	! Reusable interpolation buffer (avoid repeated allocate/deallocate)
+	real(wp), allocatable :: amr_tmp(:,:,:)
+
 	contains
 
 !********************************************************************
@@ -58,9 +65,8 @@ end subroutine amr_init
 !********************************************************************
 subroutine amr_check_remesh(step_idx)
 	integer, intent(in) :: step_idx
-	real(wp) :: half_x_new, half_y_new
-	real(wp) :: x_lo, x_hi, y_lo, y_hi
-	integer  :: n_fine, n_coarse, n_min_coarse
+	real(wp) :: half_x_new, half_y_new, half_max
+	integer  :: n_fine, n_coarse, n_min_coarse, n_fine_max
 
 	amr_step_counter = amr_step_counter + 1
 	if (amr_step_counter < remesh_interval) return
@@ -71,38 +77,44 @@ subroutine amr_check_remesh(step_idx)
 	half_x_new = max(amr_local_half_x, alen)
 	half_y_new = max(amr_local_half_y, width)
 
-	! 20% check for X
+	! 20% check for X: n_fine <= n_total / 1.2 to leave 20% coarse cells
 	n_fine = nint(2.0_wp * half_x_new / amr_dx_fine)
-	n_coarse = amr_ncvx - n_fine
-	n_min_coarse = nint(0.2_wp * n_fine)
-	if (n_coarse < n_min_coarse) then
-		write(9,'(A,I6,A)') '  WARNING: Step ', step_idx, &
-			' adaptive mesh cannot expand X further - insufficient coarse cells (melt pool too large)'
-		half_x_new = amr_half_x  ! keep previous size
+	n_fine_max = int(real(amr_ncvx, wp) / 1.2_wp)
+	if (n_fine > n_fine_max) then
+		half_max = real(n_fine_max, wp) * amr_dx_fine * 0.5_wp
+		write(9,'(A,I6,A,F8.4,A)') '  WARNING: Step ', step_idx, &
+			' adaptive mesh X capped at half_x=', half_max*1e3, ' mm (insufficient coarse cells)'
+		half_x_new = half_max
 	endif
 
 	! 20% check for Y
 	n_fine = nint(2.0_wp * half_y_new / amr_dx_fine)
-	n_coarse = amr_ncvy - n_fine
-	n_min_coarse = nint(0.2_wp * n_fine)
-	if (n_coarse < n_min_coarse) then
-		write(9,'(A,I6,A)') '  WARNING: Step ', step_idx, &
-			' adaptive mesh cannot expand Y further - insufficient coarse cells (melt pool too large)'
-		half_y_new = amr_half_y
+	n_fine_max = int(real(amr_ncvy, wp) / 1.2_wp)
+	if (n_fine > n_fine_max) then
+		half_max = real(n_fine_max, wp) * amr_dx_fine * 0.5_wp
+		write(9,'(A,I6,A,F8.4,A)') '  WARNING: Step ', step_idx, &
+			' adaptive mesh Y capped at half_y=', half_max*1e3, ' mm (insufficient coarse cells)'
+		half_y_new = half_max
 	endif
 
-	! Clamp to domain
-	x_lo = max(0.0_wp, beam_pos - half_x_new)
-	x_hi = min(amr_dimx, beam_pos + half_x_new)
-	y_lo = max(0.0_wp, beam_posy - half_y_new)
-	y_hi = min(amr_dimy, beam_posy + half_y_new)
-
-	! Adjust half sizes to clamped bounds
+	! Clamp to domain boundaries
 	half_x_new = min(half_x_new, beam_pos, amr_dimx - beam_pos)
 	half_y_new = min(half_y_new, beam_posy, amr_dimy - beam_posy)
 
+	! Skip remesh if beam hasn't moved significantly (< 5 * dx_fine)
+	if (amr_prev_beam_x > 0.0_wp) then
+		if (abs(beam_pos - amr_prev_beam_x) < 5.0_wp * amr_dx_fine .and. &
+		    abs(beam_posy - amr_prev_beam_y) < 5.0_wp * amr_dx_fine .and. &
+		    abs(half_x_new - amr_half_x) < amr_dx_fine .and. &
+		    abs(half_y_new - amr_half_y) < amr_dx_fine) then
+			return  ! no remesh needed
+		endif
+	endif
+
 	amr_half_x = half_x_new
 	amr_half_y = half_y_new
+	amr_prev_beam_x = beam_pos
+	amr_prev_beam_y = beam_posy
 	amr_needs_remesh = .true.
 end subroutine amr_check_remesh
 
@@ -407,23 +419,20 @@ subroutine amr_interpolate_all_fields(x_old, y_old)
 	call amr_interp_field(pp)
 	call amr_interp_field(solidfield)
 
-	! Property fields (recomputed each iteration, but interpolate for smooth start)
-	call amr_interp_field(den)
-	call amr_interp_field(vis)
-	call amr_interp_field(diff)
+	! den, vis, diff are NOT interpolated — they are recomputed by properties() each iteration
 
 end subroutine amr_interpolate_all_fields
 
 !********************************************************************
 subroutine amr_interp_field(field)
 ! Bilinear interpolation in X-Y using precomputed maps. Z is 1:1.
+! Uses module-level amr_tmp buffer to avoid repeated allocate/deallocate.
 	real(wp), intent(inout) :: field(:,:,:)
-	real(wp), allocatable :: tmp(:,:,:)
 	integer :: i, j, k
 	integer :: i1, i2, j1, j2
 	real(wp) :: wx, wy
 
-	allocate(tmp(ni, nj, nk))
+	if (.not. allocated(amr_tmp)) allocate(amr_tmp(ni, nj, nk))
 
 	!$OMP PARALLEL DO PRIVATE(i, j, k, i1, i2, j1, j2, wx, wy)
 	do k = 1, nk
@@ -431,17 +440,16 @@ subroutine amr_interp_field(field)
 	do i = 1, ni
 		i1 = imap_lo(i); i2 = imap_hi(i); wx = imap_w(i)
 		j1 = jmap_lo(j); j2 = jmap_hi(j); wy = jmap_w(j)
-		tmp(i,j,k) = (1.0_wp-wx)*(1.0_wp-wy) * field(i1,j1,k) + &
-		             wx*(1.0_wp-wy)            * field(i2,j1,k) + &
-		             (1.0_wp-wx)*wy            * field(i1,j2,k) + &
-		             wx*wy                     * field(i2,j2,k)
+		amr_tmp(i,j,k) = (1.0_wp-wx)*(1.0_wp-wy) * field(i1,j1,k) + &
+		                  wx*(1.0_wp-wy)            * field(i2,j1,k) + &
+		                  (1.0_wp-wx)*wy            * field(i1,j2,k) + &
+		                  wx*wy                     * field(i2,j2,k)
 	enddo
 	enddo
 	enddo
 	!$OMP END PARALLEL DO
 
-	field = tmp
-	deallocate(tmp)
+	field = amr_tmp
 end subroutine amr_interp_field
 
 !********************************************************************

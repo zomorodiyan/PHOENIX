@@ -247,8 +247,6 @@ subroutine Cust_Out
 	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 	                      'den', den)
 	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
-	                      'solidID', solidfield)
-	call write_vtk_scalar(41, trim(file_prefix)//'vtkmov'//trim(adjustl(cTemp))//'.vtk', &
 	                      'fracl', fracl)
 
 	if (species_flag == 1) then
@@ -453,12 +451,49 @@ end subroutine init_thermal_history
 !********************************************************************
 subroutine write_thermal_history(t)
 	real(wp), intent(in) :: t
-	integer :: p
+	integer :: p, i1, i2, j1, j2, kp
+	real(wp) :: wx, wy, tval
 	if (.not. thist_init) return
 	open(unit=47, file=trim(file_prefix)//'thermal_history.txt', status='old', position='append')
 	write(47,'(es12.5)', advance='no') t
 	do p = 1, n_thist
-		write(47,'(2x,f10.3)', advance='no') temp(thist_i(p), thist_j(p), thist_k(p))
+		! Bilinear interpolation at exact physical coordinate (x-y), nearest cell in z
+		i1 = thist_i(p); j1 = thist_j(p); kp = thist_k(p)
+		! Find bracketing x-indices
+		if (i1 > 1 .and. x(i1) > thist_px(p)) then
+			i2 = i1; i1 = i1 - 1
+		else if (i1 < ni) then
+			i2 = i1 + 1
+		else
+			i2 = i1
+		endif
+		! Find bracketing y-indices
+		j1 = thist_j(p)
+		if (j1 > 1 .and. y(j1) > thist_py(p)) then
+			j2 = j1; j1 = j1 - 1
+		else if (j1 < nj) then
+			j2 = j1 + 1
+		else
+			j2 = j1
+		endif
+		! Weights
+		if (i1 /= i2) then
+			wx = (thist_px(p) - x(i1)) / (x(i2) - x(i1))
+			wx = max(0.0_wp, min(1.0_wp, wx))
+		else
+			wx = 0.0_wp
+		endif
+		if (j1 /= j2) then
+			wy = (thist_py(p) - y(j1)) / (y(j2) - y(j1))
+			wy = max(0.0_wp, min(1.0_wp, wy))
+		else
+			wy = 0.0_wp
+		endif
+		tval = (1.0_wp-wx)*(1.0_wp-wy) * temp(i1,j1,kp) + &
+		       wx*(1.0_wp-wy)           * temp(i2,j1,kp) + &
+		       (1.0_wp-wx)*wy           * temp(i1,j2,kp) + &
+		       wx*wy                    * temp(i2,j2,kp)
+		write(47,'(2x,f10.3)', advance='no') tval
 	enddo
 	write(47,*)
 	close(47)
