@@ -43,6 +43,13 @@ main.f90
 │   │     ├── amr_interpolate_all_fields() [mod_adaptive_mesh.f90]
 │   │     └── amr_validate_grid()        [mod_adaptive_mesh.f90]
 │   │
+│   │ ──────────── PREDICTION (optional) ────────────
+│   │
+│   ├── [if predict_flag==1 AND laser on AND tpeak > tsolid]
+│   │     ├── predict_shift_integer()      [mod_predict.f90]
+│   │     │     └── ishift_field() ×5      [mod_predict.f90]
+│   │     └── enthalpy_to_temp()           [mod_entot.f90]
+│   │
 │   │ ──────────── ITERATION LOOP ────────────
 │   │
 │   ├── iter_loop: do while (niter < maxit)

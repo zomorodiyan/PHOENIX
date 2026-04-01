@@ -42,7 +42,7 @@ Source terms:
 
 ## mod_entot.f90 — `entotemp`
 
-Inverts enthalpy → temperature relationship. Handles solid/mushy/liquid regimes. When `species_flag=1`, uses composition-dependent H-T curve via `mix()`.
+Inverts enthalpy → temperature relationship. Handles solid/mushy/liquid regimes. When `species_flag=1`, uses composition-dependent H-T curve via `mix()`. Contains only `enthalpy_to_temp` (prediction logic has been moved to `mod_predict.f90`).
 
 ---
 

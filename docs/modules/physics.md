@@ -38,6 +38,15 @@ Movable adaptive structured mesh in X-Y that follows the laser/melt pool. Enable
 
 ---
 
+## mod_predict.f90 — `prediction`
+
+Field prediction by integer-cell shifting in the scan direction. Shifts enthalpy, velocity, and pressure fields forward by the number of cells the laser traverses in one timestep. Called before the iteration loop on heating steps when `predict_flag=1` and a melt pool exists. Reduces solver iterations by approximately 38% during heating.
+
+- `predict_shift_integer(vx, vy, dt, ...)` — computes integer cell shift from scan velocity, shifts all primary fields in extended melt pool region
+- `ishift_field(field, di, dj, ...)` — generic integer-cell shift with direction-aware iteration order (no interpolation)
+
+---
+
 ## mod_species.f90 — `species`
 
 Dissimilar metal species transport. See [Species Transport](../species/overview.md).

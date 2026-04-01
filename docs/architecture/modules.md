@@ -315,6 +315,18 @@ When `species_flag=1`: $H_s$, $H_l$, $\Delta T$, $a$, $b$, $c_{p,l}$ are all com
 
 ---
 
+## mod_predict.f90 — `prediction`
+
+Field prediction by integer-cell shifting in the scan direction. During heating steps with an active melt pool, shifts enthalpy, velocity, and pressure fields forward by the number of cells the laser traverses in one timestep. This provides a better initial guess for the iterative solver, reducing iterations by approximately 38% during heating.
+
+### `predict_shift_integer(vx, vy, dt, is, ie, js, je, ks, ke)`
+Computes the integer cell shift from scan velocity and timestep, then calls `ishift_field` for each primary field (enthalpy, uVel, vVel, wVel, pressure) within an extended melt pool region. No interpolation is performed — the shift is rounded to the nearest whole cell.
+
+### `ishift_field(field, di, dj, is, ie, js, je, ks, ke)`
+Generic integer-cell shift of a 3D field array. Shifts `field` by `di` cells in x and `dj` cells in y within the specified index bounds. Uses direction-aware iteration order (forward or backward loop depending on shift sign) to avoid overwriting source data.
+
+---
+
 ## mod_sour.f90 — `source`
 
 ### `source_momentum(idir)`

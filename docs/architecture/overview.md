@@ -110,6 +110,10 @@ main.f90
 │   ├── read_coordinates()    ← Record beam state
 │   ├── [if adaptive_flag=1]  ← AMR check + regenerate grid
 │   │
+│   ├── [if predict_flag=1 AND laser on AND tpeak > tsolid]
+│   │   ├── predict_shift_integer() ← Shift fields by integer cells in scan direction
+│   │   └── enthalpy_to_temp()      ← Recompute T, fracl from shifted enthalpy
+│   │
 │   ├── Iteration Loop (niter < maxit)
 │   │   │
 │   │   ├── properties()       ← Update vis, diff, den from T (and C)
@@ -181,6 +185,7 @@ mod_precision       ← Foundation: working precision (single/double)
               └── mod_bound        ← Boundary conditions (Marangoni, radiation)
               └── mod_discret      ← FVM discretization (momentum, enthalpy, pp)
               └── mod_entot        ← Enthalpy ↔ temperature conversion
+              └── mod_predict      ← Field prediction (integer-cell shift)
               └── mod_sour         ← Source terms (laser, latent heat, Darcy, buoyancy)
               └── mod_flux         ← Energy balance verification
               └── mod_revise       ← Pressure-velocity correction
