@@ -1181,7 +1181,7 @@
 <h2 id="mod_boundf90-boundary">mod_bound.f90 — <code>boundary</code><a class="headerlink" href="#mod_boundf90-boundary" title="Permanent link">&para;</a></h2>
 <p>Boundary conditions for all equations:</p>
 <ul>
-<li><strong>Enthalpy</strong>: radiation + convection (top), convection (sides/bottom), Dirichlet outside local region</li>
+<li><strong>Enthalpy</strong>: radiation + convection (top), convection (sides/bottom)</li>
 <li><strong>Momentum</strong>: Marangoni stress at free surface (thermal + solutal), no-slip elsewhere</li>
 <li><strong>Pressure correction</strong>: zero in solid region</li>
 </ul>
@@ -1190,7 +1190,7 @@
 <p>FVM discretization using power-law scheme:</p>
 <ul>
 <li><code>discretize_momentum(idir)</code> — u/v/w momentum with staggered grid interpolation</li>
-<li><code>discretize_enthalpy(...)</code> — energy equation with <code>delt_eff</code> for local solver</li>
+<li><code>discretize_enthalpy(...)</code> — energy equation with <code>delt</code> for transient term</li>
 <li><code>discretize_pp()</code> — pressure correction equation</li>
 </ul>
 <hr />
@@ -1203,7 +1203,7 @@
 </ul>
 <hr />
 <h2 id="mod_entotf90-entotemp">mod_entot.f90 — <code>entotemp</code><a class="headerlink" href="#mod_entotf90-entotemp" title="Permanent link">&para;</a></h2>
-<p>Inverts enthalpy → temperature relationship. Handles solid/mushy/liquid regimes. When <code>species_flag=1</code>, uses composition-dependent H-T curve via <code>mix()</code>.</p>
+<p>Inverts enthalpy → temperature relationship. Handles solid/mushy/liquid regimes. When <code>species_flag=1</code>, uses composition-dependent H-T curve via <code>mix()</code>. Contains only <code>enthalpy_to_temp</code> (prediction logic has been moved to <code>mod_predict.f90</code>).</p>
 <hr />
 <h2 id="mod_solvef90-solver">mod_solve.f90 — <code>solver</code><a class="headerlink" href="#mod_solvef90-solver" title="Permanent link">&para;</a></h2>
 <ul>

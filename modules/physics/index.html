@@ -768,10 +768,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
+  <a href="#mod_adaptive_meshf90-adaptive_mesh_mod" class="md-nav__link">
     <span class="md-ellipsis">
       
-        mod_local_enthalpy.f90 — local_enthalpy
+        mod_adaptive_mesh.f90 — adaptive_mesh_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_predictf90-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_predict.f90 — prediction
       
     </span>
   </a>
@@ -1021,10 +1032,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
+  <a href="#mod_adaptive_meshf90-adaptive_mesh_mod" class="md-nav__link">
     <span class="md-ellipsis">
       
-        mod_local_enthalpy.f90 — local_enthalpy
+        mod_adaptive_mesh.f90 — adaptive_mesh_mod
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_predictf90-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_predict.f90 — prediction
       
     </span>
   </a>
@@ -1063,7 +1085,7 @@
 
 
 <h1 id="physics-modules">Physics Modules<a class="headerlink" href="#physics-modules" title="Permanent link">&para;</a></h1>
-<p>Laser, toolpath, melt pool detection, species transport, local solver.</p>
+<p>Laser, toolpath, melt pool detection, species transport, adaptive mesh.</p>
 <hr />
 <h2 id="mod_laserf90-laserinput">mod_laser.f90 — <code>laserinput</code><a class="headerlink" href="#mod_laserf90-laserinput" title="Permanent link">&para;</a></h2>
 <p>Laser beam management. Each timestep: interpolates toolpath to find beam position, computes scan velocity, distributes power as 2D Gaussian on top surface.</p>
@@ -1081,12 +1103,21 @@
 <li>Sets momentum solver bounds (<code>istat:iend</code>, <code>jstat:jend</code>, <code>kstat</code>) with padding</li>
 </ul>
 <hr />
-<h2 id="mod_local_enthalpyf90-local_enthalpy">mod_local_enthalpy.f90 — <code>local_enthalpy</code><a class="headerlink" href="#mod_local_enthalpyf90-local_enthalpy" title="Permanent link">&para;</a></h2>
-<p>Adaptive local/global solver scheduling:</p>
+<h2 id="mod_adaptive_meshf90-adaptive_mesh_mod">mod_adaptive_mesh.f90 — <code>adaptive_mesh_mod</code><a class="headerlink" href="#mod_adaptive_meshf90-adaptive_mesh_mod" title="Permanent link">&para;</a></h2>
+<p>Movable adaptive structured mesh in X-Y that follows the laser/melt pool. Enabled by <code>adaptive_flag=1</code>.</p>
 <ul>
-<li><code>get_enthalpy_region()</code> — determines if step is local or global (every <code>localnum+1</code> steps)</li>
-<li><code>compute_delt_eff()</code> — effective timestep for skipped cells: <code>delt × (n_skipped + 1)</code></li>
-<li><code>update_skipped()</code> — tracks skip counts per cell</li>
+<li><code>amr_init()</code> — initializes the refined region after grid generation</li>
+<li><code>amr_check_remesh(step_idx)</code> — checks if remeshing is needed (every <code>remesh_interval</code> steps)</li>
+<li><code>amr_regenerate_grid()</code> — rebuilds X-Y grid with refined region centered on laser</li>
+<li><code>amr_interpolate_all_fields()</code> — interpolates all fields from old grid to new grid</li>
+<li><code>amr_validate_grid()</code> — sanity checks on new grid</li>
+</ul>
+<hr />
+<h2 id="mod_predictf90-prediction">mod_predict.f90 — <code>prediction</code><a class="headerlink" href="#mod_predictf90-prediction" title="Permanent link">&para;</a></h2>
+<p>Field prediction by integer-cell shifting in the scan direction. Shifts enthalpy, velocity, and pressure fields forward by the number of cells the laser traverses in one timestep. Called before the iteration loop on heating steps when <code>predict_flag=1</code> and a melt pool exists. Reduces solver iterations by approximately 38% during heating.</p>
+<ul>
+<li><code>predict_shift_integer(vx, vy, dt, ...)</code> — computes integer cell shift from scan velocity, shifts all primary fields in extended melt pool region</li>
+<li><code>ishift_field(field, di, dj, ...)</code> — generic integer-cell shift with direction-aware iteration order (no interpolation)</li>
 </ul>
 <hr />
 <h2 id="mod_speciesf90-species">mod_species.f90 — <code>species</code><a class="headerlink" href="#mod_speciesf90-species" title="Permanent link">&para;</a></h2>

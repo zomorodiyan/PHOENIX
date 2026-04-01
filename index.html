@@ -1040,16 +1040,14 @@
 
 <h1 id="phoenix">PHOENIX<a class="headerlink" href="#phoenix" title="Permanent link">&para;</a></h1>
 <p><strong>PHOENIX: Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evolution</strong></p>
-<p>PHOENIX is a hybrid physics-based and AI-accelerated solver for simulating process-to-microstructure evolution in laser-based additive manufacturing.</p>
+<p>PHOENIX is a hybrid physics-based solver for simulating thermo-fluid processes in laser-based additive manufacturing.</p>
 <h2 id="key-features">Key Features<a class="headerlink" href="#key-features" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Multi-physics</strong>: Coupled heat transfer, fluid flow (Navier-Stokes), phase change (melting/solidification), and species transport</li>
 <li><strong>Marangoni convection</strong>: Surface-tension-driven flow from thermal and solutal gradients</li>
 <li><strong>Dissimilar metal mixing</strong>: Species transport with composition-dependent material properties (two-way coupling)</li>
-<li><strong>Local/global solver</strong>: Adaptive solver scheduling — solves only the melt pool region for most time steps, full domain periodically</li>
+<li><strong>Adaptive mesh</strong>: Movable structured mesh in X-Y that follows the laser/melt pool, providing fine resolution where needed</li>
 <li><strong>Defect prediction</strong>: Post-simulation analysis of lack-of-fusion and keyhole porosity from max temperature field</li>
-<li><strong>Solidification microstructure</strong>: Thermal gradient G, solidification rate R, PDAS/SDAS prediction at the solidification front</li>
-<li><strong>Crack risk prediction</strong>: Crack susceptibility index (CSI) from thermal strain in the Brittle Temperature Range</li>
 <li><strong>Melt pool tracking</strong>: Time-series logging of melt pool length, depth, width, volume, and D/W aspect ratio with auto-generated plots</li>
 <li><strong>OpenMP parallelization</strong>: Shared-memory parallelism for all hot loops (TDMA, discretization, source terms)</li>
 <li><strong>VTK output</strong>: Binary structured-grid VTK files for ParaView visualization</li>
@@ -1065,8 +1063,6 @@
 <li><strong>Species transport</strong>: Convection-diffusion of concentration field with molecular diffusivity</li>
 <li><strong>Powder layer</strong>: Distinct thermal properties for unconsolidated powder</li>
 <li><strong>Defect prediction</strong>: Post-simulation detection of lack-of-fusion (<span class="arithmatex">\(T_{max} &lt; T_s\)</span>, incomplete melting) and keyhole porosity (<span class="arithmatex">\(T_{max} &gt; T_b\)</span>, excessive vaporization) from peak temperature history within the build layer</li>
-<li><strong>Solidification microstructure</strong>: Computes thermal gradient G, solidification rate R, cooling rate, primary dendrite arm spacing (PDAS), and secondary dendrite arm spacing (SDAS) at the moment each cell solidifies</li>
-<li><strong>Crack risk</strong>: Crack susceptibility index (CSI) = accumulated thermal strain while material is in the Brittle Temperature Range (BTR) near solidus</li>
 </ul>
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>fortran_new

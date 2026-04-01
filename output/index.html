@@ -1002,28 +1002,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#microstructure-report-micro_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Microstructure Report (micro_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#crack-risk-report-crack_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Crack Risk Report (crack_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#melt-pool-history" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1174,28 +1152,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#microstructure-report-micro_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Microstructure Report (micro_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#crack-risk-report-crack_flag1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Crack Risk Report (crack_flag=1)
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#melt-pool-history" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1286,32 +1242,12 @@
 <tr>
 <td><code>&lt;case&gt;_meltpool_history.txt</code></td>
 <td>Melt pool length, depth, width, volume, Tpeak</td>
-<td>Every global step</td>
+<td>Every time step</td>
 </tr>
 <tr>
 <td><code>&lt;case&gt;_meltpool_history.png</code></td>
 <td>Melt pool geometry evolution plot</td>
 <td>End of simulation</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_micro_report.txt</code></td>
-<td>Microstructure statistics (G, R, PDAS, SDAS)</td>
-<td>End of simulation (micro_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_microstructure.vtk</code></td>
-<td>Microstructure fields (VTK, multi-scalar)</td>
-<td>End of simulation (micro_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_crack_report.txt</code></td>
-<td>Crack risk statistics (CSI, strain rate)</td>
-<td>End of simulation (crack_flag=1)</td>
-</tr>
-<tr>
-<td><code>&lt;case&gt;_crack_risk.vtk</code></td>
-<td>Crack risk fields (VTK, multi-scalar)</td>
-<td>End of simulation (crack_flag=1)</td>
 </tr>
 </tbody>
 </table>
@@ -1419,12 +1355,6 @@ progress%  beam_posx  beam_posy  beam_posz  power  scanspeed  speedx  speedy
 <td>Yes</td>
 </tr>
 <tr>
-<td><code>local</code></td>
-<td>Local solver region marker</td>
-<td>-</td>
-<td>Yes</td>
-</tr>
-<tr>
 <td><code>fracl</code></td>
 <td>Liquid fraction (0=solid, 1=liquid)</td>
 <td>-</td>
@@ -1508,94 +1438,8 @@ progress%  beam_posx  beam_posy  beam_posz  power  scanspeed  speedx  speedy
   Keyhole porosity fraction: X.XXXXXX %
 </code></pre></div>
 <p>Spatial distribution available in <code>&lt;case&gt;_defect.vtk</code> and <code>&lt;case&gt;_maxtemp.vtk</code>.</p>
-<h2 id="microstructure-report-micro_flag1">Microstructure Report (micro_flag=1)<a class="headerlink" href="#microstructure-report-micro_flag1" title="Permanent link">&para;</a></h2>
-<p>Computed at the moment each cell solidifies (liquid fraction drops to 0). Only updated during global solver timesteps.</p>
-<div class="highlight"><pre><span></span><code>  === Microstructure Analysis ===
-  Solidified cells: 16013
-  G (K/m):   min= 1.15E+06  max= 2.93E+07
-  R (m/s):   min= 3.51E-03  max= 1.16E+00
-  PDAS (m):  min= 2.01E-08  max= 8.06E-08
-  SDAS (m):  min= 6.65E-08  max= 3.39E-07
-</code></pre></div>
-<p>VTK file <code>&lt;case&gt;_microstructure.vtk</code> contains 5 scalar fields:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>cooling_rate</code></td>
-<td>Cooling rate at solidification</td>
-<td>K/s</td>
-</tr>
-<tr>
-<td><code>thermal_gradient</code></td>
-<td>Temperature gradient magnitude G</td>
-<td>K/m</td>
-</tr>
-<tr>
-<td><code>solidification_rate</code></td>
-<td>Solidification front velocity R</td>
-<td>m/s</td>
-</tr>
-<tr>
-<td><code>PDAS</code></td>
-<td>Primary dendrite arm spacing</td>
-<td>m</td>
-</tr>
-<tr>
-<td><code>SDAS</code></td>
-<td>Secondary dendrite arm spacing</td>
-<td>m</td>
-</tr>
-</tbody>
-</table>
-<h2 id="crack-risk-report-crack_flag1">Crack Risk Report (crack_flag=1)<a class="headerlink" href="#crack-risk-report-crack_flag1" title="Permanent link">&para;</a></h2>
-<p>Tracks thermal strain accumulated while material passes through the Brittle Temperature Range (BTR). Only updated during global solver timesteps.</p>
-<div class="highlight"><pre><span></span><code>  === Crack Risk Analysis ===
-  Max CSI:            6.20E-02
-  Mean CSI:           2.26E-03
-  Max cooling rate:   3.44E+06 K/s
-  High-risk frac:     1.842253 %
-</code></pre></div>
-<p>VTK file <code>&lt;case&gt;_crack_risk.vtk</code> contains 4 scalar fields:</p>
-<table>
-<thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Unit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>crack_csi</code></td>
-<td>Crack susceptibility index (accumulated thermal strain in BTR)</td>
-<td>-</td>
-</tr>
-<tr>
-<td><code>cooling_rate_solid</code></td>
-<td>Cooling rate at solidification</td>
-<td>K/s</td>
-</tr>
-<tr>
-<td><code>strain_rate_solid</code></td>
-<td>Thermal strain rate at solidification (β × dT/dt)</td>
-<td>1/s</td>
-</tr>
-<tr>
-<td><code>btr_time</code></td>
-<td>Cumulative time spent in BTR</td>
-<td>s</td>
-</tr>
-</tbody>
-</table>
 <h2 id="melt-pool-history">Melt Pool History<a class="headerlink" href="#melt-pool-history" title="Permanent link">&para;</a></h2>
-<p>Time-series log of melt pool geometry, recorded every global solver timestep.</p>
+<p>Time-series log of melt pool geometry, recorded every timestep.</p>
 <table>
 <thead>
 <tr>

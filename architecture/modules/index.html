@@ -1233,22 +1233,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#mod_local_enthalpyf90-local_enthalpy" class="md-nav__link">
+  <a href="#mod_adaptive_meshf90-adaptive_mesh_mod" class="md-nav__link">
     <span class="md-ellipsis">
       
-        mod_local_enthalpy.f90 — local_enthalpy
+        mod_adaptive_mesh.f90 — adaptive_mesh_mod
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="mod_local_enthalpy.f90 — local_enthalpy">
+    <nav class="md-nav" aria-label="mod_adaptive_mesh.f90 — adaptive_mesh_mod">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
+  <a href="#amr_init" class="md-nav__link">
     <span class="md-ellipsis">
       
-        get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)
+        amr_init()
       
     </span>
   </a>
@@ -1256,10 +1256,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#compute_delt_eff" class="md-nav__link">
+  <a href="#amr_check_remeshstep_idx" class="md-nav__link">
     <span class="md-ellipsis">
       
-        compute_delt_eff()
+        amr_check_remesh(step_idx)
       
     </span>
   </a>
@@ -1267,10 +1267,32 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#update_skipped-is_local" class="md-nav__link">
+  <a href="#amr_regenerate_grid" class="md-nav__link">
     <span class="md-ellipsis">
       
-        update_skipped(..., is_local)
+        amr_regenerate_grid()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amr_interpolate_all_fields" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        amr_interpolate_all_fields()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amr_validate_grid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        amr_validate_grid()
       
     </span>
   </a>
@@ -1384,10 +1406,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" class="md-nav__link">
+  <a href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi" class="md-nav__link">
     <span class="md-ellipsis">
       
-        bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)
+        bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi)
       
     </span>
   </a>
@@ -1466,6 +1488,45 @@
     <span class="md-ellipsis">
       
         enthalpy_to_temp(ilo, ihi, jlo, jhi, klo, khi)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mod_predictf90-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        mod_predict.f90 — prediction
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="mod_predict.f90 — prediction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#predict_shift_integervx-vy-dt-is-ie-js-je-ks-ke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_shift_integer(vx, vy, dt, is, ie, js, je, ks, ke)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ishift_fieldfield-di-dj-is-ie-js-je-ks-ke" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ishift_field(field, di, dj, is, ie, js, je, ks, ke)
       
     </span>
   </a>
@@ -1923,6 +1984,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#update_thermal_history_indices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_thermal_history_indices()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#init_meltpool_history-write_meltpool_historytimet-finalize_meltpool_history" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1938,106 +2010,6 @@
     <span class="md-ellipsis">
       
         write_vtk_scalar(unit, filename, name, field) / write_vtk_vector(...)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_microstructuref90-microstructure_mod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_microstructure.f90 — microstructure_mod
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_microstructure.f90 — microstructure_mod">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_microstructurenni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_microstructure(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_microstructuredt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_microstructure(dt)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#report_microstructure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        report_microstructure()
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mod_crack_riskf90-crack_risk_mod" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        mod_crack_risk.f90 — crack_risk_mod
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="mod_crack_risk.f90 — crack_risk_mod">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#allocate_crack_risknni-nnj-nnk" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        allocate_crack_risk(nni, nnj, nnk)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#update_crack_riskdt" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        update_crack_risk(dt)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#compute_crack_report" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        compute_crack_report()
       
     </span>
   </a>
@@ -2156,7 +2128,7 @@
 <h2 id="mod_paramf90-parameters">mod_param.f90 — <code>parameters</code><a class="headerlink" href="#mod_paramf90-parameters" title="Permanent link">&para;</a></h2>
 <p>Reads all simulation parameters from <code>input_param.txt</code>.</p>
 <h3 id="read_data"><code>read_data()</code><a class="headerlink" href="#read_data" title="Permanent link">&para;</a></h3>
-<p>Parses geometry (zones, CVs, exponents) and 7 namelist groups. Creates result directory <code>result/&lt;case_name&gt;/</code> automatically.</p>
+<p>Parses geometry (zones, CVs, exponents) and namelist groups. Creates result directory <code>result/&lt;case_name&gt;/</code> automatically.</p>
 <p>See <a href="../../input-reference/">Input File Reference</a> for parameter details.</p>
 <hr />
 <h2 id="mod_geomf90-geometry">mod_geom.f90 — <code>geometry</code><a class="headerlink" href="#mod_geomf90-geometry" title="Permanent link">&para;</a></h2>
@@ -2219,10 +2191,6 @@
 <tr>
 <td><code>solidfield</code></td>
 <td>Track ID that solidified each cell</td>
-</tr>
-<tr>
-<td><code>localfield</code></td>
-<td>Local solver region visualization</td>
 </tr>
 </tbody>
 </table>
@@ -2358,17 +2326,18 @@
 </ol>
 <p>These indices are used by momentum solver, species solver, and velocity cleanup.</p>
 <hr />
-<h2 id="mod_local_enthalpyf90-local_enthalpy">mod_local_enthalpy.f90 — <code>local_enthalpy</code><a class="headerlink" href="#mod_local_enthalpyf90-local_enthalpy" title="Permanent link">&para;</a></h2>
-<h3 id="get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi"><code>get_enthalpy_region(step_idx, is_local, ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#get_enthalpy_regionstep_idx-is_local-ilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
-<p>Determines if current step is local or global:</p>
-<ul>
-<li>Global: every <code>localnum+1</code> steps, or first step</li>
-<li>Local: otherwise, returns small region around melt pool</li>
-</ul>
-<h3 id="compute_delt_eff"><code>compute_delt_eff()</code><a class="headerlink" href="#compute_delt_eff" title="Permanent link">&para;</a></h3>
-<p>Updates effective time step for all cells: <code>delt_eff(i,j,k) = delt * (n_skipped(i,j,k) + 1)</code>.</p>
-<h3 id="update_skipped-is_local"><code>update_skipped(..., is_local)</code><a class="headerlink" href="#update_skipped-is_local" title="Permanent link">&para;</a></h3>
-<p>Increments skip counter for cells outside current solve region; resets to 0 for solved cells.</p>
+<h2 id="mod_adaptive_meshf90-adaptive_mesh_mod">mod_adaptive_mesh.f90 — <code>adaptive_mesh_mod</code><a class="headerlink" href="#mod_adaptive_meshf90-adaptive_mesh_mod" title="Permanent link">&para;</a></h2>
+<p>Movable adaptive structured mesh in X-Y that follows the laser/melt pool. Enabled by <code>adaptive_flag=1</code> in the <code>&amp;adaptive_mesh</code> namelist.</p>
+<h3 id="amr_init"><code>amr_init()</code><a class="headerlink" href="#amr_init" title="Permanent link">&para;</a></h3>
+<p>Called once after <code>generate_grid</code> and field allocation. Sets up the initial refined region centered on the first laser position.</p>
+<h3 id="amr_check_remeshstep_idx"><code>amr_check_remesh(step_idx)</code><a class="headerlink" href="#amr_check_remeshstep_idx" title="Permanent link">&para;</a></h3>
+<p>Called every time step after <code>laser_beam</code>. Checks whether the mesh needs to be regenerated (every <code>remesh_interval</code> steps).</p>
+<h3 id="amr_regenerate_grid"><code>amr_regenerate_grid()</code><a class="headerlink" href="#amr_regenerate_grid" title="Permanent link">&para;</a></h3>
+<p>Rebuilds the X-Y grid so that the refined region (cell size <code>amr_dx_fine</code>) is centered on the current laser/melt pool position, with coarser cells outside.</p>
+<h3 id="amr_interpolate_all_fields"><code>amr_interpolate_all_fields()</code><a class="headerlink" href="#amr_interpolate_all_fields" title="Permanent link">&para;</a></h3>
+<p>Interpolates all field arrays (velocity, pressure, enthalpy, temperature, liquid fraction, etc.) from the old grid to the newly generated grid.</p>
+<h3 id="amr_validate_grid"><code>amr_validate_grid()</code><a class="headerlink" href="#amr_validate_grid" title="Permanent link">&para;</a></h3>
+<p>Sanity checks on the new grid: verifies monotonicity, positive volumes, and correct total domain extent.</p>
 <hr />
 <h2 id="mod_propf90-property">mod_prop.f90 — <code>property</code><a class="headerlink" href="#mod_propf90-property" title="Permanent link">&para;</a></h2>
 <h3 id="propertiesilo-ihi-jlo-jhi-klo-khi"><code>properties(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#propertiesilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
@@ -2466,11 +2435,10 @@
 <p>No-slip condition at melt pool boundaries for w-velocity.</p>
 <h3 id="bound_pp"><code>bound_pp()</code><a class="headerlink" href="#bound_pp" title="Permanent link">&para;</a></h3>
 <p>Zero pressure correction in solid region.</p>
-<h3 id="bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local"><code>bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi, is_local)</code><a class="headerlink" href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi-is_local" title="Permanent link">&para;</a></h3>
+<h3 id="bound_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>bound_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#bound_enthalpyilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Top surface</strong>: radiation + convection loss</li>
 <li><strong>Other faces</strong>: convection to ambient</li>
-<li><strong>Local mode</strong>: Dirichlet (frozen values) outside local region</li>
 </ul>
 <hr />
 <h2 id="mod_discretf90-discretization">mod_discret.f90 — <code>discretization</code><a class="headerlink" href="#mod_discretf90-discretization" title="Permanent link">&para;</a></h2>
@@ -2486,7 +2454,7 @@
 <li>Adds pressure gradient and cross-derivative source terms</li>
 </ol>
 <h3 id="discretize_enthalpyilo-ihi-jlo-jhi-klo-khi"><code>discretize_enthalpy(ilo, ihi, jlo, jhi, klo, khi)</code><a class="headerlink" href="#discretize_enthalpyilo-ihi-jlo-jhi-klo-khi" title="Permanent link">&para;</a></h3>
-<p>Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses <code>delt_eff</code> for transient term (local solver compensation).</p>
+<p>Same structure as momentum but uses thermal diffusivity instead of viscosity. Uses <code>delt</code> for the transient term.</p>
 <h3 id="discretize_pp"><code>discretize_pp()</code><a class="headerlink" href="#discretize_pp" title="Permanent link">&para;</a></h3>
 <p>Pressure-correction equation using velocity correction coefficients from momentum solve.</p>
 <hr />
@@ -2524,6 +2492,13 @@
 </tbody>
 </table>
 <p>When <code>species_flag=1</code>: <span class="arithmatex">\(H_s\)</span>, <span class="arithmatex">\(H_l\)</span>, <span class="arithmatex">\(\Delta T\)</span>, <span class="arithmatex">\(a\)</span>, <span class="arithmatex">\(b\)</span>, <span class="arithmatex">\(c_{p,l}\)</span> are all computed inline from <code>mix()</code> using local concentration.</p>
+<hr />
+<h2 id="mod_predictf90-prediction">mod_predict.f90 — <code>prediction</code><a class="headerlink" href="#mod_predictf90-prediction" title="Permanent link">&para;</a></h2>
+<p>Field prediction by integer-cell shifting in the scan direction. During heating steps with an active melt pool, shifts enthalpy, velocity, and pressure fields forward by the number of cells the laser traverses in one timestep. This provides a better initial guess for the iterative solver, reducing iterations by approximately 38% during heating.</p>
+<h3 id="predict_shift_integervx-vy-dt-is-ie-js-je-ks-ke"><code>predict_shift_integer(vx, vy, dt, is, ie, js, je, ks, ke)</code><a class="headerlink" href="#predict_shift_integervx-vy-dt-is-ie-js-je-ks-ke" title="Permanent link">&para;</a></h3>
+<p>Computes the integer cell shift from scan velocity and timestep, then calls <code>ishift_field</code> for each primary field (enthalpy, uVel, vVel, wVel, pressure) within an extended melt pool region. No interpolation is performed — the shift is rounded to the nearest whole cell.</p>
+<h3 id="ishift_fieldfield-di-dj-is-ie-js-je-ks-ke"><code>ishift_field(field, di, dj, is, ie, js, je, ks, ke)</code><a class="headerlink" href="#ishift_fieldfield-di-dj-is-ie-js-je-ks-ke" title="Permanent link">&para;</a></h3>
+<p>Generic integer-cell shift of a 3D field array. Shifts <code>field</code> by <code>di</code> cells in x and <code>dj</code> cells in y within the specified index bounds. Uses direction-aware iteration order (forward or backward loop depending on shift sign) to avoid overwriting source data.</p>
 <hr />
 <h2 id="mod_sourf90-source">mod_sour.f90 — <code>source</code><a class="headerlink" href="#mod_sourf90-source" title="Permanent link">&para;</a></h2>
 <h3 id="source_momentumidir"><code>source_momentum(idir)</code><a class="headerlink" href="#source_momentumidir" title="Permanent link">&para;</a></h3>
@@ -2581,7 +2556,7 @@
 <p>Computes energy balance: boundary conduction losses on all 6 faces, heat accumulation (enthalpy change + latent heat), and energy ratio <span class="arithmatex">\(R = Q_{in} / Q_{out}\)</span>. Used for convergence checking (<span class="arithmatex">\(R \approx 1.0\)</span>).</p>
 <hr />
 <h2 id="mod_defectf90-defect_field">mod_defect.f90 — <code>defect_field</code><a class="headerlink" href="#mod_defectf90-defect_field" title="Permanent link">&para;</a></h2>
-<p>Post-simulation defect detection based on maximum temperature history. Identifies lack-of-fusion (incomplete melting) and keyhole porosity (excessive vaporization) within the powder layer.</p>
+<p>Post-simulation defect detection based on maximum temperature history. Identifies lack-of-fusion (incomplete melting) and keyhole porosity (excessive vaporization) within the powder layer. Supports uniform defect mesh when <code>adaptive_flag==1</code>.</p>
 <h3 id="parameters">Parameters<a class="headerlink" href="#parameters" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -2712,31 +2687,16 @@
 <h3 id="outputres"><code>outputres()</code><a class="headerlink" href="#outputres" title="Permanent link">&para;</a></h3>
 <p>Writes one block per time step to <code>output.txt</code>: residuals, velocities, pool dimensions, energy balance, progress.</p>
 <h3 id="cust_out"><code>Cust_Out()</code><a class="headerlink" href="#cust_out" title="Permanent link">&para;</a></h3>
-<p>Writes binary VTK file every <code>outputintervel</code> steps. Fields: Velocity (vector), T, vis, diff, den, solidID, localfield. When <code>species_flag=1</code>: adds concentration and tsolid_field.</p>
+<p>Writes binary VTK file every <code>outputintervel</code> steps. Fields: Velocity (vector), T, vis, diff, den, solidID, fracl. When <code>species_flag=1</code>: adds concentration and tsolid_field.</p>
 <h3 id="init_thermal_history-write_thermal_historytimet-finalize_thermal_history"><code>init_thermal_history()</code> / <code>write_thermal_history(timet)</code> / <code>finalize_thermal_history()</code><a class="headerlink" href="#init_thermal_history-write_thermal_historytimet-finalize_thermal_history" title="Permanent link">&para;</a></h3>
 <p>Tracks temperature at 10 monitoring points throughout simulation. Generates Python plotting script and PNG at end.</p>
+<h3 id="update_thermal_history_indices"><code>update_thermal_history_indices()</code><a class="headerlink" href="#update_thermal_history_indices" title="Permanent link">&para;</a></h3>
+<p>Recomputes the grid indices of thermal history monitoring points after an AMR remesh event. Called by the adaptive mesh module when the grid changes.</p>
 <h3 id="init_meltpool_history-write_meltpool_historytimet-finalize_meltpool_history"><code>init_meltpool_history()</code> / <code>write_meltpool_history(timet)</code> / <code>finalize_meltpool_history()</code><a class="headerlink" href="#init_meltpool_history-write_meltpool_historytimet-finalize_meltpool_history" title="Permanent link">&para;</a></h3>
-<p>Tracks melt pool length, depth, width, volume, and peak temperature. Only recorded during global solver timesteps. Generates Python plot script and PNG at end.</p>
+<p>Tracks melt pool length, depth, width, volume, and peak temperature. Generates Python plot script and PNG at end.</p>
 <h3 id="write_vtk_scalarunit-filename-name-field-write_vtk_vector"><code>write_vtk_scalar(unit, filename, name, field)</code> / <code>write_vtk_vector(...)</code><a class="headerlink" href="#write_vtk_scalarunit-filename-name-field-write_vtk_vector" title="Permanent link">&para;</a></h3>
 <p>Binary VTK writers: ASCII header (SCALARS/VECTORS + LOOKUP_TABLE) followed by big-endian float32 data.</p>
 <hr />
-<h2 id="mod_microstructuref90-microstructure_mod">mod_microstructure.f90 — <code>microstructure_mod</code><a class="headerlink" href="#mod_microstructuref90-microstructure_mod" title="Permanent link">&para;</a></h2>
-<p>Solidification microstructure prediction. Enabled by <code>micro_flag=1</code>. Only updates during global solver timesteps.</p>
-<h3 id="allocate_microstructurenni-nnj-nnk"><code>allocate_microstructure(nni, nnj, nnk)</code><a class="headerlink" href="#allocate_microstructurenni-nnj-nnk" title="Permanent link">&para;</a></h3>
-<p>Allocates arrays: <code>cool_rate_micro</code>, <code>therm_grad</code>, <code>solid_rate</code>, <code>pdas_arr</code>, <code>sdas_arr</code>, <code>micro_solidified</code>.</p>
-<h3 id="update_microstructuredt"><code>update_microstructure(dt)</code><a class="headerlink" href="#update_microstructuredt" title="Permanent link">&para;</a></h3>
-<p>Called each global timestep. Detects solidification events (<code>fraclnot &gt; 0</code> → <code>fracl ≤ 0</code>). At solidification: computes cooling rate <code>|dT/dt|</code>, thermal gradient <code>G = |∇T|</code> (central differences), solidification rate <code>R = |dT/dt| / G</code>, PDAS <code>λ₁ = a₁ G^n₁ R^n₂</code>, SDAS <code>λ₂ = a₂ |dT/dt|^n₃</code>. Only records the first solidification event per cell.</p>
-<h3 id="report_microstructure"><code>report_microstructure()</code><a class="headerlink" href="#report_microstructure" title="Permanent link">&para;</a></h3>
-<p>Post-simulation. Computes min/max/mean statistics over solidified cells in the scan region. Writes <code>micro_report.txt</code> and a single <code>microstructure.vtk</code> with 5 scalar fields.</p>
-<hr />
-<h2 id="mod_crack_riskf90-crack_risk_mod">mod_crack_risk.f90 — <code>crack_risk_mod</code><a class="headerlink" href="#mod_crack_riskf90-crack_risk_mod" title="Permanent link">&para;</a></h2>
-<p>Crack risk prediction from thermal strain in the Brittle Temperature Range (BTR). Enabled by <code>crack_flag=1</code>. Only updates during global solver timesteps.</p>
-<h3 id="allocate_crack_risknni-nnj-nnk"><code>allocate_crack_risk(nni, nnj, nnk)</code><a class="headerlink" href="#allocate_crack_risknni-nnj-nnk" title="Permanent link">&para;</a></h3>
-<p>Allocates arrays: <code>cool_rate_solid</code>, <code>strain_rate_solid</code>, <code>btr_time</code>, <code>crack_risk_arr</code>, <code>crack_solidified</code>.</p>
-<h3 id="update_crack_riskdt"><code>update_crack_risk(dt)</code><a class="headerlink" href="#update_crack_riskdt" title="Permanent link">&para;</a></h3>
-<p>Called each global timestep. Detects solidification (stores cooling rate and strain rate = β × |dT/dt|). Accumulates BTR strain: when <code>T_solidus - ΔT_BTR &lt; T &lt; T_solidus</code>, adds <code>β × |dT/dt| × dt</code> to the crack susceptibility index (CSI).</p>
-<h3 id="compute_crack_report"><code>compute_crack_report()</code><a class="headerlink" href="#compute_crack_report" title="Permanent link">&para;</a></h3>
-<p>Post-simulation. Computes statistics, identifies high-risk cells (CSI &gt; 1%). Writes <code>crack_report.txt</code> and a single <code>crack_risk.vtk</code> with 4 scalar fields.</p>
 
 
 

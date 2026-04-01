@@ -537,17 +537,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local_solver-adaptive-solver" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        &amp;local_solver — Adaptive Solver
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#output_control-output-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -559,21 +548,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#microstructure_params-solidification-microstructure-optional" class="md-nav__link">
+  <a href="#adaptive_mesh-adaptive-mesh" class="md-nav__link">
     <span class="md-ellipsis">
       
-        &amp;microstructure_params — Solidification Microstructure (optional)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#crack_params-crack-risk-prediction-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        &amp;crack_params — Crack Risk Prediction (optional)
+        &amp;adaptive_mesh — Adaptive Mesh
       
     </span>
   </a>
@@ -1182,17 +1160,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#local_solver-adaptive-solver" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        &amp;local_solver — Adaptive Solver
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#output_control-output-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1204,21 +1171,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#microstructure_params-solidification-microstructure-optional" class="md-nav__link">
+  <a href="#adaptive_mesh-adaptive-mesh" class="md-nav__link">
     <span class="md-ellipsis">
       
-        &amp;microstructure_params — Solidification Microstructure (optional)
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#crack_params-crack-risk-prediction-optional" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        &amp;crack_params — Crack Risk Prediction (optional)
+        &amp;adaptive_mesh — Adaptive Mesh
       
     </span>
   </a>
@@ -1690,44 +1646,6 @@ The enthalpy-temperature curve is:</p>
 </table>
 <p>The top surface uses combined convection + radiation:
 $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)\)</span>$</p>
-<h3 id="local_solver-adaptive-solver"><code>&amp;local_solver</code> — Adaptive Solver<a class="headerlink" href="#local_solver-adaptive-solver" title="Permanent link">&para;</a></h3>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Unit</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>localnum</code></td>
-<td>-</td>
-<td>Number of local steps between global steps</td>
-<td>4</td>
-</tr>
-<tr>
-<td><code>local_half_x</code></td>
-<td>m</td>
-<td>Half-width of local region in x</td>
-<td>1.0e-3</td>
-</tr>
-<tr>
-<td><code>local_half_y</code></td>
-<td>m</td>
-<td>Half-width of local region in y</td>
-<td>2.0e-4</td>
-</tr>
-<tr>
-<td><code>local_depth_z</code></td>
-<td>m</td>
-<td>Depth of local region in z</td>
-<td>2.0e-4</td>
-</tr>
-</tbody>
-</table>
-<p>The local solver only updates enthalpy in a small region around the melt pool for <code>localnum</code> consecutive steps, then solves the full domain. This provides significant speedup (typically 3-5x) with minimal accuracy loss.</p>
 <h3 id="output_control-output-settings"><code>&amp;output_control</code> — Output Settings<a class="headerlink" href="#output_control-output-settings" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
@@ -1764,85 +1682,58 @@ $<span class="arithmatex">\(q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T
 <td>0</td>
 </tr>
 <tr>
-<td><code>micro_flag</code></td>
+<td><code>predict_flag</code></td>
 <td>-</td>
-<td>Enable solidification microstructure prediction (0=off, 1=on)</td>
-<td>0</td>
-</tr>
-<tr>
-<td><code>crack_flag</code></td>
-<td>-</td>
-<td>Enable crack risk prediction (0=off, 1=on)</td>
+<td>Enable field prediction by integer-cell shift (0=off, 1=on)</td>
 <td>0</td>
 </tr>
 </tbody>
 </table>
-<h3 id="microstructure_params-solidification-microstructure-optional"><code>&amp;microstructure_params</code> — Solidification Microstructure (optional)<a class="headerlink" href="#microstructure_params-solidification-microstructure-optional" title="Permanent link">&para;</a></h3>
-<p>Only read when <code>micro_flag=1</code>. All parameters have defaults for IN718.</p>
+<p>When <code>predict_flag=1</code>, the solver shifts enthalpy, velocity, and pressure fields by an integer number of cells in the scan direction before entering the iteration loop on heating steps (laser on, melt pool present). This provides a better initial guess and reduces iterations by approximately 38% during heating.</p>
+<h3 id="adaptive_mesh-adaptive-mesh"><code>&amp;adaptive_mesh</code> — Adaptive Mesh<a class="headerlink" href="#adaptive_mesh-adaptive-mesh" title="Permanent link">&para;</a></h3>
 <table>
 <thead>
 <tr>
 <th>Parameter</th>
-<th>Unit</th>
+<th>Type</th>
 <th>Description</th>
 <th>Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>a1_pdas</code></td>
-<td>m</td>
-<td>PDAS prefactor</td>
-<td>50e-6</td>
+<td><code>adaptive_flag</code></td>
+<td>integer (0 or 1)</td>
+<td>Enable adaptive mesh</td>
+<td>0</td>
 </tr>
 <tr>
-<td><code>a2_sdas</code></td>
-<td>m</td>
-<td>SDAS prefactor</td>
-<td>10e-6</td>
+<td><code>amr_local_half_x</code></td>
+<td>real (m)</td>
+<td>Initial half-length of refined region in x</td>
+<td>1.0e-3</td>
 </tr>
 <tr>
-<td><code>n1_pdas</code></td>
-<td>-</td>
-<td>PDAS exponent for G</td>
-<td>-0.5</td>
+<td><code>amr_local_half_y</code></td>
+<td>real (m)</td>
+<td>Initial half-length of refined region in y</td>
+<td>2.0e-4</td>
 </tr>
 <tr>
-<td><code>n2_pdas</code></td>
-<td>-</td>
-<td>PDAS exponent for R</td>
-<td>-0.25</td>
+<td><code>amr_dx_fine</code></td>
+<td>real (m)</td>
+<td>Refined cell size</td>
+<td>10.0e-6</td>
 </tr>
 <tr>
-<td><code>n3_sdas</code></td>
-<td>-</td>
-<td>SDAS exponent for cooling rate</td>
-<td>-0.333</td>
+<td><code>remesh_interval</code></td>
+<td>integer</td>
+<td>Regrid every N timesteps</td>
+<td>20</td>
 </tr>
 </tbody>
 </table>
-<p>PDAS: <span class="arithmatex">\(\lambda_1 = a_1 \cdot G^{n_1} \cdot R^{n_2}\)</span>, SDAS: <span class="arithmatex">\(\lambda_2 = a_2 \cdot \dot{T}^{n_3}\)</span></p>
-<h3 id="crack_params-crack-risk-prediction-optional"><code>&amp;crack_params</code> — Crack Risk Prediction (optional)<a class="headerlink" href="#crack_params-crack-risk-prediction-optional" title="Permanent link">&para;</a></h3>
-<p>Only read when <code>crack_flag=1</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Unit</th>
-<th>Description</th>
-<th>Default</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>delta_t_btr</code></td>
-<td>K</td>
-<td>Brittle Temperature Range width below T_solidus</td>
-<td>100.0</td>
-</tr>
-</tbody>
-</table>
-<p>CSI = <span class="arithmatex">\(\int_{BTR} \alpha \cdot |\dot{T}| \, dt\)</span> where BTR = <span class="arithmatex">\([T_s - \Delta T_{BTR}, \, T_s]\)</span></p>
+<p>When <code>adaptive_flag=1</code>, the mesh is regenerated every <code>remesh_interval</code> timesteps so that the refined region (cell size <code>amr_dx_fine</code>, half-extents <code>amr_local_half_x</code> x <code>amr_local_half_y</code>) follows the laser/melt pool position. Cells outside the refined region use coarser spacing.</p>
 
 
 
