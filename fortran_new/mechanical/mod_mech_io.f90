@@ -8,6 +8,7 @@ module mech_io
 	use geometry, only: x, y, z, nim1, njm1, nkm1
 	use parameters, only: wp, file_prefix, case_name, result_dir
 	use mech_material, only: sig_yield
+	use mechanical_solver, only: fem_x, fem_y, fem_z
 	implicit none
 
 	! Timing accumulators
@@ -52,15 +53,15 @@ subroutine write_mech_vtk(step_idx, T_fem, ux, uy, uz, phase, sxx, syy, szz, von
 	write(lun,'(A,I0,A)') 'POINTS ', npts, ' float'
 	close(lun)
 
-	! Binary coordinates (FEM nodes = PHOENIX cell centers x(2:nim1), etc.)
+	! Binary coordinates (from FEM node arrays)
 	open(unit=lun, file=trim(vtkfile), access='stream', form='unformatted', &
 	     position='append', convert='big_endian')
 	do k = 1, Nnz
 	do j = 1, Nny
 	do i = 1, Nnx
-		val4 = real(x(i+1), 4); write(lun) val4
-		val4 = real(y(j+1), 4); write(lun) val4
-		val4 = real(z(k+1), 4); write(lun) val4
+		val4 = real(fem_x(i), 4); write(lun) val4
+		val4 = real(fem_y(j), 4); write(lun) val4
+		val4 = real(fem_z(k), 4); write(lun) val4
 	enddo
 	enddo
 	enddo
@@ -259,13 +260,13 @@ subroutine find_fem_bracket(xp, yp, Nnx, Nny, i1, i2, j1, j2, wx, wy)
 
 	i1 = 1
 	do i = 1, Nnx - 1
-		if (x(i+1+1) > xp) exit  ! x(i+1) is FEM node i's x-coord
+		if (fem_x(i+1) > xp) exit
 		i1 = i + 1
 	enddo
 	if (i1 >= Nnx) i1 = Nnx - 1
 	i2 = i1 + 1
-	if (abs(x(i2+1) - x(i1+1)) > 1.0e-15_wp) then
-		wx = (xp - x(i1+1)) / (x(i2+1) - x(i1+1))
+	if (abs(fem_x(i2) - fem_x(i1)) > 1.0e-15_wp) then
+		wx = (xp - fem_x(i1)) / (fem_x(i2) - fem_x(i1))
 	else
 		wx = 0.0_wp
 	endif
@@ -273,13 +274,13 @@ subroutine find_fem_bracket(xp, yp, Nnx, Nny, i1, i2, j1, j2, wx, wy)
 
 	j1 = 1
 	do i = 1, Nny - 1
-		if (y(i+1+1) > yp) exit
+		if (fem_y(i+1) > yp) exit
 		j1 = i + 1
 	enddo
 	if (j1 >= Nny) j1 = Nny - 1
 	j2 = j1 + 1
-	if (abs(y(j2+1) - y(j1+1)) > 1.0e-15_wp) then
-		wy = (yp - y(j1+1)) / (y(j2+1) - y(j1+1))
+	if (abs(fem_y(j2) - fem_y(j1)) > 1.0e-15_wp) then
+		wy = (yp - fem_y(j1)) / (fem_y(j2) - fem_y(j1))
 	else
 		wy = 0.0_wp
 	endif

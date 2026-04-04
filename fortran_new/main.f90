@@ -66,7 +66,7 @@ program main
 	mech_solve_count = 0
 	if (mechanical_flag == 1) then
 		call init_mechanical()
-		call init_mech_history(nim1-1, njm1-1, nkm1-1)
+		call init_mech_history(Nnx, Nny, Nnz)
 	endif
 	call init_thermal_history
 	call init_meltpool_history
@@ -348,16 +348,16 @@ program main
 
 			! Mechanical VTK output
 			if (mod(mech_solve_count, mech_output_interval) == 0) then
-				call write_mech_vtk(step_idx, temp(2:nim1,2:njm1,2:nkm1), &
+				call write_mech_vtk(step_idx, T_fem_last, &
 					ux_mech, uy_mech, uz_mech, mech_phase, &
 					sxx_out, syy_out, szz_out, vm_out, fplus_out, &
-					nim1-1, njm1-1, nkm1-1)
+					Nnx, Nny, Nnz)
 			endif
 
 			! Mechanical history
-			call write_mech_history(timet, temp(2:nim1,2:njm1,2:nkm1), &
+			call write_mech_history(timet, T_fem_last, &
 				ux_mech, uy_mech, uz_mech, sxx_out, syy_out, &
-				nim1-1, njm1-1, nkm1-1)
+				Nnx, Nny, Nnz)
 		endif
 
 		call cpu_time(t0)
@@ -416,7 +416,7 @@ program main
 
 	if (mechanical_flag == 1) then
 		call write_mech_timing_report(file_prefix)
-		call write_mech_memory_report(file_prefix, nim1-2, njm1-2, nkm1-2, nim1-1, njm1-1, nkm1-1)
+		call write_mech_memory_report(file_prefix, Nx, Ny, Nz, Nnx, Nny, Nnz)
 		call finalize_mech_history()
 		call cleanup_mechanical()
 	endif

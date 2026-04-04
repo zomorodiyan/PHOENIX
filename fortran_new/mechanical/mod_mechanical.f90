@@ -15,6 +15,7 @@ module mechanical_solver
 
 	private
 	public :: init_mechanical, cleanup_mechanical, solve_mechanical, get_stress_yield
+	public :: Nnx, Nny, Nnz, Nx, Ny, Nz
 
 	! Grid dimensions for FEM (set in init_mechanical)
 	! FEM nodes = PHOENIX interior cell centers: x(2:nim1), y(2:njm1), z(2:nkm1)
@@ -29,8 +30,10 @@ module mechanical_solver
 	! Simplified: precompute per-element Jacobian using actual node spacing
 	real(wp) :: N_gp(8,8)           ! Shape functions at 8 GPs
 
-	! Precomputed element stiffness for uniform-dx elements (used when dx=dy=dz=const)
-	real(wp) :: Ke_solid(24,24), Ke_soft(24,24)
+	! Precomputed element stiffness per Z-layer (dx/dy uniform, dz varies per layer)
+	real(wp), allocatable :: Ke_solid_z(:,:,:)  ! (24,24,Nz)
+	real(wp), allocatable :: Ke_soft_z(:,:,:)   ! (24,24,Nz)
+	real(wp) :: Ke_solid(24,24), Ke_soft(24,24) ! reference (kept for compatibility)
 
 	! GP-level state arrays: (6 Voigt components, 8 GPs, Nx, Ny, Nz)
 	real(wp), allocatable :: sig_gp(:,:,:,:,:)
@@ -55,26 +58,50 @@ module mechanical_solver
 	! Mechanical phase (public for VTK output)
 	integer, allocatable, public :: mech_phase(:,:,:)
 
-	! Reference coordinates for FEM nodes (pointers into PHOENIX grid)
-	! FEM node (i,j,k) corresponds to PHOENIX cell center x(i+1), y(j+1), z(k+1)
-	! i.e., FEM node 1 = x(2), FEM node Nnx = x(nim1)
+	! Last extracted FEM temperature (public for VTK/history output)
+	real(wp), allocatable, public :: T_fem_last(:,:,:)
+
+	! FEM node coordinates (coarsened from PHOENIX grid by mech_mesh_ratio)
+	real(wp), allocatable, public :: fem_x(:), fem_y(:), fem_z(:)
+	integer :: mratio  ! stored copy of mech_mesh_ratio
 
 	contains
 
 !********************************************************************
 subroutine init_mechanical()
+	use parameters, only: mech_mesh_ratio
 	integer :: i, j, k, g
 	real(wp) :: gp_c(2), xi, eta_q, zeta
 	real(wp) :: xi_n(8), eta_n(8), zeta_n(8)
 	real(wp) :: dx_ref, dy_ref, dz_ref
+	integer :: n_thermal_x, n_thermal_y, n_thermal_z
 
-	! FEM grid dimensions from PHOENIX grid
-	Nnx = nim1 - 1   ! number of FEM nodes in x
-	Nny = njm1 - 1   ! number of FEM nodes in y
-	Nnz = nkm1 - 1   ! number of FEM nodes in z
-	Nx = Nnx - 1      ! number of FEM elements in x
+	mratio = mech_mesh_ratio
+
+	! Thermal interior cell count
+	n_thermal_x = nim1 - 1   ! = ncvx(1)
+	n_thermal_y = njm1 - 1
+	n_thermal_z = nkm1 - 1
+
+	! FEM grid: coarsen by mratio (take every mratio-th thermal cell center)
+	Nnx = n_thermal_x / mratio + 1
+	Nny = n_thermal_y / mratio + 1
+	Nnz = n_thermal_z / mratio + 1
+	Nx = Nnx - 1
 	Ny = Nny - 1
 	Nz = Nnz - 1
+
+	! Build FEM node coordinates from PHOENIX grid
+	allocate(fem_x(Nnx), fem_y(Nny), fem_z(Nnz))
+	do i = 1, Nnx
+		fem_x(i) = x(2 + (i-1)*mratio)
+	enddo
+	do j = 1, Nny
+		fem_y(j) = y(2 + (j-1)*mratio)
+	enddo
+	do k = 1, Nnz
+		fem_z(k) = z(2 + (k-1)*mratio)
+	enddo
 
 	! Allocate state arrays
 	allocate(sig_gp(6, 8, Nx, Ny, Nz))
@@ -91,6 +118,7 @@ subroutine init_mechanical()
 	allocate(vm_out(Nnx, Nny, Nnz))
 	allocate(fplus_out(Nnx, Nny, Nnz))
 	allocate(mech_phase(Nnx, Nny, Nnz))
+	allocate(T_fem_last(Nnx, Nny, Nnz))
 
 	sig_gp = 0.0_wp
 	eps_gp = 0.0_wp
@@ -101,6 +129,7 @@ subroutine init_mechanical()
 	sxx_out = 0.0_wp; syy_out = 0.0_wp; szz_out = 0.0_wp
 	vm_out = 0.0_wp; fplus_out = 0.0_wp
 	mech_phase = MECH_POWDER
+	T_fem_last = tempPreheat
 
 	! Precompute shape functions at 8 GPs
 	xi_n   = (/ -1.0_wp, 1.0_wp,-1.0_wp, 1.0_wp,-1.0_wp, 1.0_wp,-1.0_wp, 1.0_wp /)
@@ -125,12 +154,19 @@ subroutine init_mechanical()
 	enddo
 	enddo
 
-	! Precompute Ke for a reference uniform element (used when grid is uniform)
-	dx_ref = x(3) - x(2)
-	dy_ref = y(3) - y(2)
-	dz_ref = z(3) - z(2)
+	! Precompute Ke for each Z-layer (dx/dy uniform within layer, dz varies)
+	dx_ref = fem_x(2) - fem_x(1)
+	dy_ref = fem_y(2) - fem_y(1)
+	dz_ref = fem_z(2) - fem_z(1)
 	call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid)
 	call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft)
+
+	allocate(Ke_solid_z(24,24,Nz), Ke_soft_z(24,24,Nz))
+	do k = 1, Nz
+		dz_ref = fem_z(k+1) - fem_z(k)
+		call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid_z(:,:,k))
+		call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft_z(:,:,k))
+	enddo
 
 end subroutine init_mechanical
 
@@ -144,6 +180,9 @@ subroutine cleanup_mechanical()
 	if (allocated(ux_mech))     deallocate(ux_mech, uy_mech, uz_mech)
 	if (allocated(sxx_out))     deallocate(sxx_out, syy_out, szz_out, vm_out, fplus_out)
 	if (allocated(mech_phase))  deallocate(mech_phase)
+	if (allocated(fem_x))       deallocate(fem_x, fem_y, fem_z)
+	if (allocated(Ke_solid_z))  deallocate(Ke_solid_z, Ke_soft_z)
+	if (allocated(T_fem_last))  deallocate(T_fem_last)
 end subroutine cleanup_mechanical
 
 !********************************************************************
@@ -305,18 +344,18 @@ end subroutine fem_node_x
 
 !********************************************************************
 subroutine get_elem_dx(ie, je, ke, dxe, dye, dze)
-! Get element spacing from PHOENIX grid.
+! Get element spacing from FEM node coordinates.
 	integer, intent(in) :: ie, je, ke
 	real(wp), intent(out) :: dxe, dye, dze
-	dxe = x(ie+2) - x(ie+1)   ! FEM element ie spans PHOENIX x(ie+1) to x(ie+2)
-	dye = y(je+2) - y(je+1)
-	dze = z(ke+2) - z(ke+1)
+	dxe = fem_x(ie+1) - fem_x(ie)
+	dye = fem_y(je+1) - fem_y(je)
+	dze = fem_z(ke+1) - fem_z(ke)
 end subroutine get_elem_dx
 
 !********************************************************************
 subroutine extract_temp_to_fem(temp_phoenix, T_fem)
-! Extract PHOENIX cell-center temperature to FEM node array.
-! FEM node (i,j,k) = PHOENIX cell center (i+1, j+1, k+1).
+! Extract PHOENIX cell-center temperature to coarsened FEM node array.
+! FEM node (i,j,k) = PHOENIX cell center at index (2 + (i-1)*mratio, ...).
 	real(wp), intent(in)  :: temp_phoenix(:,:,:)
 	real(wp), intent(out) :: T_fem(Nnx, Nny, Nnz)
 	integer :: i, j, k
@@ -325,7 +364,7 @@ subroutine extract_temp_to_fem(temp_phoenix, T_fem)
 	do k = 1, Nnz
 	do j = 1, Nny
 	do i = 1, Nnx
-		T_fem(i,j,k) = temp_phoenix(i+1, j+1, k+1)
+		T_fem(i,j,k) = temp_phoenix(2 + (i-1)*mratio, 2 + (j-1)*mratio, 2 + (k-1)*mratio)
 	enddo
 	enddo
 	enddo
@@ -342,7 +381,7 @@ subroutine extract_solidfield_to_fem(sf_phoenix, sf_fem)
 	do k = 1, Nnz
 	do j = 1, Nny
 	do i = 1, Nnx
-		sf_fem(i,j,k) = sf_phoenix(i+1, j+1, k+1)
+		sf_fem(i,j,k) = sf_phoenix(2 + (i-1)*mratio, 2 + (j-1)*mratio, 2 + (k-1)*mratio)
 	enddo
 	enddo
 	enddo
@@ -513,11 +552,11 @@ subroutine ebe_matvec_mech(ux, uy, uz, Aux, Auy, Auz, phase)
 		do ke = 1 + kc, Nz, 2
 		do je = 1 + jc, Ny, 2
 		do ie = 1 + ic, Nx, 2
-			! Use precomputed Ke (assumes uniform grid for matvec tangent)
+			! Use precomputed per-layer Ke (dx/dy uniform, dz varies per layer)
 			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-				Ke_loc = Ke_solid
+				Ke_loc = Ke_solid_z(:,:,ke)
 			else
-				Ke_loc = Ke_soft
+				Ke_loc = Ke_soft_z(:,:,ke)
 			endif
 
 			! Gather
@@ -576,6 +615,7 @@ subroutine solve_mech_cg(ux, uy, uz, fx, fy, fz, phase, cg_iters_out)
 	real(wp), allocatable :: Apx(:,:,:), Apy(:,:,:), Apz(:,:,:)
 	real(wp), allocatable :: diag_inv(:,:,:)
 	real(wp) :: rz_old, rz_new, pAp, alpha_cg, beta_cg, rnorm, bnorm
+	real(wp) :: dxe, dye, dze, Ke_loc(24,24)
 	integer  :: iter, ie, je, ke, di, dj, dk, ln, dof
 
 	allocate(rx(Nnx,Nny,Nnz), ry(Nnx,Nny,Nnz), rz_arr(Nnx,Nny,Nnz))
@@ -584,19 +624,20 @@ subroutine solve_mech_cg(ux, uy, uz, fx, fy, fz, phase, cg_iters_out)
 	allocate(Apx(Nnx,Nny,Nnz), Apy(Nnx,Nny,Nnz), Apz(Nnx,Nny,Nnz))
 	allocate(diag_inv(Nnx,Nny,Nnz))
 
-	! Jacobi preconditioner: assemble diagonal
+	! Jacobi preconditioner: assemble diagonal using precomputed per-layer Ke
 	diag_inv = 0.0_wp
 	do ke = 1, Nz
 	do je = 1, Ny
 	do ie = 1, Nx
+		if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+			Ke_loc = Ke_solid_z(:,:,ke)
+		else
+			Ke_loc = Ke_soft_z(:,:,ke)
+		endif
 		do dk = 0, 1; do dj = 0, 1; do di = 0, 1
 			ln = 1 + di + 2*dj + 4*dk
 			dof = 3*(ln-1) + 1
-			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-				diag_inv(ie+di,je+dj,ke+dk) = diag_inv(ie+di,je+dj,ke+dk) + Ke_solid(dof,dof)
-			else
-				diag_inv(ie+di,je+dj,ke+dk) = diag_inv(ie+di,je+dj,ke+dk) + Ke_soft(dof,dof)
-			endif
+			diag_inv(ie+di,je+dj,ke+dk) = diag_inv(ie+di,je+dj,ke+dk) + Ke_loc(dof,dof)
 		enddo; enddo; enddo
 	enddo
 	enddo
@@ -809,6 +850,9 @@ subroutine solve_mechanical(T_phoenix, sf_phoenix, res_out, newton_iters_out, cg
 
 	! Update GP state
 	call update_gp_state(ux_mech, uy_mech, uz_mech, dT_gp_arr, mech_phase)
+
+	! Save FEM temperature for VTK/history output
+	T_fem_last = T_fem
 
 	! Update temperature reference
 	T_old_mech = T_fem

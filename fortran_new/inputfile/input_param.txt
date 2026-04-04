@@ -25,8 +25,8 @@
 &boundary_conditions   htci=5, htcj=5, htck1=5, htckn=5, tempWest=293, tempEast=293,
 	tempNorth=293,	tempBottom=293,	tempPreheat=293, tempAmb=293  /
 
-&output_control outputintervel=50, case_name='test', toolpath_file='./ToolFiles/single_track.crs', species_flag=0, predict_flag=0 /
+&output_control outputintervel=50, case_name='test', toolpath_file='./ToolFiles/B26.crs', species_flag=0, predict_flag=0 /
 
 &adaptive_mesh adaptive_flag=0, amr_local_half_x=0.8e-3, amr_local_half_y=2.0e-4, amr_dx_fine=10.0e-6, remesh_interval=10 /
 
-&mechanical_params mechanical_flag=0, mech_interval=10, mech_output_interval=5 /
+&mechanical_params mechanical_flag=0, mech_interval=10, mech_output_interval=5, mech_mesh_ratio=4 /
