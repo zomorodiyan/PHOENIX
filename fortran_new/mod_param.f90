@@ -54,8 +54,14 @@ module parameters
 	! Enthalpy prediction flag
 	integer :: predict_flag = 0   ! 0=off, 1=integer-cell shift prediction during heating
 
+	! Mechanical solver parameters
+	integer :: mechanical_flag = 0        ! 0=off, 1=on
+	integer :: mech_interval = 10         ! solve mechanical every N thermal steps
+	integer :: mech_output_interval = 5   ! output mech VTK every N mechanical solves
+
 	namelist / output_control / outputintervel, case_name, toolpath_file, species_flag, predict_flag
 	namelist / adaptive_mesh / adaptive_flag, amr_local_half_x, amr_local_half_y, amr_dx_fine, remesh_interval
+	namelist / mechanical_params / mechanical_flag, mech_interval, mech_output_interval
 
 	contains
 
@@ -104,6 +110,9 @@ subroutine read_data
 
 	READ (10, NML=adaptive_mesh)
 	! read adaptive mesh parameters
+
+	READ (10, NML=mechanical_params)
+	! read mechanical solver parameters
 
 	close(10)    ! close file 10
 

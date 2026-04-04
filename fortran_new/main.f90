@@ -33,6 +33,8 @@ program main
 	use defect_field
 	use adaptive_mesh_mod
 	use prediction
+	use mechanical_solver
+	use mech_io
 	use species, only: allocate_species, init_species, &
 		species_bc, solve_species, concentration, conc_old, &
 		mix, tsolid2
@@ -45,6 +47,10 @@ program main
 	real(wp) t0, t1
 	real(wp) t_step_wall
 	real(wp) wall_start, wall_elapsed
+	integer  mech_solve_count
+	real(wp) mech_res
+	integer  mech_newton_iters, mech_cg_iters, n_yield
+	real(wp) t_mech_cpu0, t_mech_cpu1
 
 	call read_data
 	call read_toolpath
@@ -57,6 +63,11 @@ program main
 	call OpenFiles
 	call initialize
 	if (adaptive_flag == 1) call amr_init()
+	mech_solve_count = 0
+	if (mechanical_flag == 1) then
+		call init_mechanical()
+		call init_mech_history(nim1-1, njm1-1, nkm1-1)
+	endif
 	call init_thermal_history
 	call init_meltpool_history
 
@@ -317,6 +328,38 @@ program main
 		call cpu_time(t1)
 		t_defect = t_defect + (t1 - t0)
 
+!-----mechanical solver (every mech_interval steps)-----
+		if (mechanical_flag == 1 .and. mod(step_idx, mech_interval) == 0) then
+			call cpu_time(t_mech_cpu0)
+			call solve_mechanical(temp, solidfield, mech_res, mech_newton_iters, mech_cg_iters)
+			call get_stress_yield(sxx_out, syy_out, szz_out, vm_out, fplus_out)
+			mech_solve_count = mech_solve_count + 1
+			call cpu_time(t_mech_cpu1)
+			t_mech = t_mech + (t_mech_cpu1 - t_mech_cpu0)
+			mio_t_cpu = mio_t_cpu + (t_mech_cpu1 - t_mech_cpu0)
+			mio_n_solves = mio_n_solves + 1
+
+			! Report to output.txt
+			n_yield = count(fplus_out > 0.0_wp)
+			write(9,'(A,I6,A,es10.3,A,es10.3,A,I8)') &
+				'  Mech step', mech_solve_count, &
+				'  res=', mech_res, '  max_vm=', maxval(vm_out), &
+				'  yield_elems=', n_yield
+
+			! Mechanical VTK output
+			if (mod(mech_solve_count, mech_output_interval) == 0) then
+				call write_mech_vtk(step_idx, temp(2:nim1,2:njm1,2:nkm1), &
+					ux_mech, uy_mech, uz_mech, mech_phase, &
+					sxx_out, syy_out, szz_out, vm_out, fplus_out, &
+					nim1-1, njm1-1, nkm1-1)
+			endif
+
+			! Mechanical history
+			call write_mech_history(timet, temp(2:nim1,2:njm1,2:nkm1), &
+				ux_mech, uy_mech, uz_mech, sxx_out, syy_out, &
+				nim1-1, njm1-1, nkm1-1)
+		endif
+
 		call cpu_time(t0)
 		call CalTime
 		call outputres
@@ -370,6 +413,13 @@ program main
 	call EndTime
 	call finalize_thermal_history
 	call finalize_meltpool_history
+
+	if (mechanical_flag == 1) then
+		call write_mech_timing_report(file_prefix)
+		call write_mech_memory_report(file_prefix, nim1-2, njm1-2, nkm1-2, nim1-1, njm1-1, nkm1-1)
+		call finalize_mech_history()
+		call cleanup_mechanical()
+	endif
 
 	wall_elapsed = omp_get_wtime() - wall_start
 

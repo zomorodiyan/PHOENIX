@@ -24,6 +24,8 @@ module timing
 	real(wp), save :: t_species  = 0.0_wp   ! species transport (solve_species)
 	real(wp), save :: t_amr      = 0.0_wp   ! adaptive mesh (remesh + interpolation)
 	integer,  save :: n_amr_remesh = 0       ! number of remeshes performed
+	real(wp), save :: t_mech     = 0.0_wp   ! mechanical solver (total CPU)
+	integer,  save :: n_mech_solves = 0      ! number of mechanical solves
 
 	! Heating / cooling stage wall-clock time
 	real(wp), save :: t_heating   = 0.0_wp   ! wall-clock time in laser-on steps
@@ -107,7 +109,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	real(wp), intent(in) :: timet_end
 	real(wp), intent(in) :: wall_elapsed
 	character(len=*), intent(in) :: file_prefix
-	integer, parameter :: lun = 88, nmod = 17
+	integer, parameter :: lun = 88, nmod = 18
 	integer :: ihr, imin, isec
 	real(wp) :: t_total, t_sum
 	real(wp) :: pct, pct_glob
@@ -116,7 +118,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	integer :: idx(nmod), i, j, itmp
 
 	t_total = t_prop + t_bound + t_discret + t_sour + t_resid + t_converge + &
-	          t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_amr + t_other
+	          t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_amr + t_mech + t_other
 	if (t_total <= 0.0_wp) t_total = 1.0_wp
 
 	t_list(1) = t_prop;    name_list(1) = 'mod_prop'
@@ -135,7 +137,8 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	t_list(14) = t_defect; name_list(14) = 'defect (max_temp)'
 	t_list(15) = t_species; name_list(15) = 'mod_species'
 	t_list(16) = t_amr;    name_list(16) = 'adaptive mesh'
-	t_list(17) = t_other;  name_list(17) = 'other (copy/misc)'
+	t_list(17) = t_mech;   name_list(17) = 'mechanical'
+	t_list(18) = t_other;  name_list(18) = 'other (copy/misc)'
 	do i = 1, nmod
 		idx(i) = i
 	enddo
@@ -171,7 +174,7 @@ subroutine write_timing_report(itertot, timet_end, wall_elapsed, file_prefix)
 	enddo
 	write(lun,'(a)') '--------------------------------------------'
 	t_sum = t_prop + t_bound + t_discret + t_sour + t_resid + t_converge + &
-	        t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_amr + t_other
+	        t_solve + t_entot + t_dimen + t_flux + t_revise + t_print + t_laser + t_defect + t_species + t_amr + t_mech + t_other
 	write(lun,'(a,f12.3)') '  Sum (check):         ', t_sum
 	write(lun,'(a)') '============================================'
 	write(lun,'(a)') ''

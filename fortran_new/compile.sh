@@ -38,6 +38,9 @@ gfortran -fopenmp -O3 -march=native -c \
     mod_toolpath.f90 \
     mod_timing.f90 \
     mod_defect.f90 \
+    mechanical/mod_mech_material.f90 \
+    mechanical/mod_mechanical.f90 \
+    mechanical/mod_mech_io.f90 \
     main.f90
 
 gfortran -fopenmp -O3 -march=native *.o -o cluster_main
