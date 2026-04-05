@@ -68,8 +68,7 @@ program main
 	! Mechanical-only process: skip thermal init, go straight to mechanical loop
 	if (run_mode == 'mechanical') then
 		call generate_grid
-		call init_mechanical()
-		call init_mech_history(Nnx, Nny, Nnz)
+		! init_mechanical and init_mech_history called inside run_mechanical_loop
 		call run_mechanical_loop()
 		stop
 	endif
@@ -137,7 +136,7 @@ program main
 				call amr_regenerate_grid()
 				call update_thermal_history_indices()
 				call defect_update_map()
-				if (mechanical_flag == 1) call update_mech_grid()
+				if (mechanical_flag == 1 .and. .not. mech_parallel) call update_mech_grid()
 				call cpu_time(t1)
 				t_amr = t_amr + (t1 - t0)
 				n_amr_remesh = n_amr_remesh + 1
