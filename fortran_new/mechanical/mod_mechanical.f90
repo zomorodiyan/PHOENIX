@@ -386,8 +386,9 @@ subroutine mech_interp_gp_field(x_old, y_old, x_new, y_new, gp_field)
 
 	real(wp), allocatable :: tmp(:,:,:,:,:)
 	real(wp), allocatable :: xc_old(:), yc_old(:), xc_new(:), yc_new(:)
-	integer  :: ie, je, ke, g, c, i1, i2, j1, j2
-	real(wp) :: xn, yn, wx, wy
+	integer, allocatable :: imap(:), jmap(:)
+	integer  :: ie, je, ke, i_near, j_near
+	real(wp) :: xn, yn, d1, d2
 
 	! Compute element center coordinates (old and new)
 	allocate(xc_old(Nx), yc_old(Ny), xc_new(Nx), yc_new(Ny))
@@ -400,54 +401,45 @@ subroutine mech_interp_gp_field(x_old, y_old, x_new, y_new, gp_field)
 		yc_new(je) = 0.5_wp * (y_new(je) + y_new(je+1))
 	enddo
 
-	allocate(tmp(6, 8, Nx, Ny, Nz))
-
-	!$OMP PARALLEL DO PRIVATE(ie,je,ke,g,c,i1,i2,j1,j2,xn,yn,wx,wy) COLLAPSE(2)
-	do ke = 1, Nz
+	! Build nearest-neighbor maps (preserves stress magnitudes, no smoothing)
+	allocate(imap(Nx), jmap(Ny))
+	i_near = 1
+	do ie = 1, Nx
+		xn = xc_new(ie)
+		do while (i_near < Nx)
+			d1 = abs(xc_old(i_near) - xn)
+			d2 = abs(xc_old(i_near+1) - xn)
+			if (d2 >= d1) exit
+			i_near = i_near + 1
+		enddo
+		imap(ie) = i_near
+	enddo
+	j_near = 1
 	do je = 1, Ny
 		yn = yc_new(je)
-		j1 = 1
-		do j1 = 1, Ny-1
-			if (yc_old(j1+1) >= yn) exit
+		do while (j_near < Ny)
+			d1 = abs(yc_old(j_near) - yn)
+			d2 = abs(yc_old(j_near+1) - yn)
+			if (d2 >= d1) exit
+			j_near = j_near + 1
 		enddo
-		j2 = min(j1 + 1, Ny)
-		if (j1 == j2) then
-			wy = 0.0_wp
-		else
-			wy = (yn - yc_old(j1)) / (yc_old(j2) - yc_old(j1))
-			wy = max(0.0_wp, min(1.0_wp, wy))
-		endif
+		jmap(je) = j_near
+	enddo
 
-		do ie = 1, Nx
-			xn = xc_new(ie)
-			i1 = 1
-			do i1 = 1, Nx-1
-				if (xc_old(i1+1) >= xn) exit
-			enddo
-			i2 = min(i1 + 1, Nx)
-			if (i1 == i2) then
-				wx = 0.0_wp
-			else
-				wx = (xn - xc_old(i1)) / (xc_old(i2) - xc_old(i1))
-				wx = max(0.0_wp, min(1.0_wp, wx))
-			endif
+	allocate(tmp(6, 8, Nx, Ny, Nz))
 
-			do g = 1, 8
-			do c = 1, 6
-				tmp(c,g,ie,je,ke) = &
-					(1.0_wp-wx)*(1.0_wp-wy) * gp_field(c,g,i1,j1,ke) &
-					+ wx*(1.0_wp-wy)         * gp_field(c,g,i2,j1,ke) &
-					+ (1.0_wp-wx)*wy         * gp_field(c,g,i1,j2,ke) &
-					+ wx*wy                  * gp_field(c,g,i2,j2,ke)
-			enddo
-			enddo
-		enddo
+	!$OMP PARALLEL DO PRIVATE(ie,je,ke) COLLAPSE(3)
+	do ke = 1, Nz
+	do je = 1, Ny
+	do ie = 1, Nx
+		tmp(:, :, ie, je, ke) = gp_field(:, :, imap(ie), jmap(je), ke)
+	enddo
 	enddo
 	enddo
 	!$OMP END PARALLEL DO
 
 	gp_field = tmp
-	deallocate(tmp, xc_old, yc_old, xc_new, yc_new)
+	deallocate(tmp, xc_old, yc_old, xc_new, yc_new, imap, jmap)
 end subroutine mech_interp_gp_field
 
 !********************************************************************
