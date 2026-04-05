@@ -91,17 +91,30 @@ subroutine init_mechanical()
 	Ny = Nny - 1
 	Nz = Nnz - 1
 
+	! Ensure FEM nodes stay within PHOENIX interior (2 to nim1, etc.)
+	! Last FEM node index in PHOENIX: 2 + (Nnx-1)*mratio must be <= nim1
+	if (2 + (Nnx-1)*mratio > nim1) Nnx = (nim1 - 2) / mratio + 1
+	if (2 + (Nny-1)*mratio > njm1) Nny = (njm1 - 2) / mratio + 1
+	if (2 + (Nnz-1)*mratio > nkm1) Nnz = (nkm1 - 2) / mratio + 1
+	Nx = Nnx - 1; Ny = Nny - 1; Nz = Nnz - 1
+
 	! Build FEM node coordinates from PHOENIX grid
+	! Force last node to be at the interior boundary (nim1, njm1, nkm1)
+	! to capture the surface layer
 	allocate(fem_x(Nnx), fem_y(Nny), fem_z(Nnz))
 	do i = 1, Nnx
-		fem_x(i) = x(2 + (i-1)*mratio)
+		fem_x(i) = x(min(2 + (i-1)*mratio, nim1))
 	enddo
 	do j = 1, Nny
-		fem_y(j) = y(2 + (j-1)*mratio)
+		fem_y(j) = y(min(2 + (j-1)*mratio, njm1))
 	enddo
 	do k = 1, Nnz
-		fem_z(k) = z(2 + (k-1)*mratio)
+		fem_z(k) = z(min(2 + (k-1)*mratio, nkm1))
 	enddo
+	! Ensure last node IS at the surface
+	fem_x(Nnx) = x(nim1)
+	fem_y(Nny) = y(njm1)
+	fem_z(Nnz) = z(nkm1)
 
 	! Allocate state arrays
 	allocate(sig_gp(6, 8, Nx, Ny, Nz))
@@ -355,16 +368,19 @@ end subroutine get_elem_dx
 !********************************************************************
 subroutine extract_temp_to_fem(temp_phoenix, T_fem)
 ! Extract PHOENIX cell-center temperature to coarsened FEM node array.
-! FEM node (i,j,k) = PHOENIX cell center at index (2 + (i-1)*mratio, ...).
+! Last node forced to nim1/njm1/nkm1 to capture surface.
 	real(wp), intent(in)  :: temp_phoenix(:,:,:)
 	real(wp), intent(out) :: T_fem(Nnx, Nny, Nnz)
-	integer :: i, j, k
+	integer :: i, j, k, ip, jp, kp
 
-	!$OMP PARALLEL DO PRIVATE(i,j,k)
+	!$OMP PARALLEL DO PRIVATE(i,j,k,ip,jp,kp)
 	do k = 1, Nnz
 	do j = 1, Nny
 	do i = 1, Nnx
-		T_fem(i,j,k) = temp_phoenix(2 + (i-1)*mratio, 2 + (j-1)*mratio, 2 + (k-1)*mratio)
+		ip = min(2 + (i-1)*mratio, nim1)
+		jp = min(2 + (j-1)*mratio, njm1)
+		kp = min(2 + (k-1)*mratio, nkm1)
+		T_fem(i,j,k) = temp_phoenix(ip, jp, kp)
 	enddo
 	enddo
 	enddo
@@ -375,13 +391,16 @@ end subroutine extract_temp_to_fem
 subroutine extract_solidfield_to_fem(sf_phoenix, sf_fem)
 	real(wp), intent(in)  :: sf_phoenix(:,:,:)
 	real(wp), intent(out) :: sf_fem(Nnx, Nny, Nnz)
-	integer :: i, j, k
+	integer :: i, j, k, ip, jp, kp
 
-	!$OMP PARALLEL DO PRIVATE(i,j,k)
+	!$OMP PARALLEL DO PRIVATE(i,j,k,ip,jp,kp)
 	do k = 1, Nnz
 	do j = 1, Nny
 	do i = 1, Nnx
-		sf_fem(i,j,k) = sf_phoenix(2 + (i-1)*mratio, 2 + (j-1)*mratio, 2 + (k-1)*mratio)
+		ip = min(2 + (i-1)*mratio, nim1)
+		jp = min(2 + (j-1)*mratio, njm1)
+		kp = min(2 + (k-1)*mratio, nkm1)
+		sf_fem(i,j,k) = sf_phoenix(ip, jp, kp)
 	enddo
 	enddo
 	enddo
