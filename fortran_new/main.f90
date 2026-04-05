@@ -107,6 +107,7 @@ program main
 				call amr_regenerate_grid()
 				call update_thermal_history_indices()
 				call defect_update_map()
+				if (mechanical_flag == 1) call update_mech_grid()
 				call cpu_time(t1)
 				t_amr = t_amr + (t1 - t0)
 				n_amr_remesh = n_amr_remesh + 1

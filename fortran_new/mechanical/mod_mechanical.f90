@@ -15,6 +15,7 @@ module mechanical_solver
 
 	private
 	public :: init_mechanical, cleanup_mechanical, solve_mechanical, get_stress_yield
+	public :: update_mech_grid
 	public :: Nnx, Nny, Nnz, Nx, Ny, Nz
 
 	! Grid dimensions for FEM (set in init_mechanical)
@@ -182,6 +183,44 @@ subroutine init_mechanical()
 	enddo
 
 end subroutine init_mechanical
+
+!********************************************************************
+subroutine update_mech_grid()
+! Refresh FEM node coordinates and precomputed Ke after AMR remesh.
+! AMR changes x, y coordinate values but NOT ni, nj (topology preserved),
+! so array sizes remain valid — only coordinates and Ke need updating.
+	integer :: i, j, k
+	real(wp) :: dx_ref, dy_ref, dz_ref
+
+	! Refresh FEM node coordinates from current PHOENIX grid
+	do i = 1, Nnx
+		fem_x(i) = x(min(2 + (i-1)*mratio, nim1))
+	enddo
+	do j = 1, Nny
+		fem_y(j) = y(min(2 + (j-1)*mratio, njm1))
+	enddo
+	! z does not change with AMR, but refresh for safety
+	do k = 1, Nnz
+		fem_z(k) = z(min(2 + (k-1)*mratio, nkm1))
+	enddo
+	fem_x(Nnx) = x(nim1)
+	fem_y(Nny) = y(njm1)
+	fem_z(Nnz) = z(nkm1)
+
+	! Recompute precomputed Ke with updated element sizes
+	dx_ref = fem_x(2) - fem_x(1)
+	dy_ref = fem_y(2) - fem_y(1)
+	dz_ref = fem_z(2) - fem_z(1)
+	call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid)
+	call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft)
+
+	do k = 1, Nz
+		dz_ref = fem_z(k+1) - fem_z(k)
+		call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid_z(:,:,k))
+		call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft_z(:,:,k))
+	enddo
+
+end subroutine update_mech_grid
 
 !********************************************************************
 subroutine cleanup_mechanical()
