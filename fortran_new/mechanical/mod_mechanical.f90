@@ -65,6 +65,7 @@ module mechanical_solver
 	! FEM node coordinates (coarsened from PHOENIX grid by mech_mesh_ratio)
 	real(wp), allocatable, public :: fem_x(:), fem_y(:), fem_z(:)
 	integer :: mratio  ! stored copy of mech_mesh_ratio
+	logical :: grid_uniform = .true.  ! .true. if dx/dy uniform → use precomputed Ke
 
 	contains
 
@@ -168,9 +169,24 @@ subroutine init_mechanical()
 	enddo
 	enddo
 
-	! Precompute Ke for each Z-layer (dx/dy uniform within layer, dz varies)
+	! Check if dx/dy are uniform (tolerance: 1% relative)
 	dx_ref = fem_x(2) - fem_x(1)
 	dy_ref = fem_y(2) - fem_y(1)
+	grid_uniform = .true.
+	do i = 2, Nx
+		if (abs((fem_x(i+1)-fem_x(i)) - dx_ref) > 0.01_wp * dx_ref) then
+			grid_uniform = .false.; exit
+		endif
+	enddo
+	if (grid_uniform) then
+		do j = 2, Ny
+			if (abs((fem_y(j+1)-fem_y(j)) - dy_ref) > 0.01_wp * dy_ref) then
+				grid_uniform = .false.; exit
+			endif
+		enddo
+	endif
+
+	! Precompute Ke for each Z-layer (valid when dx/dy uniform)
 	dz_ref = fem_z(2) - fem_z(1)
 	call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid)
 	call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft)
@@ -208,9 +224,24 @@ subroutine update_mech_grid(T_phoenix)
 	fem_y(Nny) = y(njm1)
 	fem_z(Nnz) = z(nkm1)
 
-	! (2) Recompute precomputed Ke (used as fallback, not in matvec)
+	! Check if dx/dy are uniform (tolerance: 1% relative)
 	dx_ref = fem_x(2) - fem_x(1)
 	dy_ref = fem_y(2) - fem_y(1)
+	grid_uniform = .true.
+	do i = 2, Nx
+		if (abs((fem_x(i+1)-fem_x(i)) - dx_ref) > 0.01_wp * dx_ref) then
+			grid_uniform = .false.; exit
+		endif
+	enddo
+	if (grid_uniform) then
+		do j = 2, Ny
+			if (abs((fem_y(j+1)-fem_y(j)) - dy_ref) > 0.01_wp * dy_ref) then
+				grid_uniform = .false.; exit
+			endif
+		enddo
+	endif
+
+	! (2) Recompute precomputed Ke
 	dz_ref = fem_z(2) - fem_z(1)
 	call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid)
 	call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft)
@@ -657,12 +688,20 @@ subroutine ebe_matvec_mech(ux, uy, uz, Aux, Auy, Auz, phase)
 		do ke = 1 + kc, Nz, 2
 		do je = 1 + jc, Ny, 2
 		do ie = 1 + ic, Nx, 2
-			! Compute Ke using actual element dimensions (AMR-safe)
-			call get_elem_dx(ie, je, ke, dxe, dye, dze)
-			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-				call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
+			! Get Ke: precomputed if uniform grid, on-the-fly if AMR non-uniform
+			if (grid_uniform) then
+				if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+					Ke_loc = Ke_solid_z(:,:,ke)
+				else
+					Ke_loc = Ke_soft_z(:,:,ke)
+				endif
 			else
-				call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
+				call get_elem_dx(ie, je, ke, dxe, dye, dze)
+				if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+					call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
+				else
+					call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
+				endif
 			endif
 
 			! Gather
@@ -730,16 +769,24 @@ subroutine solve_mech_cg(ux, uy, uz, fx, fy, fz, phase, cg_iters_out)
 	allocate(Apx(Nnx,Nny,Nnz), Apy(Nnx,Nny,Nnz), Apz(Nnx,Nny,Nnz))
 	allocate(diag_inv(Nnx,Nny,Nnz))
 
-	! Jacobi preconditioner: assemble diagonal using actual element Ke
+	! Jacobi preconditioner: assemble diagonal
 	diag_inv = 0.0_wp
 	do ke = 1, Nz
 	do je = 1, Ny
 	do ie = 1, Nx
-		call get_elem_dx(ie, je, ke, dxe, dye, dze)
-		if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-			call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
+		if (grid_uniform) then
+			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+				Ke_loc = Ke_solid_z(:,:,ke)
+			else
+				Ke_loc = Ke_soft_z(:,:,ke)
+			endif
 		else
-			call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
+			call get_elem_dx(ie, je, ke, dxe, dye, dze)
+			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+				call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
+			else
+				call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
+			endif
 		endif
 		do dk = 0, 1; do dj = 0, 1; do di = 0, 1
 			ln = 1 + di + 2*dj + 4*dk
