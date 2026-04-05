@@ -185,21 +185,22 @@ subroutine init_mechanical()
 end subroutine init_mechanical
 
 !********************************************************************
-subroutine update_mech_grid()
-! Refresh FEM node coordinates and precomputed Ke after AMR remesh.
-! AMR changes x, y coordinate values but NOT ni, nj (topology preserved),
-! so array sizes remain valid — only coordinates and Ke need updating.
-	integer :: i, j, k
-	real(wp) :: dx_ref, dy_ref, dz_ref
+subroutine update_mech_grid(T_phoenix)
+! Refresh FEM mesh after AMR remesh. AMR changes x, y coordinate values
+! but NOT ni, nj (topology preserved), so array sizes remain valid.
+! Updates: (1) fem_x/y/z, (2) precomputed Ke, (3) eps_gp, (4) T_old_mech.
+	real(wp), intent(in) :: T_phoenix(:,:,:)
+	integer :: i, j, k, ie, je, ke, di, dj, dk, ln, dof, g, p, q
+	real(wp) :: dx_ref, dy_ref, dz_ref, dxe, dye, dze
+	real(wp) :: u_e(24), B_gp(6,24), eps_curr(6)
 
-	! Refresh FEM node coordinates from current PHOENIX grid
+	! (1) Refresh FEM node coordinates from current PHOENIX grid
 	do i = 1, Nnx
 		fem_x(i) = x(min(2 + (i-1)*mratio, nim1))
 	enddo
 	do j = 1, Nny
 		fem_y(j) = y(min(2 + (j-1)*mratio, njm1))
 	enddo
-	! z does not change with AMR, but refresh for safety
 	do k = 1, Nnz
 		fem_z(k) = z(min(2 + (k-1)*mratio, nkm1))
 	enddo
@@ -207,18 +208,57 @@ subroutine update_mech_grid()
 	fem_y(Nny) = y(njm1)
 	fem_z(Nnz) = z(nkm1)
 
-	! Recompute precomputed Ke with updated element sizes
+	! (2) Recompute precomputed Ke (used as fallback, not in matvec)
 	dx_ref = fem_x(2) - fem_x(1)
 	dy_ref = fem_y(2) - fem_y(1)
 	dz_ref = fem_z(2) - fem_z(1)
 	call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid)
 	call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft)
-
 	do k = 1, Nz
 		dz_ref = fem_z(k+1) - fem_z(k)
 		call compute_Ke_uniform(E_solid, nu_mech, dx_ref, dy_ref, dz_ref, Ke_solid_z(:,:,k))
 		call compute_Ke_uniform(E_soft,  nu_mech, dx_ref, dy_ref, dz_ref, Ke_soft_z(:,:,k))
 	enddo
+
+	! (3) Recompute eps_gp from current displacements using new B matrices.
+	! Without this, eps_inc = B_new*u - eps_gp_old is inconsistent → NaN.
+	!$OMP PARALLEL DO PRIVATE(ie,je,ke,u_e,B_gp,eps_curr,dxe,dye,dze,di,dj,dk,ln,dof,g,p,q) COLLAPSE(3)
+	do ke = 1, Nz
+	do je = 1, Ny
+	do ie = 1, Nx
+		call get_elem_dx(ie, je, ke, dxe, dye, dze)
+
+		do dk = 0, 1
+		do dj = 0, 1
+		do di = 0, 1
+			ln = 1 + di + 2*dj + 4*dk
+			dof = 3*(ln-1)
+			u_e(dof+1) = ux_mech(ie+di, je+dj, ke+dk)
+			u_e(dof+2) = uy_mech(ie+di, je+dj, ke+dk)
+			u_e(dof+3) = uz_mech(ie+di, je+dj, ke+dk)
+		enddo
+		enddo
+		enddo
+
+		do g = 1, 8
+			call get_B_at_gp(dxe, dye, dze, g, B_gp)
+			do p = 1, 6
+				eps_curr(p) = 0.0_wp
+				do q = 1, 24
+					eps_curr(p) = eps_curr(p) + B_gp(p, q) * u_e(q)
+				enddo
+			enddo
+			eps_gp(:, g, ie, je, ke) = eps_curr
+		enddo
+	enddo
+	enddo
+	enddo
+	!$OMP END PARALLEL DO
+
+	! (4) Refresh T_old_mech from current temperature on new grid.
+	! Without this, dT = T_new - T_old contains spurious thermal strain
+	! from the grid coordinate change (not actual temperature change).
+	call extract_temp_to_fem(T_phoenix, T_old_mech)
 
 end subroutine update_mech_grid
 
@@ -607,30 +647,22 @@ subroutine ebe_matvec_mech(ux, uy, uz, Aux, Auy, Auz, phase)
 	real(wp) :: dxe, dye, dze
 	integer  :: ie, je, ke, a, b, di, dj, dk, ln, dof
 	integer  :: color, ic, jc, kc
-	logical  :: need_recompute
 
 	Aux = 0.0_wp; Auy = 0.0_wp; Auz = 0.0_wp
 
 	do color = 0, 7
 		ic = mod(color, 2); jc = mod(color/2, 2); kc = mod(color/4, 2)
 
-		!$OMP PARALLEL DO PRIVATE(ie,je,ke,xe,Axe,Ke_loc,dxe,dye,dze,a,b,di,dj,dk,ln,dof,need_recompute) COLLAPSE(3)
+		!$OMP PARALLEL DO PRIVATE(ie,je,ke,xe,Axe,Ke_loc,dxe,dye,dze,a,b,di,dj,dk,ln,dof) COLLAPSE(3)
 		do ke = 1 + kc, Nz, 2
 		do je = 1 + jc, Ny, 2
 		do ie = 1 + ic, Nx, 2
-			! Boundary elements may have non-uniform dx/dy — recompute Ke
-			need_recompute = (ie == Nx) .or. (je == Ny)
-			if (need_recompute) then
-				call get_elem_dx(ie, je, ke, dxe, dye, dze)
-				if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-					call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
-				else
-					call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
-				endif
-			else if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-				Ke_loc = Ke_solid_z(:,:,ke)
+			! Compute Ke using actual element dimensions (AMR-safe)
+			call get_elem_dx(ie, je, ke, dxe, dye, dze)
+			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+				call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
 			else
-				Ke_loc = Ke_soft_z(:,:,ke)
+				call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
 			endif
 
 			! Gather
@@ -698,23 +730,16 @@ subroutine solve_mech_cg(ux, uy, uz, fx, fy, fz, phase, cg_iters_out)
 	allocate(Apx(Nnx,Nny,Nnz), Apy(Nnx,Nny,Nnz), Apz(Nnx,Nny,Nnz))
 	allocate(diag_inv(Nnx,Nny,Nnz))
 
-	! Jacobi preconditioner: assemble diagonal using precomputed per-layer Ke
+	! Jacobi preconditioner: assemble diagonal using actual element Ke
 	diag_inv = 0.0_wp
 	do ke = 1, Nz
 	do je = 1, Ny
 	do ie = 1, Nx
-		! Boundary elements may have non-uniform dx/dy — recompute Ke
-		if ((ie == Nx) .or. (je == Ny)) then
-			call get_elem_dx(ie, je, ke, dxe, dye, dze)
-			if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-				call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
-			else
-				call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
-			endif
-		else if (elem_phase(ie,je,ke) /= MECH_POWDER) then
-			Ke_loc = Ke_solid_z(:,:,ke)
+		call get_elem_dx(ie, je, ke, dxe, dye, dze)
+		if (elem_phase(ie,je,ke) /= MECH_POWDER) then
+			call compute_Ke_uniform(E_solid, nu_mech, dxe, dye, dze, Ke_loc)
 		else
-			Ke_loc = Ke_soft_z(:,:,ke)
+			call compute_Ke_uniform(E_soft, nu_mech, dxe, dye, dze, Ke_loc)
 		endif
 		do dk = 0, 1; do dj = 0, 1; do di = 0, 1
 			ln = 1 + di + 2*dj + 4*dk
