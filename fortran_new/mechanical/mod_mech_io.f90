@@ -97,20 +97,6 @@ subroutine read_mech_input(step_idx_expect, step_out, time_out, &
 	found = .true.
 end subroutine read_mech_input
 
-!********************************************************************
-subroutine write_mech_done()
-! Write sentinel file to signal thermal loop is complete.
-	integer, parameter :: lun = 95
-	open(unit=lun, file=trim(file_prefix)//'mech_DONE', status='replace')
-	close(lun)
-end subroutine write_mech_done
-
-!********************************************************************
-function check_mech_done() result(done)
-! Check if thermal solver has signaled completion.
-	logical :: done
-	inquire(file=trim(file_prefix)//'mech_DONE', exist=done)
-end function check_mech_done
 
 !********************************************************************
 subroutine write_mech_vtk(step_idx, T_fem, ux, uy, uz, phase, sxx, syy, szz, vonmises, fplus, &

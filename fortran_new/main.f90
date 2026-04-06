@@ -439,8 +439,7 @@ program main
 
 	end do time_loop
 
-	! Signal mechanical solver that thermal is done
-	if (mech_parallel) call write_mech_done()
+	! No mech_DONE sentinel needed — mechanical knows the last step from timax/delt
 
 	! Post-simulation analysis (before EndTime closes output file)
 	call compute_defect_determ()
@@ -485,7 +484,7 @@ subroutine run_mechanical_loop()
 
 	real(wp), allocatable :: temp_buf(:,:,:), sf_buf(:,:,:)
 	real(wp), allocatable :: x_buf(:), y_buf(:), x_prev(:), y_prev(:)
-	integer  :: step_out, mech_count, n_yield, next_step
+	integer  :: step_out, mech_count, n_yield, next_step, last_mech_step, nsteps_total
 	real(wp) :: time_out, mech_res
 	integer  :: mech_newton_iters, mech_cg_iters
 	real(wp) :: t0_cpu, t1_cpu, wall_mech_start
@@ -505,16 +504,24 @@ subroutine run_mechanical_loop()
 	x_prev = x(1:ni)
 	y_prev = y(1:nj)
 
+	! Compute the last step that will have a mech input file
+	nsteps_total = nint(timax / delt)
+	last_mech_step = (nsteps_total / mech_interval) * mech_interval
+	write(*,'(A,I6,A,I6)') '  [MECH] Expecting files from step', mech_interval, &
+		' to', last_mech_step
+
 	mech_count = 0
 	next_step = mech_interval
 
 	do
+		! All expected files processed — exit
+		if (next_step > last_mech_step) exit
+
 		! Poll for next input file
 		call read_mech_input(next_step, step_out, time_out, &
 			temp_buf, sf_buf, x_buf, y_buf, found)
 
 		if (.not. found) then
-			if (check_mech_done()) exit
 			call sleep(1)
 			cycle
 		endif
@@ -571,9 +578,5 @@ subroutine run_mechanical_loop()
 	call cleanup_mechanical()
 
 	deallocate(temp_buf, sf_buf, x_buf, y_buf, x_prev, y_prev)
-
-	! Clean up DONE sentinel
-	open(unit=95, file=trim(file_prefix)//'mech_DONE', status='old')
-	close(95, status='delete')
 
 end subroutine run_mechanical_loop
