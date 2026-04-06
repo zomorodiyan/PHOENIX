@@ -76,7 +76,7 @@ end subroutine allocate_species
 !********************************************************************
 subroutine init_species
 	integer :: i, j, k
-	real(wp) :: z_powder_top, y_mid
+	real(wp) :: y_mid
 
 	! Derived constants for secondary material
 	deltemp2 = tliquid2 - tsolid2
@@ -85,17 +85,15 @@ subroutine init_species
 	hlcal2   = hsmelt2 + cpavg2*deltemp2
 	hlfriz2  = hlcal2 + hlatnt
 
-	! Initial conditions: substrate=1 (base), powder half-domain=0 (secondary)
-	z_powder_top = dimz                    ! top of domain = top of powder
-	y_mid = dimy * 0.5_wp                  ! half of domain in y
+	! Initial conditions: substrate=1, lower-half-y powder=1, upper-half-y powder=0
+	y_mid = dimy * 0.5_wp
 
+	concentration = 1.0_wp  ! default: base material everywhere
 	do k=1,nk
 	do j=1,nj
 	do i=1,ni
-		if (z(k) >= (dimz - layerheight) .and. y(j) < y_mid) then
-			concentration(i,j,k) = 0.0_wp   ! secondary material in powder half
-		else
-			concentration(i,j,k) = 1.0_wp   ! base material
+		if (z(k) >= (dimz - layerheight) .and. y(j) >= y_mid) then
+			concentration(i,j,k) = 0.0_wp   ! secondary material in upper powder half
 		endif
 	enddo
 	enddo
