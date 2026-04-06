@@ -60,10 +60,10 @@ Currently `dgdc_const = -0.3` N/m (typical for liquid metal binary alloys).
 ### Initial Conditions
 
 - **Substrate** (below powder layer): C = 1 (base material)
-- **Powder layer, y < y_mid**: C = 1 (base material)
-- **Powder layer, y >= y_mid**: C = 0 (secondary material)
+- **Powder layer, y >= y_mid**: C = 1 (base material)
+- **Powder layer, y < y_mid**: C = 0 (secondary material)
 
-This represents a half-and-half powder bed configuration for dissimilar metal testing, with the secondary material in the upper half of the y-domain.
+This represents a half-and-half powder bed configuration for dissimilar metal testing.
 
 ## Secondary Material Properties
 
