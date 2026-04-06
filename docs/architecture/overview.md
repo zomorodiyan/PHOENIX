@@ -97,72 +97,7 @@ The solutal Marangoni term ($d\gamma/dC$) is only active when `species_flag=1`.
 
 ## Program Flow
 
-```
-main.f90
-│
-├── Initialization
-│   ├── read_data()           ← Parse input_param.txt
-│   ├── read_toolpath()       ← Load .crs toolpath
-│   ├── generate_grid()       ← Build non-uniform 3D mesh
-│   ├── allocate_fields()     ← Allocate all field arrays
-│   ├── initialize()          ← Set initial conditions
-│   ├── allocate_species()    ← [if species_flag=1]
-│   ├── init_mechanical()     ← [if mechanical_flag=1] FEM grid, Ke, GP arrays
-│   └── amr_init()            ← [if adaptive_flag=1]
-│
-├── Time Stepping Loop (timet < timax)
-│   │
-│   ├── laser_beam()          ← Update beam position
-│   ├── read_coordinates()    ← Record beam state
-│   ├── [if adaptive_flag=1]  ← AMR check + regenerate grid + update_mech_grid
-│   │
-│   ├── [if predict_flag=1 AND laser on AND tpeak > tsolid]
-│   │   ├── predict_shift_integer() ← Shift fields by integer cells in scan direction
-│   │   └── enthalpy_to_temp()      ← Recompute T, fracl from shifted enthalpy
-│   │
-│   ├── Iteration Loop (niter < maxit)
-│   │   │
-│   │   ├── properties()       ← Update vis, diff, den from T (and C)
-│   │   ├── bound_enthalpy()   ← Enthalpy BCs (radiation, convection)
-│   │   ├── discretize_enthalpy() ← FVM coefficients for energy eq
-│   │   ├── source_enthalpy()  ← Laser + latent heat source terms
-│   │   ├── calc_enthalpy_residual()
-│   │   ├── enhance_converge_speed() ← Block correction
-│   │   ├── solution_enthalpy() ← TDMA solve for enthalpy
-│   │   ├── enthalpy_to_temp() ← H → T, fracl conversion
-│   │   ├── pool_size()        ← Find melt pool bounds
-│   │   │
-│   │   └── [if melt pool exists]
-│   │       ├── cleanuvw()     ← Zero velocity in solid
-│   │       ├── u-momentum: bound → discretize → source → residual → TDMA
-│   │       ├── v-momentum: bound → discretize → source → residual → TDMA
-│   │       ├── w-momentum: bound → discretize → source → residual → TDMA
-│   │       └── pressure:   bound → discretize → source → residual → TDMA → revision
-│   │
-│   ├── [after iter_loop]
-│   │   ├── species_bc()       ← [if species_flag=1]
-│   │   └── solve_species()    ← [if species_flag=1] FVM + TDMA for concentration
-│   │
-│   ├── update_max_temp()      ← Defect analysis accumulation
-│   │
-│   ├── [if mechanical_flag=1 AND mod(step, mech_interval)==0]
-│   │   ├── solve_mechanical()   ← Newton-Raphson + CG on FEM grid
-│   │   ├── get_stress_yield()   ← Smooth GP stress to nodes, von Mises
-│   │   ├── write_mech_vtk()     ← [every mech_output_interval]
-│   │   └── write_mech_history() ← Stress/displacement at monitor points
-│   │
-│   ├── outputres()            ← Print residuals to output.txt
-│   ├── Cust_Out()             ← Write VTK (every outputintervel steps)
-│   └── conc_old = concentration ← [if species_flag=1]
-│
-└── Post-simulation
-    ├── compute_defect_determ()       ← Defect classification
-    ├── write_defect_report()         ← Defect VTK + report
-    ├── write_timing_report()         ← Performance breakdown
-    ├── write_memory_report()         ← Memory usage
-    ├── finalize_mechanical_io()      ← [if mechanical_flag=1] Deformation GIF
-    └── write_mech_timing_report()    ← [if mechanical_flag=1] Mech timing
-```
+See [Solver Algorithm — Main Program Call Flow](solver.md) for the detailed call graph with module annotations.
 
 ## Numerical Method
 
