@@ -90,6 +90,11 @@ The solutal Marangoni term ($d\gamma/dC$) is only active when `species_flag=1`.
 
 - **Zero-flux Neumann**: $\frac{\partial C}{\partial n} = 0$ on all 6 faces
 
+### Mechanical
+
+- **Bottom face** ($k=1$): $\mathbf{u} = \mathbf{0}$ (clamped substrate base)
+- **All other faces**: Traction-free (natural BC)
+
 ## Program Flow
 
 ```
@@ -102,13 +107,14 @@ main.f90
 │   ├── allocate_fields()     ← Allocate all field arrays
 │   ├── initialize()          ← Set initial conditions
 │   ├── allocate_species()    ← [if species_flag=1]
+│   ├── init_mechanical()     ← [if mechanical_flag=1] FEM grid, Ke, GP arrays
 │   └── amr_init()            ← [if adaptive_flag=1]
 │
 ├── Time Stepping Loop (timet < timax)
 │   │
 │   ├── laser_beam()          ← Update beam position
 │   ├── read_coordinates()    ← Record beam state
-│   ├── [if adaptive_flag=1]  ← AMR check + regenerate grid
+│   ├── [if adaptive_flag=1]  ← AMR check + regenerate grid + update_mech_grid
 │   │
 │   ├── [if predict_flag=1 AND laser on AND tpeak > tsolid]
 │   │   ├── predict_shift_integer() ← Shift fields by integer cells in scan direction
@@ -138,15 +144,24 @@ main.f90
 │   │   └── solve_species()    ← [if species_flag=1] FVM + TDMA for concentration
 │   │
 │   ├── update_max_temp()      ← Defect analysis accumulation
+│   │
+│   ├── [if mechanical_flag=1 AND mod(step, mech_interval)==0]
+│   │   ├── solve_mechanical()   ← Newton-Raphson + CG on FEM grid
+│   │   ├── get_stress_yield()   ← Smooth GP stress to nodes, von Mises
+│   │   ├── write_mech_vtk()     ← [every mech_output_interval]
+│   │   └── write_mech_history() ← Stress/displacement at monitor points
+│   │
 │   ├── outputres()            ← Print residuals to output.txt
 │   ├── Cust_Out()             ← Write VTK (every outputintervel steps)
 │   └── conc_old = concentration ← [if species_flag=1]
 │
 └── Post-simulation
-    ├── compute_defect_determ()  ← Defect classification
-    ├── write_defect_report()    ← Defect VTK + report
-    ├── write_timing_report()    ← Performance breakdown
-    └── write_memory_report()    ← Memory usage
+    ├── compute_defect_determ()       ← Defect classification
+    ├── write_defect_report()         ← Defect VTK + report
+    ├── write_timing_report()         ← Performance breakdown
+    ├── write_memory_report()         ← Memory usage
+    ├── finalize_mechanical_io()      ← [if mechanical_flag=1] Deformation GIF
+    └── write_mech_timing_report()    ← [if mechanical_flag=1] Mech timing
 ```
 
 ## Numerical Method
@@ -195,6 +210,9 @@ mod_precision       ← Foundation: working precision (single/double)
               └── mod_toolpath     ← Toolpath file reading
               └── mod_timing       ← Performance reporting
               └── mod_defect       ← Defect detection and output
+              └── mod_mech_material  ← Mechanical material properties, J2 return map
+                  └── mod_mechanical   ← EBE FEM solver (Newton + CG)
+                  └── mod_mech_io      ← Mechanical VTK, timing, history, GIF
 ```
 
 ## Adaptive Mesh
@@ -210,3 +228,37 @@ Key behavior:
 5. **Validation**: `amr_validate_grid()` checks grid integrity (monotonicity, positive volumes, correct domain extent).
 
 This allows using fine resolution only where needed (near the melt pool) while keeping the total cell count manageable.
+
+## Mechanical Solver
+
+When `mechanical_flag=1`, an EBE (Element-By-Element) FEM solver computes residual stress and deformation from the thermal field. One-way coupling: $T \rightarrow \Delta\varepsilon^{th} \rightarrow \mathbf{u} \rightarrow \boldsymbol{\sigma}$.
+
+### Governing Equation
+
+$$\nabla \cdot \boldsymbol{\sigma} = \mathbf{0}, \quad \Delta\boldsymbol{\sigma} = \mathbf{C} : (\Delta\boldsymbol{\varepsilon} - \alpha_V \Delta T \, \mathbf{I})$$
+
+with J2 plasticity (von Mises yield, temperature-dependent yield strength, radial return mapping).
+
+### FEM Grid
+
+The mechanical grid is coarsened from the thermal grid by `mech_mesh_ratio`. Example: 200x200x50 thermal with ratio=2 gives 100x100x25 FEM nodes. 8-node hexahedral elements with 2x2x2 Gauss quadrature.
+
+### Solution Algorithm
+
+1. Extract temperature from PHOENIX to FEM grid
+2. Determine phase (POWDER/LIQUID/SOLID) per node
+3. Newton-Raphson iteration ($\text{tol} = 10^{-4}$, max 10):
+    - Assemble residual via 8-color EBE
+    - Solve $\mathbf{K}\Delta\mathbf{u} = -\mathbf{R}$ via Jacobi-preconditioned CG
+4. Update Gauss point stress/strain state with J2 return map
+5. Smooth stresses to nodes, compute von Mises
+
+### Parallel Mode
+
+With `bash run.sh <case> N1 N2`, thermal and mechanical run as separate OS processes:
+
+- Thermal writes binary temperature files every `mech_interval` steps
+- Mechanical process polls, reads, and solves independently
+- ~1.6x speedup on 24-core machine (10+10 threads optimal)
+
+See [Mechanical Solver](../mechanics/overview.md) for full details.
