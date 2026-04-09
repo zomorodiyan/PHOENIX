@@ -3,8 +3,26 @@
 ## Requirements
 
 - **Compiler**: gfortran (GCC Fortran) with OpenMP support
-- **Python 3**: For toolpath generation and thermal history plotting
+- **Python 3**: For toolpath generation and thermal history plotting (`numpy`, `matplotlib`)
 - **ParaView**: For VTK visualization (optional)
+
+## Install dependencies
+
+A helper script is provided that installs everything above on common Linux
+distributions (apt / dnf / yum / pacman / zypper). It auto-detects the package
+manager, **skips anything already installed**, and verifies the toolchain
+(including a small OpenMP compile test):
+
+```bash
+cd fortran_new
+bash install_deps.sh
+```
+
+The script installs:
+
+- `gfortran` and `libgomp` (OpenMP runtime)
+- `python3` and `pip`
+- `numpy` and `matplotlib` (skipped if already importable, e.g. via pip)
 
 ## Build
 
