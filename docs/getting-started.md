@@ -82,8 +82,9 @@ bash clean.sh    # Removes .o, .mod, cluster_main (preserves results)
 
 ## Workflow
 
-1. Edit `inputfile/input_param.txt` (geometry, materials, numerics)
-2. Generate or select a toolpath in `ToolFiles/`
-3. `bash compile.sh`
-4. `bash run.sh mycase 4 &`
-5. Open VTK files in ParaView: `result/mycase/mycase_vtkmov*.vtk`
+1. `bash install_deps.sh` (first time only — installs gfortran, python3, numpy, matplotlib, OpenMP)
+2. Edit `inputfile/input_param.txt` (geometry, materials, numerics)
+3. Generate or select a toolpath in `ToolFiles/`
+4. `bash compile.sh`
+5. `bash run.sh mycase 4 &`
+6. Open VTK files in ParaView: `result/mycase/mycase_vtkmov*.vtk`
