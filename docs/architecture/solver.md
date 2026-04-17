@@ -26,8 +26,9 @@ main.f90
 ├── init_meltpool_history()              [mod_print.f90]
 │
 ├── [if species_flag == 1]
-│     ├── allocate_species()             [mod_species.f90]
-│     └── init_species()                 [mod_species.f90]
+│     ├── read_species_params()          [species_solver/mod_species.f90]
+│     ├── allocate_species()             [species_solver/mod_species.f90]
+│     └── init_species()                 [species_solver/mod_species.f90]
 ├── [if mechanical_flag == 1]
 │     ├── init_mechanical()              [mechanical/mod_mechanical.f90]
 │     └── init_mech_history()            [mechanical/mod_mech_io.f90]
@@ -118,15 +119,15 @@ main.f90
 │   │ ──────────── AFTER ITERATION LOOP ────────────
 │   │
 │   ├── [if species_flag == 1]
-│   │   ├── species_bc()                 [mod_species.f90]
-│   │   └── solve_species()              [mod_species.f90]
+│   │   ├── species_bc()                 [species_solver/mod_species.f90]
+│   │   └── solve_species()              [species_solver/mod_species.f90]
 │   │         ├── [FVM discretization]   (inline, power-law scheme)
 │   │         ├── [boundary transfers]   (inline)
 │   │         ├── [assembly + URF]       (inline)
-│   │         ├── solution_species_tdma()[mod_species.f90]
-│   │         ├── enhance_species_speed()[mod_species.f90]
+│   │         ├── solution_species_tdma()[species_solver/mod_species.f90]
+│   │         ├── enhance_species_speed()[species_solver/mod_species.f90]
 │   │         ├── [concentration clip]   (inline, [0,1])
-│   │         └── calc_species_residual()[mod_species.f90]
+│   │         └── calc_species_residual()[species_solver/mod_species.f90]
 │   │
 │   ├── update_max_temp()                [mod_defect.f90]
 │   │

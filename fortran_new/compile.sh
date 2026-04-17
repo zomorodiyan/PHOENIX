@@ -23,7 +23,7 @@ gfortran -fopenmp -O3 -march=native -c \
     mod_dimen.f90 \
     mod_adaptive_mesh.f90 \
     mod_resid.f90 \
-    mod_species.f90 \
+    species_solver/mod_species.f90 \
     mod_prop.f90 \
     mod_bound.f90 \
     mod_discret.f90 \
@@ -38,9 +38,9 @@ gfortran -fopenmp -O3 -march=native -c \
     mod_toolpath.f90 \
     mod_timing.f90 \
     mod_defect.f90 \
-    mechanical/mod_mech_material.f90 \
-    mechanical/mod_mechanical.f90 \
-    mechanical/mod_mech_io.f90 \
+    mechanical_solver/mod_mech_material.f90 \
+    mechanical_solver/mod_mechanical.f90 \
+    mechanical_solver/mod_mech_io.f90 \
     main.f90
 
 gfortran -fopenmp -O3 -march=native *.o -o cluster_main

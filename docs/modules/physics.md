@@ -47,8 +47,10 @@ Field prediction by integer-cell shifting in the scan direction. Shifts enthalpy
 
 ---
 
-## mod_species.f90 — `species`
+## species_solver/mod_species.f90 — `species`
 
 Dissimilar metal species transport. See [Species Transport](../species/overview.md).
 
-Key functions: `mix(prop1, prop2, C)`, `solve_species()` (FVM + TDMA + block correction), `species_bc()` (zero-flux Neumann).
+Secondary material properties and transport numerics live in `species_solver/inputfile/input_param_species.txt` and are loaded by `read_species_params()` at startup when `species_flag=1`.
+
+Key functions: `mix(prop1, prop2, C)`, `read_species_params()`, `solve_species()` (FVM + TDMA + block correction), `species_bc()` (zero-flux Neumann).

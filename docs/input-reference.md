@@ -144,7 +144,7 @@ $$q_{loss} = h(T - T_{amb}) + \epsilon \sigma (T^4 - T_{amb}^4)$$
 | `outputintervel` | steps | VTK output frequency (every N time steps) | 50 |
 | `case_name` | - | Case identifier (sets output directory name) | 'testcase' |
 | `toolpath_file` | - | Path to toolpath file (.crs) | './ToolFiles/B26.crs' |
-| `species_flag` | - | Enable species transport (0=off, 1=on) | 0 |
+| `species_flag` | - | Enable species transport (0=off, 1=on). When `1`, secondary-material properties are read from `species_solver/inputfile/input_param_species.txt` | 0 |
 | `predict_flag` | - | Enable field prediction by integer-cell shift (0=off, 1=on) | 0 |
 
 When `predict_flag=1`, the solver shifts enthalpy, velocity, and pressure fields by an integer number of cells in the scan direction before entering the iteration loop on heating steps (laser on, melt pool present). This provides a better initial guess and reduces iterations by approximately 38% during heating.

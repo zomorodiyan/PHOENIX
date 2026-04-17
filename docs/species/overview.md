@@ -2,14 +2,16 @@
 
 ## Overview
 
-The species transport module (`mod_species.f90`) enables simulation of dissimilar metal mixing in additive manufacturing. It solves a convection-diffusion equation for concentration and provides composition-dependent material properties through two-way coupling.
+The species transport module (`species_solver/mod_species.f90`) enables simulation of dissimilar metal mixing in additive manufacturing. It solves a convection-diffusion equation for concentration and provides composition-dependent material properties through two-way coupling.
+
+Secondary material properties and transport numerics live in `species_solver/inputfile/input_param_species.txt` and are read by `read_species_params()` at startup when `species_flag=1`.
 
 ## Concentration Convention
 
 | Value | Meaning | Properties Source |
 |-------|---------|-------------------|
 | **C = 1** | Pure primary (base) material | `&material_properties` in `input_param.txt` |
-| **C = 0** | Pure secondary material | Named constants in `mod_species.f90` |
+| **C = 0** | Pure secondary material | `&species_secondary_material` / `&species_secondary_powder` in `input_param_species.txt` |
 | **0 < C < 1** | Mixed region | `mix(prop1, prop2, C) = prop1*C + prop2*(1-C)` |
 
 ## Enabling Species Transport
@@ -67,7 +69,7 @@ This represents a half-and-half powder bed configuration for dissimilar metal te
 
 ## Secondary Material Properties
 
-Defined as named constants in `mod_species.f90`:
+Read from `species_solver/inputfile/input_param_species.txt` via namelists `&species_secondary_material`, `&species_secondary_powder`, and `&species_transport`. Defaults below match the historical hardcoded constants:
 
 | Property | Primary | Secondary | Unit |
 |----------|---------|-----------|------|

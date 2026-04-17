@@ -1,0 +1,56 @@
+!-------------------------------------------------------------
+! PHOENIX Species Solver Input Parameters
+!-------------------------------------------------------------
+! Required when species_flag=1 in ./inputfile/input_param.txt.
+! The module carries no default values — if this file is missing
+! or a namelist fails to parse, the solver aborts at startup.
+!
+! Governs the secondary (C=0) material properties and the
+! concentration transport equation. The primary (C=1) material
+! properties are still read from ./inputfile/input_param.txt
+! (namelists &material_properties and &powder_properties).
+!-------------------------------------------------------------
+
+!--- Secondary material (bulk) properties ---
+! dens2      : solid density                                  (kg/m^3)
+! denl2      : liquid density                                 (kg/m^3)
+! viscos2    : dynamic viscosity of liquid                    (Pa.s)
+! tsolid2    : solidus temperature                            (K)
+! tliquid2   : liquidus temperature                           (K)
+! tboiling2  : boiling temperature                            (K)
+! acpa2      : solid Cp linear coefficient  (Cp = acpa*T+acpb)(J/kg/K^2)
+! acpb2      : solid Cp constant coefficient                  (J/kg/K)
+! acpl2      : liquid Cp                                      (J/kg/K)
+! thconsa2   : solid k linear coefficient   (k = thconsa*T+thconsb) (W/m/K^2)
+! thconsb2   : solid k constant coefficient                   (W/m/K)
+! thconl2    : liquid thermal conductivity                    (W/m/K)
+
+&species_secondary_material
+    dens2=8880.0, denl2=7800.0, viscos2=0.003,
+    tsolid2=1728.0, tliquid2=1803.0, tboiling2=3650.0,
+    acpa2=0.3441, acpb2=400.0, acpl2=800.0,
+    thconsa2=0.0205, thconsb2=10.0, thconl2=120.0
+/
+
+!--- Secondary powder properties ---
+! pden2      : powder density                                 (kg/m^3)
+! pcpa2      : powder Cp linear coefficient                   (J/kg/K^2)
+! pcpb2      : powder Cp constant coefficient                 (J/kg/K)
+! pthcona2   : powder k linear coefficient                    (W/m/K^2)
+! pthconb2   : powder k constant coefficient                  (W/m/K)
+
+&species_secondary_powder
+    pden2=7330.0, pcpa2=0.3508, pcpb2=457.7,
+    pthcona2=0.0, pthconb2=0.795
+/
+
+!--- Species transport numerics ---
+! D_m        : molecular mass diffusivity in liquid           (m^2/s)
+! urfspecies : under-relaxation factor for concentration      (dimensionless)
+! dgdc_const : solutal Marangoni coefficient dgamma/dC        (N/m)
+! diff_floor : diffusivity floor used in solid cells          (kg/m/s)
+
+&species_transport
+    D_m=5.0e-9, urfspecies=0.7,
+    dgdc_const=-0.3, diff_floor=1.0e-30
+/

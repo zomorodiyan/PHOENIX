@@ -6,6 +6,11 @@ module species
 ! When species_flag=1, solves concentration equation once per timestep
 ! after iter_loop exits. When species_flag=0, module is inert.
 !
+! Secondary material (C=0) properties and transport numerics are read
+! from ./species_solver/inputfile/input_param_species.txt via
+! read_species_params(). Primary material (C=1) properties remain in
+! ./inputfile/input_param.txt.
+!
 	use precision
 	use constant
 	use geometry
@@ -19,32 +24,41 @@ module species
 
 	! species_flag is declared in mod_param.f90 and read from input_param.txt
 
-	! Secondary material properties (named constants)
-	real(wp), parameter :: dens2    = 8880.0_wp
-	real(wp), parameter :: denl2    = 7800.0_wp
-	real(wp), parameter :: viscos2  = 0.003_wp
-	real(wp), parameter :: tsolid2  = 1728.0_wp
-	real(wp), parameter :: tliquid2 = 1803.0_wp
-	real(wp), parameter :: tboiling2= 3650.0_wp
-	real(wp), parameter :: acpa2    = 0.3441_wp
-	real(wp), parameter :: acpb2    = 400.0_wp
-	real(wp), parameter :: acpl2    = 800.0_wp
-	real(wp), parameter :: thconsa2 = 0.0205_wp
-	real(wp), parameter :: thconsb2 = 10.0_wp
-	real(wp), parameter :: thconl2  = 120.0_wp
+	! Secondary material properties (read from input_param_species.txt).
+	! No defaults — read_species_params() must succeed before use.
+	real(wp), save :: dens2
+	real(wp), save :: denl2
+	real(wp), save :: viscos2
+	real(wp), save :: tsolid2
+	real(wp), save :: tliquid2
+	real(wp), save :: tboiling2
+	real(wp), save :: acpa2
+	real(wp), save :: acpb2
+	real(wp), save :: acpl2
+	real(wp), save :: thconsa2
+	real(wp), save :: thconsb2
+	real(wp), save :: thconl2
 
-	! Secondary powder properties
-	real(wp), parameter :: pden2    = 7330.0_wp
-	real(wp), parameter :: pcpa2    = 0.3508_wp
-	real(wp), parameter :: pcpb2    = 457.7_wp
-	real(wp), parameter :: pthcona2 = 0.0_wp
-	real(wp), parameter :: pthconb2 = 0.795_wp
+	! Secondary powder properties (read from input_param_species.txt)
+	real(wp), save :: pden2
+	real(wp), save :: pcpa2
+	real(wp), save :: pcpb2
+	real(wp), save :: pthcona2
+	real(wp), save :: pthconb2
 
-	! Species transport parameters
-	real(wp), parameter :: D_m = 5.0e-9_wp         ! molecular mass diffusivity (m^2/s)
-	real(wp), parameter :: urfspecies = 0.7_wp      ! under-relaxation factor
-	real(wp), parameter :: dgdc_const = -0.3_wp      ! dg/dC (solutal Marangoni coefficient, N/m)
-	real(wp), parameter :: diff_floor = 1.0e-30_wp  ! diffusivity floor in solid
+	! Species transport parameters (read from input_param_species.txt)
+	real(wp), save :: D_m         ! molecular mass diffusivity (m^2/s)
+	real(wp), save :: urfspecies  ! under-relaxation factor
+	real(wp), save :: dgdc_const  ! dg/dC (solutal Marangoni coefficient, N/m)
+	real(wp), save :: diff_floor  ! diffusivity floor in solid
+
+	! Namelists for input_param_species.txt
+	namelist / species_secondary_material / dens2, denl2, viscos2, &
+		tsolid2, tliquid2, tboiling2, &
+		acpa2, acpb2, acpl2, &
+		thconsa2, thconsb2, thconl2
+	namelist / species_secondary_powder /  pden2, pcpa2, pcpb2, pthcona2, pthconb2
+	namelist / species_transport /         D_m, urfspecies, dgdc_const, diff_floor
 
 	! Derived constants for secondary material (set in init_species)
 	real(wp), save :: hsmelt2, hlcal2, hlfriz2, cpavg2, deltemp2
@@ -64,6 +78,61 @@ pure real(wp) function mix(prop1, prop2, C)
 	real(wp), intent(in) :: prop1, prop2, C
 	mix = prop1 * C + prop2 * (1.0_wp - C)
 end function mix
+
+!********************************************************************
+subroutine read_species_params()
+! Read secondary material properties and transport numerics from
+! ./species_solver/inputfile/input_param_species.txt. Called from main.f90
+! when species_flag=1, before allocate_species/init_species.
+	integer :: iu, ios
+	logical :: fexist
+
+	inquire(file='./species_solver/inputfile/input_param_species.txt', exist=fexist)
+	if (.not. fexist) then
+		write(*,'(A)') 'ERROR: species_solver/inputfile/input_param_species.txt not found'
+		stop 1
+	endif
+
+	iu = 89
+	open(unit=iu, file='./species_solver/inputfile/input_param_species.txt', &
+	     form='formatted', status='old', iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: cannot open input_param_species.txt'
+		stop 1
+	endif
+
+	read(iu, NML=species_secondary_material, iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: failed reading &species_secondary_material from input_param_species.txt'
+		stop 1
+	endif
+
+	read(iu, NML=species_secondary_powder, iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: failed reading &species_secondary_powder from input_param_species.txt'
+		stop 1
+	endif
+
+	read(iu, NML=species_transport, iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: failed reading &species_transport from input_param_species.txt'
+		stop 1
+	endif
+
+	close(iu)
+
+	write(*,'(A)')        '  [species] Parameters from input_param_species.txt:'
+	write(*,'(A,ES10.3)') '    dens2       = ', dens2
+	write(*,'(A,ES10.3)') '    denl2       = ', denl2
+	write(*,'(A,ES10.3)') '    viscos2     = ', viscos2
+	write(*,'(A,F8.1)')   '    tsolid2     = ', tsolid2
+	write(*,'(A,F8.1)')   '    tliquid2    = ', tliquid2
+	write(*,'(A,F8.1)')   '    tboiling2   = ', tboiling2
+	write(*,'(A,ES10.3)') '    D_m         = ', D_m
+	write(*,'(A,F6.3)')   '    urfspecies  = ', urfspecies
+	write(*,'(A,ES10.3)') '    dgdc_const  = ', dgdc_const
+	write(*,'(A,ES10.3)') '    diff_floor  = ', diff_floor
+end subroutine read_species_params
 
 !********************************************************************
 subroutine allocate_species

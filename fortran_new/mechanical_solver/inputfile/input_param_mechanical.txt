@@ -1,0 +1,27 @@
+!-------------------------------------------------------------
+! PHOENIX Mechanical Solver Input Parameters
+!-------------------------------------------------------------
+
+!--- Material properties ---
+! E_solid      : Young's modulus, solid/substrate (Pa)
+! E_soft       : Young's modulus, powder/liquid (Pa)
+! nu_mech      : Poisson's ratio (dimensionless)
+! sig_yield_0  : J2 yield stress at reference temperature (Pa)
+! T_ref_yield  : Reference temperature for yield strength (K)
+! alpha_V      : Volumetric thermal expansion coefficient (1/K)
+
+&mechanical_material
+    E_solid=70.0e9, E_soft=0.7e9, nu_mech=0.3,
+    sig_yield_0=250.0e6, T_ref_yield=293.0, alpha_V=1.0e-5
+/
+
+!--- Solver numerical parameters ---
+! cg_maxiter_mech : Conjugate gradient max iterations
+! cg_tol_mech     : CG convergence tolerance (relative residual)
+! newton_maxiter  : Newton nonlinear iteration max count
+! newton_tol      : Newton convergence tolerance
+
+&mechanical_numerics
+    cg_maxiter_mech=20000, cg_tol_mech=1.0e-4,
+    newton_maxiter=10, newton_tol=1.0e-4
+/

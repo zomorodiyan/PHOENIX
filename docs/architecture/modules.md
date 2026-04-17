@@ -239,15 +239,18 @@ When `species_flag=1`: all properties are computed from `mix(prop_primary, prop_
 
 ---
 
-## mod_species.f90 — `species`
+## species_solver/mod_species.f90 — `species`
 
 Species transport for dissimilar metal mixing. See [Species Transport](../species/overview.md) for details.
+
+Secondary material properties and transport numerics are read from `species_solver/inputfile/input_param_species.txt` (namelists `&species_secondary_material`, `&species_secondary_powder`, `&species_transport`) via `read_species_params()`.
 
 ### Key functions:
 
 | Function | Description |
 |----------|-------------|
 | `mix(prop1, prop2, C)` | Pure function: `prop1*C + prop2*(1-C)` |
+| `read_species_params()` | Reads `input_param_species.txt` (called when `species_flag=1`) |
 | `allocate_species()` | Allocates concentration arrays |
 | `init_species()` | Sets IC: substrate=1, powder half=0 |
 | `species_bc()` | Zero-flux Neumann on all faces |

@@ -35,7 +35,7 @@ program main
 	use prediction
 	use mechanical_solver
 	use mech_io
-	use species, only: allocate_species, init_species, &
+	use species, only: read_species_params, allocate_species, init_species, &
 		species_bc, solve_species, concentration, conc_old, &
 		mix, tsolid2
 
@@ -94,6 +94,7 @@ program main
 	call init_meltpool_history
 
 	if (species_flag == 1) then
+		call read_species_params
 		call allocate_species
 		call init_species
 	endif

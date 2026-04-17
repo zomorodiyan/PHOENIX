@@ -16,19 +16,22 @@ module mech_material
 	integer, parameter :: MECH_LIQUID = 1
 	integer, parameter :: MECH_SOLID  = 2
 
-	! Mechanical material parameters (identical to fortran-ebe-lpbf)
-	real(wp), parameter :: E_solid   = 70.0e9_wp      ! Young's modulus, solid/substrate (Pa)
-	real(wp), parameter :: E_soft    = 0.7e9_wp        ! Young's modulus, powder/liquid (Pa)
-	real(wp), parameter :: nu_mech   = 0.3_wp          ! Poisson's ratio
-	real(wp), parameter :: sig_yield_0 = 250.0e6_wp    ! J2 yield stress at reference temp (Pa)
-	real(wp), parameter :: T_ref_yield = 293.0_wp       ! Reference temperature for yield (K)
-	real(wp), parameter :: alpha_V   = 1.0e-5_wp       ! Volumetric thermal expansion (1/K)
+	! Mechanical material parameters (read from input_param_mechanical.txt)
+	real(wp) :: E_solid
+	real(wp) :: E_soft
+	real(wp) :: nu_mech
+	real(wp) :: sig_yield_0
+	real(wp) :: T_ref_yield
+	real(wp) :: alpha_V
 
-	! Solver parameters
-	integer, parameter  :: cg_maxiter_mech = 20000
-	real(wp), parameter :: cg_tol_mech     = 1.0e-4_wp
-	integer, parameter  :: newton_maxiter  = 10
-	real(wp), parameter :: newton_tol      = 1.0e-4_wp
+	! Solver parameters (read from input_param_mechanical.txt)
+	integer  :: cg_maxiter_mech
+	real(wp) :: cg_tol_mech
+	integer  :: newton_maxiter
+	real(wp) :: newton_tol
+
+	namelist / mechanical_material / E_solid, E_soft, nu_mech, sig_yield_0, T_ref_yield, alpha_V
+	namelist / mechanical_numerics / cg_maxiter_mech, cg_tol_mech, newton_maxiter, newton_tol
 
 	contains
 
@@ -150,5 +153,51 @@ subroutine j2_return_map(s_trial, s_mapped, f_yield_out, T_gp)
 		s_mapped = s_trial
 	endif
 end subroutine j2_return_map
+
+!********************************************************************
+subroutine read_mech_params()
+	integer :: iu, ios
+	logical :: fexist
+
+	inquire(file='./mechanical_solver/inputfile/input_param_mechanical.txt', exist=fexist)
+	if (.not. fexist) then
+		write(*,'(A)') 'ERROR: mechanical_solver/inputfile/input_param_mechanical.txt not found'
+		stop 1
+	endif
+
+	iu = 88
+	open(unit=iu, file='./mechanical_solver/inputfile/input_param_mechanical.txt', &
+	     form='formatted', status='old', iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: cannot open input_param_mechanical.txt'
+		stop 1
+	endif
+
+	read(iu, NML=mechanical_material, iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: failed reading &mechanical_material from input_param_mechanical.txt'
+		stop 1
+	endif
+
+	read(iu, NML=mechanical_numerics, iostat=ios)
+	if (ios /= 0) then
+		write(*,'(A)') 'ERROR: failed reading &mechanical_numerics from input_param_mechanical.txt'
+		stop 1
+	endif
+
+	close(iu)
+
+	write(*,'(A)')        '  [mech] Parameters from input_param_mechanical.txt:'
+	write(*,'(A,ES10.3)') '    E_solid      = ', E_solid
+	write(*,'(A,ES10.3)') '    E_soft       = ', E_soft
+	write(*,'(A,F6.3)')   '    nu_mech      = ', nu_mech
+	write(*,'(A,ES10.3)') '    sig_yield_0  = ', sig_yield_0
+	write(*,'(A,F8.1)')   '    T_ref_yield  = ', T_ref_yield
+	write(*,'(A,ES10.3)') '    alpha_V      = ', alpha_V
+	write(*,'(A,I8)')     '    cg_maxiter   = ', cg_maxiter_mech
+	write(*,'(A,ES10.3)') '    cg_tol       = ', cg_tol_mech
+	write(*,'(A,I8)')     '    newton_max   = ', newton_maxiter
+	write(*,'(A,ES10.3)') '    newton_tol   = ', newton_tol
+end subroutine read_mech_params
 
 end module mech_material

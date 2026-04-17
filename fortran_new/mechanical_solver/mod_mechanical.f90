@@ -80,6 +80,8 @@ subroutine init_mechanical()
 	real(wp) :: dx_ref, dy_ref, dz_ref
 	integer :: n_thermal_x, n_thermal_y, n_thermal_z
 
+	call read_mech_params()
+
 	mratio = mech_mesh_ratio
 
 	! Thermal interior cell count
