@@ -5,7 +5,7 @@
 Detailed call graph showing which function belongs to which module (`.f90` file).
 
 ```
-main.f90
+thermal_fluid_solver/main.f90
 │
 │ ══════════════ INITIALIZATION ══════════════
 │
@@ -30,8 +30,8 @@ main.f90
 │     ├── allocate_species()             [species_solver/mod_species.f90]
 │     └── init_species()                 [species_solver/mod_species.f90]
 ├── [if mechanical_flag == 1]
-│     ├── init_mechanical()              [mechanical/mod_mechanical.f90]
-│     └── init_mech_history()            [mechanical/mod_mech_io.f90]
+│     ├── init_mechanical()              [mechanical_solver/mod_mechanical.f90]
+│     └── init_mech_history()            [mechanical_solver/mod_mech_io.f90]
 ├── [if adaptive_flag == 1]
 │     └── amr_init()                     [mod_adaptive_mesh.f90]
 │
@@ -132,18 +132,18 @@ main.f90
 │   ├── update_max_temp()                [mod_defect.f90]
 │   │
 │   ├── [if mechanical_flag==1 AND mod(step, mech_interval)==0]
-│   │   ├── solve_mechanical()           [mechanical/mod_mechanical.f90]
+│   │   ├── solve_mechanical()           [mechanical_solver/mod_mechanical.f90]
 │   │   │     ├── extract_temp_to_fem()    ← T from PHOENIX to FEM grid
-│   │   │     ├── update_mech_phase()      [mechanical/mod_mech_material.f90]
+│   │   │     ├── update_mech_phase()      [mechanical_solver/mod_mech_material.f90]
 │   │   │     ├── compute_dT_gp()          ← dT at Gauss points
 │   │   │     ├── Newton loop:
 │   │   │     │   ├── compute_residual()   ← 8-color EBE assembly
 │   │   │     │   └── solve_mech_cg()      ← Jacobi-preconditioned CG
 │   │   │     │         └── ebe_matvec_mech() ← matrix-free or precomputed Ke
 │   │   │     └── update_gp_state()        ← J2 return map at each GP
-│   │   ├── get_stress_yield()           [mechanical/mod_mechanical.f90]
-│   │   ├── write_mech_vtk()            [mechanical/mod_mech_io.f90]
-│   │   └── write_mech_history()         [mechanical/mod_mech_io.f90]
+│   │   ├── get_stress_yield()           [mechanical_solver/mod_mechanical.f90]
+│   │   ├── write_mech_vtk()            [mechanical_solver/mod_mech_io.f90]
+│   │   └── write_mech_history()         [mechanical_solver/mod_mech_io.f90]
 │   │
 │   ├── CalTime()                        [mod_print.f90]
 │   ├── outputres()                      [mod_print.f90]
@@ -166,12 +166,12 @@ main.f90
 ├── finalize_thermal_history()           [mod_print.f90]
 ├── finalize_meltpool_history()          [mod_print.f90]
 ├── [if mechanical_flag == 1]
-│     ├── write_mech_timing_report()     [mechanical/mod_mech_io.f90]
-│     ├── write_mech_memory_report()     [mechanical/mod_mech_io.f90]
-│     ├── finalize_mech_history()        [mechanical/mod_mech_io.f90]
-│     ├── finalize_mechanical_io()       [mechanical/mod_mech_io.f90]
+│     ├── write_mech_timing_report()     [mechanical_solver/mod_mech_io.f90]
+│     ├── write_mech_memory_report()     [mechanical_solver/mod_mech_io.f90]
+│     ├── finalize_mech_history()        [mechanical_solver/mod_mech_io.f90]
+│     ├── finalize_mechanical_io()       [mechanical_solver/mod_mech_io.f90]
 │     │     └── generates plot_deformation.py → deformation.gif
-│     └── cleanup_mechanical()           [mechanical/mod_mechanical.f90]
+│     └── cleanup_mechanical()           [mechanical_solver/mod_mechanical.f90]
 ├── write_timing_report()                [mod_timing.f90]
 └── write_memory_report()                [mod_timing.f90]
 ```

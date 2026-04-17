@@ -4,7 +4,7 @@
 
 The mechanical solver computes residual stress and deformation in laser powder bed fusion using an Element-By-Element (EBE) finite element method with J2 elastoplasticity. It provides one-way coupling from the thermal solver: temperature drives thermal strain, which produces displacement and stress through quasi-static mechanical equilibrium.
 
-The solver is implemented in `fortran_new/mechanical/` as three modules:
+The solver is implemented in `fortran_new/mechanical_solver/` as three modules:
 
 | Module | File | Purpose |
 |--------|------|---------|

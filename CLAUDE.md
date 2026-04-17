@@ -12,20 +12,27 @@ PHOENIX: Process-resolved Hybrid Omniphysics Engine for Nonlinear In-situ X-evol
 
 ```
 PHOENIX/
-├── fortran_new/          # Active simulation code
-│   ├── main.f90          # Entry point
-│   ├── mod_*.f90         # Fortran modules (one per file)
-│   ├── compile.sh        # Build script (gfortran + OpenMP)
-│   ├── clean.sh          # Remove build artifacts and results
-│   ├── run.sh            # Run script: bash run.sh <case_name> [omp_threads]
+├── fortran_new/                    # Active simulation code
+│   ├── compile.sh                  # Build script (gfortran + OpenMP)
+│   ├── clean.sh                    # Remove build artifacts and results
+│   ├── run.sh                      # Run script: bash run.sh <case_name> [omp_threads]
 │   ├── inputfile/
-│   │   └── input_param.txt   # All simulation parameters
+│   │   └── input_param.txt         # Global simulation parameters
+│   ├── thermal_fluid_solver/       # Thermal + fluid-flow solver modules
+│   │   ├── main.f90                # Program entry point
+│   │   └── mod_*.f90
+│   ├── mechanical_solver/          # EBE FEM residual-stress solver
+│   │   ├── mod_*.f90
+│   │   └── inputfile/input_param_mechanical.txt
+│   ├── species_solver/             # Dissimilar-metal species transport
+│   │   ├── mod_species.f90
+│   │   └── inputfile/input_param_species.txt
 │   ├── ToolFiles/
-│   │   ├── B26.crs           # Active toolpath (hardcoded in mod_toolpath.f90)
-│   │   └── toolpath_generator_rectangle.py  # Toolpath generator
-│   └── result/               # Output directory (VTK, reports, etc.)
-├── legacy/               # Old/reference code (read-only)
-└── projects/             # Task tracking (one folder per project)
+│   │   ├── B26.crs                 # Active toolpath (hardcoded in mod_toolpath.f90)
+│   │   └── toolpath_generator_rectangle.py
+│   └── result/                     # Output directory (VTK, reports, etc.)
+├── legacy/                         # Old/reference code (read-only)
+└── projects/                       # Task tracking (one folder per project)
 ```
 
 ## Build & Run
@@ -46,10 +53,12 @@ bash clean.sh
 
 ## Key Files
 
-- **mod_toolpath.f90**: Reads `./ToolFiles/B26.crs` (hardcoded path)
-- **input_param.txt**: All simulation parameters (geometry, material, numerics, laser, etc.)
-- **mod_sim_state.f90**: Global state arrays and constants
-- **mod_laser.f90**: Laser beam positioning from toolpath data
+- **thermal_fluid_solver/mod_toolpath.f90**: Reads `./ToolFiles/B26.crs` (hardcoded path)
+- **inputfile/input_param.txt**: Global simulation parameters (geometry, material, numerics, laser, etc.)
+- **thermal_fluid_solver/mod_sim_state.f90**: Global state arrays and constants
+- **thermal_fluid_solver/mod_laser.f90**: Laser beam positioning from toolpath data
+- **mechanical_solver/inputfile/input_param_mechanical.txt**: Mechanical-only parameters (loaded when `mechanical_flag=1`)
+- **species_solver/inputfile/input_param_species.txt**: Species-only parameters (loaded when `species_flag=1`)
 
 ## Toolpath Generator
 

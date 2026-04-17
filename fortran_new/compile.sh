@@ -10,38 +10,38 @@ find . -maxdepth 1 -name "cluster_main*" -exec rm -f '{}' \;
 echo "Compiling PHOENIX..."
 
 gfortran -fopenmp -O3 -march=native -c \
-    mod_precision.f90 \
-    mod_const.f90 \
-    mod_cfd_utils.f90 \
-    mod_param.f90 \
-    mod_geom.f90 \
-    mod_field_data.f90 \
-    mod_coeff_data.f90 \
-    mod_sim_state.f90 \
-    mod_init.f90 \
-    mod_laser.f90 \
-    mod_dimen.f90 \
-    mod_adaptive_mesh.f90 \
-    mod_resid.f90 \
+    thermal_fluid_solver/mod_precision.f90 \
+    thermal_fluid_solver/mod_const.f90 \
+    thermal_fluid_solver/mod_cfd_utils.f90 \
+    thermal_fluid_solver/mod_param.f90 \
+    thermal_fluid_solver/mod_geom.f90 \
+    thermal_fluid_solver/mod_field_data.f90 \
+    thermal_fluid_solver/mod_coeff_data.f90 \
+    thermal_fluid_solver/mod_sim_state.f90 \
+    thermal_fluid_solver/mod_init.f90 \
+    thermal_fluid_solver/mod_laser.f90 \
+    thermal_fluid_solver/mod_dimen.f90 \
+    thermal_fluid_solver/mod_adaptive_mesh.f90 \
+    thermal_fluid_solver/mod_resid.f90 \
     species_solver/mod_species.f90 \
-    mod_prop.f90 \
-    mod_bound.f90 \
-    mod_discret.f90 \
-    mod_entot.f90 \
-    mod_predict.f90 \
-    mod_sour.f90 \
-    mod_flux.f90 \
-    mod_revise.f90 \
-    mod_solve.f90 \
-    mod_print.f90 \
-    mod_converge.f90 \
-    mod_toolpath.f90 \
-    mod_timing.f90 \
-    mod_defect.f90 \
+    thermal_fluid_solver/mod_prop.f90 \
+    thermal_fluid_solver/mod_bound.f90 \
+    thermal_fluid_solver/mod_discret.f90 \
+    thermal_fluid_solver/mod_entot.f90 \
+    thermal_fluid_solver/mod_predict.f90 \
+    thermal_fluid_solver/mod_sour.f90 \
+    thermal_fluid_solver/mod_flux.f90 \
+    thermal_fluid_solver/mod_revise.f90 \
+    thermal_fluid_solver/mod_solve.f90 \
+    thermal_fluid_solver/mod_print.f90 \
+    thermal_fluid_solver/mod_converge.f90 \
+    thermal_fluid_solver/mod_toolpath.f90 \
+    thermal_fluid_solver/mod_timing.f90 \
+    thermal_fluid_solver/mod_defect.f90 \
     mechanical_solver/mod_mech_material.f90 \
     mechanical_solver/mod_mechanical.f90 \
     mechanical_solver/mod_mech_io.f90 \
-    main.f90
+    thermal_fluid_solver/main.f90
 
 gfortran -fopenmp -O3 -march=native *.o -o cluster_main
 

@@ -1,6 +1,9 @@
 # Module Reference
 
-Detailed documentation for every module in `fortran_new/`.
+Detailed documentation for every module in `fortran_new/`. All `mod_*.f90` files listed below live in `fortran_new/thermal_fluid_solver/`, except:
+
+- `species_solver/mod_species.f90`
+- `mechanical_solver/mod_mech_material.f90`, `mod_mechanical.f90`, `mod_mech_io.f90`
 
 ---
 

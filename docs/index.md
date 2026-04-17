@@ -46,16 +46,16 @@ Results are written to `fortran_new/result/mycase/`.
 
 ```
 PHOENIX/
-├── fortran_new/          # Active simulation code
-│   ├── main.f90          # Entry point
-│   ├── mod_*.f90         # Fortran modules (one per file)
-│   ├── mechanical/       # EBE FEM mechanical solver
-│   ├── compile.sh        # Build script
-│   ├── run.sh            # Run script
-│   ├── clean.sh          # Clean build artifacts
-│   ├── inputfile/        # Simulation parameters
-│   └── ToolFiles/        # Toolpath files (.crs)
-├── legacy/               # Reference code (read-only)
-├── projects/             # Task tracking
-└── docs/                 # This documentation
+├── fortran_new/                 # Active simulation code
+│   ├── thermal_fluid_solver/    # Thermal + fluid-flow modules (+ main.f90 entry point)
+│   ├── mechanical_solver/       # EBE FEM residual-stress solver (+ inputfile)
+│   ├── species_solver/          # Dissimilar-metal species transport (+ inputfile)
+│   ├── compile.sh               # Build script
+│   ├── run.sh                   # Run script
+│   ├── clean.sh                 # Clean build artifacts
+│   ├── inputfile/               # Global simulation parameters
+│   └── ToolFiles/               # Toolpath files (.crs)
+├── legacy/                      # Reference code (read-only)
+├── projects/                    # Task tracking
+└── docs/                        # This documentation
 ```
