@@ -63,23 +63,43 @@ subroutine ishift_field(field, di, dj, is, ie, js, je, ks, ke)
 
 	!$OMP PARALLEL DO PRIVATE(i, j, k, isrc, jsrc)
 	do k = ks, ke
-		do j = js, je
-			jsrc = j - dj
-			if (jsrc < 2 .or. jsrc > njm1) cycle
-			if (di >= 0) then
-				do i = ie, is, -1
-					isrc = i - di
-					if (isrc < 2 .or. isrc > nim1) cycle
-					field(i,j,k) = field(isrc, jsrc, k)
-				enddo
-			else
-				do i = is, ie
-					isrc = i - di
-					if (isrc < 2 .or. isrc > nim1) cycle
-					field(i,j,k) = field(isrc, jsrc, k)
-				enddo
-			endif
-		enddo
+		if (dj >= 0) then
+			do j = je, js, -1
+				jsrc = j - dj
+				if (jsrc < 2 .or. jsrc > njm1) cycle
+				if (di >= 0) then
+					do i = ie, is, -1
+						isrc = i - di
+						if (isrc < 2 .or. isrc > nim1) cycle
+						field(i,j,k) = field(isrc, jsrc, k)
+					enddo
+				else
+					do i = is, ie
+						isrc = i - di
+						if (isrc < 2 .or. isrc > nim1) cycle
+						field(i,j,k) = field(isrc, jsrc, k)
+					enddo
+				endif
+			enddo
+		else
+			do j = js, je
+				jsrc = j - dj
+				if (jsrc < 2 .or. jsrc > njm1) cycle
+				if (di >= 0) then
+					do i = ie, is, -1
+						isrc = i - di
+						if (isrc < 2 .or. isrc > nim1) cycle
+						field(i,j,k) = field(isrc, jsrc, k)
+					enddo
+				else
+					do i = is, ie
+						isrc = i - di
+						if (isrc < 2 .or. isrc > nim1) cycle
+						field(i,j,k) = field(isrc, jsrc, k)
+					enddo
+				endif
+			enddo
+		endif
 	enddo
 	!$OMP END PARALLEL DO
 
