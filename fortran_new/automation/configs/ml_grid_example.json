@@ -1,0 +1,42 @@
+{
+  "input_template": "inputfile/input_param.txt",
+  "sweep": {
+    "alaspowvol": [250, 300],
+    "sourcerad": [2.8e-05, 3.2e-05],
+    "scan_speed": [0.9, 1.2],
+    "hatch_spacing": [8e-05, 1e-04]
+  },
+  "static_params": {
+    "timax": 0.01,
+    "delt": 2e-05,
+    "mechanical_flag": 0,
+    "species_flag": 0
+  },
+  "toolpath": {
+    "template": {
+      "center_x": 0.001,
+      "center_y": 0.001,
+      "center_z": 0.0006975,
+      "size_x": 0.0015,
+      "size_y": 0.0015,
+      "scan_axis": "x",
+      "turnaround_time": 0.0005,
+      "rotation_angle": 0.0
+    },
+    "sweep_keys": {
+      "scan_speed": "scan_speed",
+      "hatch_spacing": "hatch_spacing"
+    }
+  },
+  "execution": {
+    "max_concurrent_runs": 2,
+    "thermal_threads": 4,
+    "mech_threads": 0,
+    "timeout_s": 0,
+    "retries": 0
+  },
+  "ml_outputs": {
+    "vtk_patterns": ["*_defect.vtk", "*_maxtemp.vtk", "*_vtkmov*.vtk"],
+    "copy_mode": "copy"
+  }
+}

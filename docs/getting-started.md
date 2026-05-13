@@ -88,3 +88,66 @@ bash clean.sh    # Removes .o, .mod, cluster_main (preserves results)
 4. `bash compile.sh`
 5. `bash run.sh mycase 4 &`
 6. Open VTK files in ParaView: `result/mycase/mycase_vtkmov*.vtk`
+
+## ML Experiment Automation (Parallel + Isolated Cases)
+
+PHOENIX includes an automation runner for grid sweeps that is race-condition-safe and ML-data-ready.
+
+- Generates per-case toolpaths (`.crs`) from swept `scan_speed` and `hatch_spacing`
+- Materializes isolated case workspaces under `fortran_new/automation/runs/<run_id>/`
+- Runs cases in parallel batches (`max_concurrent_runs`)
+- Collects KPI table + VTK artifacts index under `fortran_new/automation/results/<run_id>/`
+
+### 1) Configure sweep
+
+Edit example config:
+
+```bash
+fortran_new/automation/configs/ml_grid_example.json
+```
+
+Key fields:
+
+- `sweep`: Cartesian grid of parameters (include `scan_speed`, `hatch_spacing`)
+- `toolpath.template`: fixed geometry defaults for toolpath generation
+- `execution.max_concurrent_runs`: number of parallel PHOENIX jobs
+- `ml_outputs.vtk_patterns`: mesh files to collect (default: defect, maxtemp, vtkmov)
+
+### 2) Run dry-run (materialize only)
+
+```bash
+cd fortran_new
+python3 automation/run_experiments.py \
+  --config automation/configs/ml_grid_example.json \
+  --run-id test_dryrun \
+  --dry-run
+```
+
+### 3) Run experiments
+
+```bash
+cd fortran_new
+python3 automation/run_experiments.py \
+  --config automation/configs/ml_grid_example.json \
+  --run-id train_001
+```
+
+### 4) Resume interrupted run
+
+```bash
+cd fortran_new
+python3 automation/run_experiments.py \
+  --config automation/configs/ml_grid_example.json \
+  --run-id train_001 \
+  --resume
+```
+
+### Output files
+
+Generated in `fortran_new/automation/results/<run_id>/`:
+
+- `cases_manifest.csv` - per-case status, pid, retries, timing, params
+- `kpi_summary.csv` - scalar KPI table per successful case
+- `failures.csv` - failed cases with reason/log path
+- `ml_index.csv` - collected VTK file paths, bytes, SHA256 checksums
+- `run_metadata.json` - config snapshot + execution metadata
